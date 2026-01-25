@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<body>
+<style>
+    #menu{
+        height:5vh;
+        width:100%;
+        display: flex;
+        justify-content: space-evenly; 
+        flex-direction: row;
+        align-items: center;
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+        box-sizing: border-box; 
+        
+    }
+    #menu a{
+        color: black; 
+        text-decoration: none; 
+        display: block;
+        box-sizing: border-box;
+        padding: 5px 0;
+
+    }
+
+    #test{
+        height:20vh;
+        width:100%;
+        display: flex;
+        justify-content: space-evenly; 
+        flex-direction: column;
+        align-items: center;
+        border-bottom: 1px solid black;
+        box-sizing: border-box; 
+        
+    }
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+</style>
+<!--Header section of the website-->
+<div style="height: 7vh; ">
+<h1 style="text-align: center; ">Wealth Management System Home Page</h1>
+</div>
+
+<!-- menu-->
+<div id="menu">
+<a href = "wmRealEstate.html" >Real Estate</a>
+
+<a href = "wmInvestment.html" >Investment</a>
+
+<a href = "wmRetirement.html" >Retirement</a>
+</div>
+
+<div id="test">
+<!--button to test server and mysql-->
+This button is for testing the connections to the server. <br>It returns some test data stored
+mysql. <br>Make sure server and database are up and running.
+<button id="serverTest">Test Server</button>
+</div>
+
+<script>
+    document.getElementById('serverTest').addEventListener('click', async () =>{
+        const res = await fetch('http://localhost:8080/users');
+        const users = await res.json();
+        console.log(users);
+        alert(JSON.stringify(users));
+    })
+</script>
+
+</body>
+</html>
