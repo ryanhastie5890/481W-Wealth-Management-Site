@@ -1,6 +1,9 @@
 const express = require('express');  // main web framework for HTML/CSS/JS, handling POST/GET requests.
-const http = require('http');
-const socketIo = require('socket.io');
+
+// not needed right now. may need in the future for bi-direction data possibly real-time updates.
+// const http = require('http');  
+// const socketIo = require('socket.io');
+
 const path = require('path');
 const dbCon = require('./database.js').dbCon; // connect to DB
 const session = require('express-session');  // middleware for express. Track user sessions.
@@ -18,7 +21,7 @@ app.use(express.static(__dirname));  // for static files: HTML/CSS/JS
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(session({
-  secret: 'replace_this_with_random_string',
+  secret: 'FIXME_temp_string_replace_in_future',
   resave: false,
   saveUninitialized: false
 }));
@@ -54,6 +57,10 @@ app.post('/login', (req, res) => {
       res.send("Login successful");
     }
   );
+});
+
+server.listen(8080, () => {
+  console.log("Server running at http://localhost:8080");
 });
 
 // main sockeet.io logic
