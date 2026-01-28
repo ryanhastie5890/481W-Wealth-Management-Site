@@ -1,8 +1,8 @@
 const express = require('express');  // main web framework for HTML/CSS/JS, handling POST/GET requests.
 
-// not needed right now. may need in the future for bi-direction data possibly real-time updates.
-// const http = require('http');  
-// const socketIo = require('socket.io');
+
+const http = require('http');  
+// const socketIo = require('socket.io'); // not needed right now. may need in the future for bi-direction data possibly real-time updates.
 
 const path = require('path');
 const dbCon = require('./database.js').dbCon; // connect to DB
@@ -12,7 +12,7 @@ const bcrypt = require('bcrypt');            // password hashing
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
+// const io = socketIo(server);  // not needed right now. may need in the future for bi-direction data possibly real-time updates.
 
 const user_sockets = {} // map screennames to socket.id
 
@@ -36,9 +36,10 @@ app.post('/register', async (req, res) => {
       (err) => {
         if (err) return res.status(400).send("User already exists");
         res.send("Registration successful");
+        return res.redirect('/');
       }
     );
-  } catch (e) {
+  } catch (err) {
     res.status(500).send("Server error");
   }
 });
@@ -50,11 +51,14 @@ app.post('/login', (req, res) => {
     [email],
     async (err, results) => {
       if (err || results.length === 0) return res.status(401).send("Invalid credentials");
+
       const user = results[0];
       const match = await bcrypt.compare(password, user.password_hash);
+
       if (!match) return res.status(401).send("Invalid credentials");
       req.session.userId = user.id; // <-- store logged-in user in session
-      res.send("Login successful");
+      //res.send("Login successful");
+      return res.redirect('/');
     }
   );
 });
