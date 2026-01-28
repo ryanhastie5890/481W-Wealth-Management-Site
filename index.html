@@ -23,6 +23,7 @@
       <button type="submit">Login</button>
     </form>
 
+    <p id="message"></p>
     <p>Hello World!</p>
 
     <h2>Real Estate (Rental)</h2>
@@ -36,5 +37,14 @@
 
     <h2>User Accounts</h2>
     <p>User and admin account management.</p>
+    <script>
+      fetch('/message')
+        .then(res => res.text())
+        .then(msg => {
+          if (msg) {
+            document.getElementById('message').innerText = msg;
+          }
+        });
+    </script>
   </body>
 </html>

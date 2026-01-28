@@ -34,8 +34,11 @@ app.post('/register', async (req, res) => {
       "INSERT INTO users (email, password_hash) VALUES (?, ?)",
       [email, hash],
       (err) => {
-        if (err) return res.status(400).send("User already exists");
-        res.send("Registration successful");
+        if (err) {
+          req.session.message = "User already exists";
+          return res.redirect('/');
+        }
+        req.session.message = "Registration successful";
         return res.redirect('/');
       }
     );
@@ -55,12 +58,21 @@ app.post('/login', (req, res) => {
       const user = results[0];
       const match = await bcrypt.compare(password, user.password_hash);
 
-      if (!match) return res.status(401).send("Invalid credentials");
+      if (!match) {
+        req.session.message = "Invalid credentials";
+        return res.redirect('/');
+      }
       req.session.userId = user.id; // <-- store logged-in user in session
-      //res.send("Login successful");
+      req.session.message = "Login successful!";
       return res.redirect('/');
     }
   );
+});
+
+app.get('/message', (req, res) => {
+  const msg = req.session.message || "";
+  req.session.message = null; // clear message after reading
+  res.send(msg);
 });
 
 server.listen(8080, () => {

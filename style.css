@@ -6,3 +6,7 @@ body {
   background: #9eb5b3;
   margin: 0;
 }
+
+#message {
+  color: white;
+}
