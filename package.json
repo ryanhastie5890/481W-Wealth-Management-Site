@@ -1,0 +1,27 @@
+{
+  "name": "481w-wealth-management-site",
+  "version": "1.0.0",
+  "description": "General repo for Wealth Management Site",
+  "main": "database.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryanhastie5890/481W-Wealth-Management-Site.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ryanhastie5890/481W-Wealth-Management-Site/issues"
+  },
+  "homepage": "https://github.com/ryanhastie5890/481W-Wealth-Management-Site#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "mysql2": "^3.16.2"
+  }
+}
