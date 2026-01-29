@@ -24,7 +24,6 @@
     </form>
 
     <p id="message"></p>
-    <p>Hello World!</p>
 
     <h2>Real Estate (Rental)</h2>
     <p>Income, expenses, lease tracking, notifications.</p>
@@ -37,6 +36,9 @@
 
     <h2>User Accounts</h2>
     <p>User and admin account management.</p>
+
+    <div id="user-info" style="position:absolute; top:10px; right:20px; color:white;"></div>
+
     <script>
       fetch('/message')
         .then(res => res.text())
@@ -45,6 +47,14 @@
             document.getElementById('message').innerText = msg;
           }
         });
+
+      fetch('/session-info')
+        .then(res => res.json())
+        .then(data => {
+          if (data.loggedIn) {
+            document.getElementById('user-info').innerText = data.email;
+          }
+      });
     </script>
   </body>
 </html>
