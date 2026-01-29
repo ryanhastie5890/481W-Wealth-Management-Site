@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-<!--main webpage used for the web application--> 
+<!--webpage for accounts--> 
   <head>
     <meta charset="utf-8">
     <title>COSC 481 Project</title>
@@ -12,7 +12,7 @@
 
       <!--Header section of the website-->
       <div style="height: 7vh; ">
-      <a href = "index.html" style="color: lightgreen;">Wealth Management System</a>
+      <a href = "index.html" >Wealth Management System</a>
       </div>
 
     </header>
@@ -25,26 +25,14 @@
 
     <a href = "Retirement.html" >Retirement</a>
 
-    <a href = "Accounts.html" >Account</a>
+    <a href = "Accounts.html" style="color:lightgreen;" >Account</a>
 
-</div>
-
-<div id="forms">
-    <form action="/register" method="POST">
-      <input name="email" type="email" placeholder="Email" required>
-      <input name="password" type="password" placeholder="Password" required>
-      <button type="submit">Register</button>
-    </form>
-
-    <form action="/login" method="POST">
-      <input name="email" type="email" placeholder="Email" required>
-      <input name="password" type="password" placeholder="Password" required>
-      <button type="submit">Login</button>
-    </form>
 </div>
 
     <p id="message"></p>
-    
+
+    <h2>User Accounts</h2>
+    <p>User and admin account management.</p>
     <script>
       fetch('/message')
         .then(res => res.text())
