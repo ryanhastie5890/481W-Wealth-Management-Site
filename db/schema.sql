@@ -9,3 +9,17 @@ CREATE TABLE users (
   password_hash VARCHAR(255) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Properties table
+CREATE TABLE properties (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  userId INT, 
+  name VARCHAR(255) NOT NULL,
+  description TEXT,
+  type ENUM('Apartment','House','Land') NOT NULL,    
+  status ENUM('Self Owned','Rented Out','Selling','Leasing') NOT NULL DEFAULT 'Self Owned',
+  occupants INT DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,    
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (userId) REFERENCES users(id) ON DELETE SET NULL
+);
