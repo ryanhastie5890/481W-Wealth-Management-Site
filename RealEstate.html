@@ -32,17 +32,21 @@
     <p id="message"></p>
 
 
-    <h2>Real Estate (Rental)</h2>
-    <p>Income, expenses, lease tracking, notifications.</p>
+    
+    <!--Income, expenses, lease tracking, notifications.-->
 
     <script>
-      fetch('/message')
-        .then(res => res.text())
-        .then(msg => {
-          if (msg) {
-            document.getElementById('message').innerText = msg;
-          }
-        });
+      fetch('/session')
+      .then(r => r.json())
+      .then(data => {
+        if(data.userId){
+            document.getElementById("message").innerHTML = "Logged in as: "+data.email;
+        }
+        else{
+            document.getElementById("message").innerHTML = "You are not logged in";
+        }
+      })
+      
     </script>
   </body>
 </html>

@@ -26,7 +26,6 @@ app.use(session({
   saveUninitialized: false
 }));
 
-// FIX ME:register
 app.post('/register', async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -36,6 +35,7 @@ app.post('/register', async (req, res) => {
       [email, hash],
       (err) => {
         if (err) {
+          console.error("MYSQL INSERT ERROR:", err);
           req.session.message = "User already exists";
           return res.redirect('/');
         }
@@ -48,7 +48,6 @@ app.post('/register', async (req, res) => {
   }
 });
 
-// FIX ME: login 
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
   dbCon.query(
@@ -64,34 +63,37 @@ app.post('/login', (req, res) => {
         req.session.message = "Invalid credentials";
         return res.redirect('/');
       }
-      req.session.userId = user.id; // store logged-in user id in session
-      req.session.email = user.email;  // store logged-in user email in session
-      req.session.message = "Login successful";
+      req.session.userId = user.id; // <-- store logged-in user in session
+      req.session.message = "Login successful!";
       return res.redirect('/');
     }
   );
 });
 
-// returns a message to the client
 app.get('/message', (req, res) => {
   const msg = req.session.message || "";
+  req.session.message = null; // clear message after reading
   res.send(msg);
 });
 
-// returns the session login status and the user email to the client
-app.get('/session-info', (req, res) => {
-  if (req.session.userId) {
-    res.json({ 
-      loggedIn: true, 
-      email: req.session.email 
-    });
-  } 
-  else {
-    res.json({ loggedIn: false });
+app.get('/session', (req, res) =>{
+  //get user email
+  if(req.session.userId != null){
+    dbCon.query("SELECT email FROM users WHERE id = ?",[req.session.userId],
+      (err, results) => {
+        if(err || results.length == 0){
+          return res.json({userId: req.session.userId, email: null});//id but no email
+        }
+       res.json({userId: req.session.userId, email: results[0].email});//id and email
+      }
+    )
   }
-});
+  else{
+    res.json({userId: null, email:null});//no id and no email
+  }
 
-// FIX ME: connect to local host in this case it is hard coded 8080
+})
+
 server.listen(8080, () => {
   console.log("Server running at http://localhost:8080");
 });
