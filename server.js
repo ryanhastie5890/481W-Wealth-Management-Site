@@ -76,7 +76,7 @@ app.get('/message', (req, res) => {
   res.send(msg);
 });
 
-app.get('/session', (req, res) =>{
+app.get('/session', (req, res) =>{//get session info
   //get user email
   if(req.session.userId != null){
     dbCon.query("SELECT email FROM users WHERE id = ?",[req.session.userId],
@@ -93,6 +93,41 @@ app.get('/session', (req, res) =>{
   }
 
 })
+
+app.post('/add-property', (req, res)=>{//create property
+  const { name, description, type, status, occupants } = req.body;
+  const userId = req.session.userId || null;
+
+  if(userId != null){
+  dbCon.query("INSERT INTO properties (userId, name, description, type, status, occupants) VALUES (?,?,?,?,?,?)",
+    [userId, name, description, type, status, occupants],
+    (err, result) =>{
+      if(err){
+        console.error("DATA INSERT ERROR:",err);
+        return res.status(500).send("Error creating property");
+      }
+      res.redirect('/RealEstate.html')
+    }
+  )}
+
+
+})
+
+app.get('/get-properties', (req, res) =>{//retrieve properties to display
+  if(!req.session.userId){
+    return res.status(401).json({error: "You are not logged in"});
+  }
+  dbCon.query("SELECT id, name, description, type, status, occupants, created_at FROM properties WHERE userId = ?",
+    [req.session.userId],
+    (err, results) => {
+      if(err){
+        console.error("Failed to retrieve properties:", err);
+        return res.status(500).json({error: "Db error"});
+      }
+      res.json(results);
+    }
+  );
+});
 
 server.listen(8080, () => {
   console.log("Server running at http://localhost:8080");

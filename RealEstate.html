@@ -11,8 +11,9 @@
     <header>
 
       <!--Header section of the website-->
-      <div style="height: 7vh; ">
+      <div id="heading">
       <a href = "index.html" >Wealth Management System</a>
+      <p id="message"></p>
       </div>
 
     </header>
@@ -29,14 +30,50 @@
 
 </div>
 
-    <p id="message"></p>
+<!--add property button-->
+<button onclick="showForm()">Add Property</button>
+<!--Properties display-->
+<h2>Your Properties: </h2>
+<div id="propertiesDisplay">
+
+</div>
+
+    <div id="property_form" style="display:none;">
+    <form action="/add-property" method="POST"><!--add property form-->
+      <label for="name">Name of Property</label><br><br>
+      <input name="name" type="text" required><br><br>
+
+      <label for="description">Description of Property</label><br><br>
+      <input name="description" type="text" required><br><br>
+
+      <label for="type">Type of Property</label><br><br>
+      <select name="type" required>
+        <option value="Apartment">Apartment Complex</option>
+        <option value="House">House</option>
+        <option value="Land">Land</option>
+      </select><br><br>
+
+      <label for="status">Status of Property</label><br><br>
+      <select name="status" required>
+        <option value="Self Owned">Self Owned</option>
+        <option value="Rented Out">Rented Out</option>
+        <option value="Selling">Selling</option>
+        <option value="Leasing">Leasing</option>
+      </select><br><br>
+
+      <label for="occupants">Number of Occupants</label><br><br>
+      <input name="occupants" type="number" min="0" value="0"><br><br>
+      
+      <button type="submit">Add Property</button>
+    </form>
+    </div>
 
 
     
     <!--Income, expenses, lease tracking, notifications.-->
 
     <script>
-      fetch('/session')
+      fetch('/session')//get session
       .then(r => r.json())
       .then(data => {
         if(data.userId){
@@ -46,6 +83,48 @@
             document.getElementById("message").innerHTML = "You are not logged in";
         }
       })
+
+      fetch('/get-properties', {cache: "no-store"})
+       .then(res => {
+        if(!res.ok) throw new Error("You are not logged in");
+        return res.json();
+       })
+       .then(property => {
+        const display = document.getElementById("propertiesDisplay");
+
+        if(property.length == 0){
+            display.innerHTML ="<p>You have not added any property";
+            return;
+        }
+        property.forEach(p =>{
+            const div = document.createElement("div");
+            div.className ="property-item";
+
+            //populate with data
+            div.innerHTML =`
+                <h3>Name: ${p.name}</h3><br>
+                <p>Description: ${p.description}</p><br>
+                <p>Type: ${p.type}</p><br>
+                <p>Status: ${p.status}</p><br>
+                <p>Occupants: ${p.occupants}</p><br>
+                <p>Created: ${new Date(p.created_at).toLocaleDateString()}</p>
+                `;
+
+            display.appendChild(div);
+        });
+       })
+       .catch(err =>{
+        document.getElementById("propertiesDisplay").innerHTML ="<p>You are not logged in</p>"
+       });
+
+       //for toggling on and off the form
+       function showForm(){
+        document.getElementById("property_form").style.display = "flex";
+        document.getElementById("propertiesDisplay").style.display = "none";
+       }
+       function hideForm(){
+        document.getElementById("property_form").style.display = "none";
+       }
       
     </script>
   </body>
