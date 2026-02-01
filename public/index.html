@@ -10,39 +10,37 @@
   <body>
     <header>
       <!--Header section of the website-->
-      <div style="height: 7vh; ">
+      <div style="height: 7vh;">
         <a href = "index.html" style="color: lightgreen;">Wealth Management System</a>
       </div>
       <!--Display user while logged in-->
       <div id="user-info" style="position:absolute; top:10px; right:20px; color:white;"></div>
     </header>
 
-    <!-- menu-->
+    <!--menu-->
     <div id="menu">
-    <a href = "RealEstate.html" >Real Estate</a>
-    <a href = "Investment.html" >Investment</a>
-    <a href = "Retirement.html" >Retirement</a>
-    <a href = "Accounts.html" >Account</a>
+      <a href = "RealEstate.html" >Real Estate</a>
+      <a href = "Investment.html" >Investment</a>
+      <a href = "Retirement.html" >Retirement</a>
+      <a href = "Accounts.html" >Account</a>
+    </div>
 
-</div>
+    <div id="forms">
+      <form action="/register" method="POST">
+        <input name="email" type="email" placeholder="Email" required>
+        <input name="password" type="password" placeholder="Password" required>
+        <button type="submit">Register</button>
+      </form>
 
-<div id="forms">
-    <form action="/register" method="POST">
-      <input name="email" type="email" placeholder="Email" required>
-      <input name="password" type="password" placeholder="Password" required>
-      <button type="submit">Register</button>
-    </form>
-
-    <form action="/login" method="POST">
-      <input name="email" type="email" placeholder="Email" required>
-      <input name="password" type="password" placeholder="Password" required>
-      <button type="submit">Login</button>
-    </form>
-</div>
+      <form action="/login" method="POST">
+        <input name="email" type="email" placeholder="Email" required>
+        <input name="password" type="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+      </form>
+    </div>
 
     <p id="message"></p>
     
-    <script src="./js/session.js">
-    </script>
+    <script src="./js/session.js"></script>
   </body>
 </html>

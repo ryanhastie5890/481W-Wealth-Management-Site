@@ -35,6 +35,7 @@ body {
         box-sizing: border-box; 
 
 }
+
 #property_form{
         position: fixed;
         top: 25%;
@@ -51,6 +52,7 @@ body {
         border-radius: 20px;
         z-index:999;
 }
+
 .property-item{
   background: white;
   padding: 10px;
@@ -63,6 +65,7 @@ body {
   align-items: center;
   box-sizing: border-box;  
 }
+
 #heading{
         height:7vh;
         width:100%;
