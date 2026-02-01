@@ -17,7 +17,7 @@ const server = http.createServer(app);
 const user_sockets = {} // map screennames to socket.id
 
 // setup middleware
-app.use(express.static(__dirname));  // for static files: HTML/CSS/JS
+app.use(express.static(path.join(__dirname, 'public')));  // for static files: HTML/CSS/JS
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(session({
@@ -64,6 +64,7 @@ app.post('/login', (req, res) => {
         return res.redirect('/');
       }
       req.session.userId = user.id; // <-- store logged-in user in session
+      req.session.email = user.email;
       req.session.message = "Login successful!";
       return res.redirect('/');
     }
@@ -76,25 +77,23 @@ app.get('/message', (req, res) => {
   res.send(msg);
 });
 
-app.get('/session', (req, res) =>{//get session info
+app.get('/session', (req, res) =>{  //get session info
   //get user email
   if(req.session.userId != null){
-    dbCon.query("SELECT email FROM users WHERE id = ?",[req.session.userId],
-      (err, results) => {
-        if(err || results.length == 0){
-          return res.json({userId: req.session.userId, email: null});//id but no email
-        }
-       res.json({userId: req.session.userId, email: results[0].email});//id and email
-      }
-    )
+    res.json({
+      loggedIn: true,
+      userId: req.session.userId,
+      email: req.session.email
+    });
+  } 
+  else {
+    res.json({
+      loggedIn: false
+    });
   }
-  else{
-    res.json({userId: null, email:null});//no id and no email
-  }
+});
 
-})
-
-app.post('/add-property', (req, res)=>{//create property
+app.post('/add-property', (req, res)=>{  //create property
   const { name, description, type, status, occupants } = req.body;
   const userId = req.session.userId || null;
 
@@ -111,7 +110,7 @@ app.post('/add-property', (req, res)=>{//create property
   )}
 
 
-})
+});
 
 app.get('/get-properties', (req, res) =>{//retrieve properties to display
   if(!req.session.userId){

@@ -4,31 +4,26 @@
   <head>
     <meta charset="utf-8">
     <title>COSC 481 Project</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./css/style.css">
     <link rel="shortcut icon" href="#"> <!-- to remove 404 error favicon.ico not found -->
   </head>
   <body>
     <header>
-
       <!--Header section of the website-->
       <div id="heading">
-      <a href = "index.html" >Wealth Management System</a>
+        <a href = "index.html" >Wealth Management System</a>
       <p id="message"></p>
       </div>
-
+      <!--Display user while logged in-->
+      <div id="user-info" style="position:absolute; top:10px; right:20px; color:white;"></div>
     </header>
-
     <!-- menu-->
     <div id="menu">
-    <a href = "RealEstate.html" style="color: lightgreen;">Real Estate</a>
-
-    <a href = "Investment.html" >Investment</a>
-
-    <a href = "Retirement.html" >Retirement</a>
-
-    <a href = "Accounts.html" >Account</a>
-
-</div>
+      <a href = "RealEstate.html" style="color: lightgreen;">Real Estate</a>
+      <a href = "Investment.html" >Investment</a>
+      <a href = "Retirement.html" >Retirement</a>
+      <a href = "Accounts.html" >Account</a>
+    </div>
 
 <!--add property button-->
 <button onclick="showForm()">Add Property</button>
@@ -72,18 +67,7 @@
     
     <!--Income, expenses, lease tracking, notifications.-->
 
-    <script>
-      fetch('/session')//get session
-      .then(r => r.json())
-      .then(data => {
-        if(data.userId){
-            document.getElementById("message").innerHTML = "Logged in as: "+data.email;
-        }
-        else{
-            document.getElementById("message").innerHTML = "You are not logged in";
-        }
-      })
-
+    <script src="./js/session.js">
       fetch('/get-properties', {cache: "no-store"})
        .then(res => {
         if(!res.ok) throw new Error("You are not logged in");
