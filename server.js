@@ -1,25 +1,25 @@
-const express = require('express');  // main web framework for HTML/CSS/JS, handling POST/GET requests.
+// updated server.js to use ES6 latest syntax
+import express from 'express';                      // main web framework for HTML/CSS/JS, handling POST/GET requests.
+import http from 'http';                            // server that Express runs on
+import path from 'path';                            // file and directory paths across different operating systems
+import { dbCon } from './database.js';              // connect to DB to run queries
+import session from 'express-session';              // middleware for express. Track user sessions.
+import bcrypt from 'bcrypt';                        // password hashing
 
+import { fileURLToPath } from 'url';                // converts ES module file URLs into regular file paths
+import { dirname } from 'path';                     // extracts the directory name from a file path
 
-const http = require('http');  
-// const socketIo = require('socket.io'); // not needed right now. may need in the future for bi-direction data possibly real-time updates.
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-const path = require('path');
-const dbCon = require('./database.js').dbCon; // connect to DB
-const session = require('express-session');  // middleware for express. Track user sessions.
-const bodyParser = require('body-parser');   // 
-const bcrypt = require('bcrypt');            // password hashing
 
 const app = express();
 const server = http.createServer(app);
-// const io = socketIo(server);  // not needed right now. may need in the future for bi-direction data possibly real-time updates.
-
-const user_sockets = {} // map screennames to socket.id
 
 // setup middleware
 app.use(express.static(path.join(__dirname, 'public')));  // for static files: HTML/CSS/JS
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(session({
   secret: 'FIXME_temp_string_replace_in_future',
   resave: false,
@@ -131,10 +131,3 @@ app.get('/get-properties', (req, res) =>{//retrieve properties to display
 server.listen(8080, () => {
   console.log("Server running at http://localhost:8080");
 });
-
-// main sockeet.io logic
-// io.on('connection', (socket) => {
-//   socket.on('to-server', (msg) => {
-
-//   })
-// });

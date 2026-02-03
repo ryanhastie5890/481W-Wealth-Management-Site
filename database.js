@@ -1,6 +1,7 @@
 // Module to establish DB connection on localhost
 
-var mysql = require('mysql2');
+// var mysql = require('mysql2');
+import mysql from 'mysql2';
 // Create connection & verify credentials
 var dbCon = mysql.createConnection(
   {       
@@ -20,4 +21,5 @@ dbCon.connect(function(error){
 });
 
 // export handle to the connection, for use in other models to access the DB
-exports.dbCon = dbCon;
+// exports.dbCon = dbCon;
+export { dbCon };
