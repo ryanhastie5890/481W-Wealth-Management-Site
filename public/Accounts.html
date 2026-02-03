@@ -2,6 +2,7 @@
 <html lang="en" dir="ltr">
 <!--webpage for accounts--> 
   <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <meta charset="utf-8">
     <title>COSC 481 Project</title>
     <link rel="stylesheet" href="./css/style.css">
@@ -10,7 +11,7 @@
   <body>
     <header>
       <!--Header section of the website-->
-      <div style="height: 7vh;">
+      <div class="heading" style="height: 7vh;">
         <a href = "index.html" >Wealth Management System</a>
       </div>
       <!--Display user while logged in-->
@@ -18,16 +19,15 @@
     </header>
 
     <!--menu-->
-    <div id="menu">
-      <a href = "RealEstate.html" >Real Estate</a>
-      <a href = "Investment.html" >Investment</a>
-      <a href = "Retirement.html" >Retirement</a>
-      <a href = "Accounts.html" style="color:lightgreen;" >Account</a>
+    <div class="menu">
+      <a class= "menu-option" href = "RealEstate.html" ><i class="bi bi-house"></i>Real Estate</a>
+      <a class= "menu-option" href = "Investment.html" ><i class="bi bi-bank"></i>Investment</a>
+      <a class= "menu-option" href = "Retirement.html" ><i class="bi bi-sunglasses"></i>Retirement</a>
+      <a class= "menu-option" href = "Accounts.html" style="color:lightgreen;" ><i class="bi bi-file-person"></i>Account</a>
     </div>
-    <p id="message"></p>
-
-    <h2>User Accounts</h2>
-    <p>User and admin account management.</p>
+    <h2 style="text-align: center;">User Accounts</h2>
+    <h5 style="text-align: center;">User and admin account management.</h5>
+    <div class="bottom-line"></div>
     <script src="./js/session.js"></script>
   </body>
 </html>
