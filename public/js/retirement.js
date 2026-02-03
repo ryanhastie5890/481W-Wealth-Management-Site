@@ -9,18 +9,18 @@ const retirementOptions = {
   "HSA": ["HSA"]
 };
 
-// Open modal on button click
+// open modal on button click
 addInvestmentsButton.addEventListener('click', () => {
   modal.style.display = 'block';
   showCategoryOptions();
 });
 
-// Close modal
+// close modal
 closeModal.addEventListener('click', () => {
   modal.style.display = 'none';
 });
 
-// Close modal if user clicks outside content
+// close modal if user clicks outside content
 window.addEventListener('click', (e) => {
   if (e.target === modal) modal.style.display = 'none';
 });
@@ -72,10 +72,10 @@ function showFinalForm(category, subtype) {
     const expected_return = document.getElementById('expected_return').value;
     const years_to_retirement = document.getElementById('years_to_retirement').value;
 
-    // For now just log it; later connect to server
+    // FIX ME: temp log information, setup connection to server later
     console.log({ account_type, current_balance, annual_contribution, expected_return, years_to_retirement });
 
-    // Clear modal
+    // clear modal
     modal.style.display = 'none';
     modalBody.innerHTML = '';
     alert(`Added ${account_type}!`);

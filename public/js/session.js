@@ -1,3 +1,5 @@
+// client side sessions
+
 fetch('/message')
   .then(res => res.text())
   .then(msg => {
