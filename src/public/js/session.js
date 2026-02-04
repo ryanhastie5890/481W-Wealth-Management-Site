@@ -1,6 +1,6 @@
 // client side sessions
 
-fetch('/message')
+fetch('api/session/sessionMessage')
   .then(res => res.text())
   .then(msg => {
     if (msg) {
@@ -8,7 +8,7 @@ fetch('/message')
     }
   });
 
-fetch('/session')
+fetch('api/session/getSession')
   .then(res => res.json())
   .then(data => {
     if (data.loggedIn) {
