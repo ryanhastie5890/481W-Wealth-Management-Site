@@ -4,37 +4,56 @@
   <head>
     <meta charset="utf-8">
     <title>COSC 481 Project</title>
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="shortcut icon" href="#"> <!-- to remove 404 error favicon.ico not found -->
   </head>
   <body>
     <header>
+
       <!--Header section of the website-->
       <div id="heading">
-        <a href = "index.html" >Wealth Management System</a>
+      <a href = "index.html" >Wealth Management System</a>
       <p id="message"></p>
       </div>
-      <!--Display user while logged in-->
-      <div id="user-info" style="position:absolute; top:10px; right:20px; color:white;"></div>
+
     </header>
+
     <!-- menu-->
     <div id="menu">
-      <a href = "RealEstate.html" style="color: lightgreen;">Real Estate</a>
-      <a href = "Investment.html" >Investment</a>
-      <a href = "Retirement.html" >Retirement</a>
-      <a href = "Accounts.html" >Account</a>
-    </div>
+    <a href = "RealEstate.html" style="color: lightgreen;">Real Estate</a>
+
+    <a href = "Investment.html" >Investment</a>
+
+    <a href = "Retirement.html" >Retirement</a>
+
+    <a href = "Accounts.html" >Account</a>
+
+</div>
 
 <!--add property button-->
-<button onclick="showForm()">Add Property</button>
+<button onclick="showFormProp()">Add Property</button>
+
+<!--add income button-->
+<button onclick="showFormInc()">Add Income</button>
+
+<!--add expense button-->
+<button onclick="showFormExp()">Add Expense</button>
 <!--Properties display-->
 <h2>Your Properties: </h2>
-<div id="propertiesDisplay">
+<div id="propertiesDisplay"></div>
+
+<!--Income display-->
+<h2>Your Incomes: </h2>
+<div id="incomeDisplay"></div>
+
+<!--Expense display-->
+<h2>Your Expenses: </h2>
+<div id="expenseDisplay">
 
 </div>
 
     <div id="property_form" style="display:none;">
-    <form action="/add-property" method="POST"><!--add property form-->
+    <form action="/api/realEstate/add-property" method="POST"><!--add property form-->
       <label for="name">Name of Property</label><br><br>
       <input name="name" type="text" required><br><br>
 
@@ -63,12 +82,115 @@
     </form>
     </div>
 
+    <!--Income form-->
+    <div id="income_form" style="display:none;">
+    <form action="/api/realEstate/add-income" method="POST">
+      <label for="amount">Amount</label><br><br>
+      <input name="amount" type="number" step="0.01" min="0" placeholder="0.00" required><br><br>
+
+      <label for="note">Note</label><br><br>
+      <input name="note" type="text" required><br><br>
+
+      <button type="submit">Add Income</button>
+    </form>
+    </div>
+
+    <!--Expense form-->
+    <div id="expense_form" style="display:none;">
+    <form action="/api/realEstate/add-expense" method="POST">
+      <label for="amount">Amount</label><br><br>
+      <input name="amount" type="number" step="0.01" min="0" placeholder="0.00" required><br><br>
+
+      <label for="note">Note</label><br><br>
+      <input name="note" type="text" required><br><br>
+
+      <button type="submit">Add Expense</button>
+    </form>
+    </div>
+
+    <!--forms for updating items-->
+    <div id="property_form_update" style="display:none;">
+    <form id="editPropForm"><!--add property form-->
+
+      <input type="hidden" id="propertyId" />
+
+      <label for="name">Name of Property</label><br><br>
+      <input id ="pName" name="name" type="text" required><br><br>
+
+      <label for="description">Description of Property</label><br><br>
+      <input id ="pDescription" name="description" type="text" required><br><br>
+
+      <label for="type">Type of Property</label><br><br>
+      <select id="pType" name="type" required>
+        <option value="Apartment">Apartment Complex</option>
+        <option value="House">House</option>
+        <option value="Land">Land</option>
+      </select><br><br>
+
+      <label for="status">Status of Property</label><br><br>
+      <select id="pStatus" name="status" required>
+        <option value="Self Owned">Self Owned</option>
+        <option value="Rented Out">Rented Out</option>
+        <option value="Selling">Selling</option>
+        <option value="Leasing">Leasing</option>
+      </select><br><br>
+
+      <label for="occupants">Number of Occupants</label><br><br>
+      <input id="pOccupants" name="occupants" type="number" min="0" value="0"><br><br>
+      
+      <button type="submit">Update Property</button>
+    </form>
+    </div>
+
+    <!--Income form-->
+    <div id="income_form_update" style="display:none;">
+    <form id="editIncForm">
+
+      <input type="hidden" id="incomeId" />
+
+      <label for="amount">Amount</label><br><br>
+      <input id="iAmount" name="amount" type="number" step="0.01" min="0" placeholder="0.00" required><br><br>
+
+      <label for="note">Note</label><br><br>
+      <input id="iNote" name="note" type="text" required><br><br>
+
+      <button type="submit">Update Income</button>
+    </form>
+    </div>
+
+    <!--Expense form-->
+    <div id="expense_form_update" style="display:none;">
+    <form id ="editExpForm">
+
+      <input type="hidden" id="expenseId" />
+
+      <label for="amount">Amount</label><br><br>
+      <input id="eAmount" name="amount" type="number" step="0.01" min="0" placeholder="0.00" required><br><br>
+
+      <label for="note">Note</label><br><br>
+      <input id="eNote" name="note" type="text" required><br><br>
+
+      <button type="submit">Update Expense</button>
+    </form>
+    </div>
+
 
     
     <!--Income, expenses, lease tracking, notifications.-->
 
-    <script src="./js/session.js">
-      fetch('/get-properties', {cache: "no-store"})
+    <script>
+      fetch('/api/session/getSession')//get session
+      .then(r => r.json())
+      .then(data => {
+        if(data.userId){
+            document.getElementById("message").innerHTML = "Logged in as: "+data.email;
+        }
+        else{
+            document.getElementById("message").innerHTML = "You are not logged in";
+        }
+      })
+
+      fetch('/api/realEstate/get-properties', {cache: "no-store"})
        .then(res => {
         if(!res.ok) throw new Error("You are not logged in");
         return res.json();
@@ -91,7 +213,9 @@
                 <p>Type: ${p.type}</p><br>
                 <p>Status: ${p.status}</p><br>
                 <p>Occupants: ${p.occupants}</p><br>
-                <p>Created: ${new Date(p.created_at).toLocaleDateString()}</p>
+                <p>Created: ${new Date(p.created_at).toLocaleDateString()}</p><br>
+                <button onclick= "updatePropertyForm(${p.id})">Edit Property</button><br>
+                <button onclick= "deleteProperty(${p.id})">Remove Property</button>
                 `;
 
             display.appendChild(div);
@@ -101,14 +225,213 @@
         document.getElementById("propertiesDisplay").innerHTML ="<p>You are not logged in</p>"
        });
 
-       //for toggling on and off the form
-       function showForm(){
+       fetch('/api/realEstate/get-incomes', {cache: "no-store"})
+       .then(res => {
+        if(!res.ok) throw new Error("You are not logged in");
+        return res.json();
+       })
+       .then(income => {
+        const display = document.getElementById("incomeDisplay");
+
+        if(income.length == 0){
+            display.innerHTML ="<p>You have not added any income";
+            return;
+        }
+        income.forEach(i =>{
+            const div = document.createElement("div");
+            div.className ="income-item";
+
+            //populate with data
+            div.innerHTML =`
+                <h3>Amount: ${i.amount}</h3><br>
+                <p>Note: ${i.note}</p><br>
+                <p>Created: ${new Date(i.created_at).toLocaleDateString()}</p><br>
+                <button onclick= "updateIncomeForm(${i.id})">Update Income</button><br>
+                <button onclick= "deleteIncome(${i.id})">Remove Income</button>
+                `;
+
+            display.appendChild(div);
+        });
+       })
+       .catch(err =>{
+        document.getElementById("incomeDisplay").innerHTML ="<p>You are not logged in</p>"
+       });
+
+       fetch('/api/realEstate/get-expenses', {cache: "no-store"})
+       .then(res => {
+        if(!res.ok) throw new Error("You are not logged in");
+        return res.json();
+       })
+       .then(expense => {
+        const display = document.getElementById("expenseDisplay");
+
+        if(expense.length == 0){
+            display.innerHTML ="<p>You have not added any expense";
+            return;
+        }
+        expense.forEach(e =>{
+            const div = document.createElement("div");
+            div.className ="expense-item";
+
+            //populate with data
+            div.innerHTML =`
+                <h3>Amount: ${e.amount}</h3><br>
+                <p>Note: ${e.note}</p><br>
+                <p>Created: ${new Date(e.created_at).toLocaleDateString()}</p><br>
+                <button onclick= "updateExpenseForm(${e.id})">Edit Expense</button><br>
+                <button onclick= "deleteExpense(${e.id})">Remove Expense</button>
+                `;
+
+            display.appendChild(div);
+        });
+       })
+       .catch(err =>{
+        document.getElementById("expenseDisplay").innerHTML ="<p>You are not logged in</p>"
+       });
+
+       //delete property call
+       function deleteProperty(propId){
+        fetch(`/api/realEstate/delete-property/${propId}`,{
+             method: 'DELETE'})
+        .then(res => res.json())
+        .then(data =>{
+          console.log(data);
+          if(data.success){
+            location.reload();//reload page
+          }
+        })
+        .catch(err => console.error(err));
+       }
+
+       //delete income call
+       function deleteIncome(incId){
+        fetch(`/api/realEstate/delete-income/${incId}`,{
+             method: 'DELETE'})
+        .then(res => res.json())
+        .then(data =>{
+          console.log(data);
+          if(data.success){
+            location.reload();//reload page
+          }
+        })
+        .catch(err => console.error(err));
+       }
+
+       //delete expense call
+       function deleteExpense(expId){
+        fetch(`/api/RealEstate/delete-expense/${expId}`,{
+             method: 'DELETE'})
+        .then(res => res.json())
+        .then(data =>{
+          console.log(data);
+          if(data.success){
+            location.reload();//reload page
+          }
+        })
+        .catch(err => console.error(err));
+       }
+
+       //submit actions for update forms
+       document.getElementById('editPropForm').addEventListener('submit', e =>{
+        e.preventDefault();
+
+        const id = document.getElementById('propertyId').value;
+
+        fetch(`/api/realEstate/update-property/${id}`,{
+          method: 'PUT',
+          headers:{'Content-Type': 'application/json'},
+          body: JSON.stringify({
+              name: document.getElementById('pName').value,
+              description: document.getElementById('pDescription').value,
+              type: document.getElementById("pType").value,
+              status: document.getElementById("pStatus").value,
+              occupants: document.getElementById("pOccupants").value
+          })
+        })
+         .then(res => res.json())
+         .then(data => {
+            if (data.success) location.reload();
+       });
+       })
+
+       document.getElementById('editIncForm').addEventListener('submit', e =>{
+        e.preventDefault();
+
+        const id = document.getElementById('incomeId').value;
+
+        fetch(`/api/realEstate/update-income/${id}`,{
+          method: 'PUT',
+          headers:{'Content-Type': 'application/json'},
+          body: JSON.stringify({
+              amount: document.getElementById("iAmount").value,
+              note: document.getElementById("iNote").value
+          })
+        })
+         .then(res => res.json())
+         .then(data => {
+            if (data.success) location.reload();
+       });
+       })
+
+       document.getElementById('editExpForm').addEventListener('submit', e =>{
+        e.preventDefault();
+
+        const id = document.getElementById('expenseId').value;
+
+        fetch(`/api/realEstate/update-expense/${id}`,{
+          method: 'PUT',
+          headers:{'Content-Type': 'application/json'},
+          body: JSON.stringify({
+              amount: document.getElementById("eAmount").value,
+              note: document.getElementById("eNote").value
+          })
+        })
+         .then(res => res.json())
+         .then(data => {
+            if (data.success) location.reload();
+       });
+       })
+
+       //for toggling on the forms
+       function showFormProp(){
         document.getElementById("property_form").style.display = "flex";
+        hideDisplays();
+       }
+
+       function showFormInc(){
+        document.getElementById("income_form").style.display = "flex";
+        hideDisplays();
+       }
+
+       function showFormExp(){
+        document.getElementById("expense_form").style.display = "flex";
+        hideDisplays();
+       }
+
+       function updatePropertyForm(id){
+        document.getElementById("property_form_update").style.display = "flex";
+        document.getElementById("propertyId").value = id;
+        hideDisplays();
+       }
+
+       function updateIncomeForm(id){
+        document.getElementById("income_form_update").style.display = "flex";
+        document.getElementById("incomeId").value = id;
+        hideDisplays();
+       }
+
+       function updateExpenseForm(id){
+        document.getElementById("expense_form_update").style.display = "flex";
+        document.getElementById("expenseId").value = id;
+        hideDisplays();
+       }
+
+       function hideDisplays(){
         document.getElementById("propertiesDisplay").style.display = "none";
+        document.getElementById("incomeDisplay").style.display = "none";
+        document.getElementById("expenseDisplay").style.display = "none";
        }
-       function hideForm(){
-        document.getElementById("property_form").style.display = "none";
-       }
+
       
     </script>
   </body>

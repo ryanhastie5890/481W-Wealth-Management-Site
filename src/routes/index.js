@@ -8,6 +8,7 @@ import express from 'express';
 import authRoutes from './auth.routes.js';
 import sessionRoutes from './session.routes.js';
 import investmentsRoutes from './investments.routes.js';
+import realEstateRoutes from './realEstate.routes.js';
 
 const router = express.Router();
 
@@ -15,5 +16,6 @@ const router = express.Router();
 router.use('/auth', authRoutes);
 router.use('/session', sessionRoutes);
 router.use('/investments', investmentsRoutes);
+router.use('/realEstate',realEstateRoutes);
 
 export default router;
