@@ -4,8 +4,8 @@ const modalBody = document.getElementById('modal-body');
 const closeModal = document.getElementById('close-modal');
 
 const retirementOptions = {
-  "IRA": ["IRA", "Roth IRA"],
-  "ERA": ["401k", "403b"],
+  "Individual Retirement Accounts": ["IRA", "Roth IRA"],
+  "Employer Retirement Accounts": ["401k", "403b"],
   "HSA": ["HSA"]
 };
 
@@ -52,32 +52,28 @@ function showFinalForm(category, subtype) {
     <h3>Add ${subtype}</h3>
     <label>Current Balance</label>
     <input type="number" id="current_balance" step="0.01">
-    <br>
-    <label>Annual Contribution</label>
-    <input type="number" id="annual_contribution" step="0.01">
-    <br>
-    <label>Expected Return (%)</label>
-    <input type="number" id="expected_return" step="0.01">
-    <br>
-    <label>Years to Retirement</label>
-    <input type="number" id="years_to_retirement">
     <br><br>
     <button id="save-account">Save Account</button>
   `;
 
   document.getElementById('save-account').onclick = async () => {
-    const account_type = subtype;
-    const current_balance = document.getElementById('current_balance').value;
-    const annual_contribution = document.getElementById('annual_contribution').value;
-    const expected_return = document.getElementById('expected_return').value;
-    const years_to_retirement = document.getElementById('years_to_retirement').value;
+    const amount = document.getElementById('current_balance').value;
 
-    // FIX ME: temp log information, setup connection to server later
-    console.log({ account_type, current_balance, annual_contribution, expected_return, years_to_retirement });
+    const res = await fetch('/api/retirement/test', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        account_type: subtype,
+        amount
+      })
+    });
 
-    // clear modal
-    modal.style.display = 'none';
-    modalBody.innerHTML = '';
-    alert(`Added ${account_type}!`);
+    if (res.ok) {
+      console.log('Retirement test sent');
+      modal.style.display = 'none';
+    } 
+    else {
+      console.log('Error sending retirement test');
+    }
   };
 }

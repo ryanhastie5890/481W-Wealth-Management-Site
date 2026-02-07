@@ -13,11 +13,7 @@ CREATE TABLE users (
 CREATE TABLE retirement_accounts (
   id INT AUTO_INCREMENT PRIMARY KEY,
   userId INT NOT NULL,
-  account_type VARCHAR(50),      
-  account_name VARCHAR(100),     
+  account_type VARCHAR(50),           
   current_balance DECIMAL(12,2),
-  annual_contribution DECIMAL(12,2),
-  expected_return DECIMAL(5,2),
-  years_to_retirement INT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
