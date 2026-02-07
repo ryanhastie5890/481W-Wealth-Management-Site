@@ -30,29 +30,37 @@
 
 </div>
 
+<h2>Incomes - Expenses:</h2>
+<h2 id="total"></h2>
+
+<div id="buttons">
 <!--add property button-->
-<button onclick="showFormProp()">Add Property</button>
+<button class="addButton" onclick="showFormProp()" style="display:flex">Add Property</button><br>
 
 <!--add income button-->
-<button onclick="showFormInc()">Add Income</button>
+<button class="addButton" onclick="showFormInc()" style="display:flex">Add Income</button><br>
 
 <!--add expense button-->
-<button onclick="showFormExp()">Add Expense</button>
+<button class="addButton" onclick="showFormExp()" style="display:flex">Add Expense</button>
+</div>
+
+
 <!--Properties display-->
-<h2>Your Properties: </h2>
+<h2 id="propertyLabel">Your Properties: </h2>
 <div id="propertiesDisplay"></div>
 
 <!--Income display-->
-<h2>Your Incomes: </h2>
+<h2 id="incomeLabel">Your Incomes: </h2>
 <div id="incomeDisplay"></div>
 
 <!--Expense display-->
-<h2>Your Expenses: </h2>
+<h2 id="expenseLabel">Your Expenses: </h2>
 <div id="expenseDisplay">
 
 </div>
 
     <div id="property_form" style="display:none;">
+    <button type="button" onclick="hideForms()" class="xButton">X</button>
     <form action="/api/realEstate/add-property" method="POST"><!--add property form-->
       <label for="name">Name of Property</label><br><br>
       <input name="name" type="text" required><br><br>
@@ -85,6 +93,7 @@
     <!--Income form-->
     <div id="income_form" style="display:none;">
     <form action="/api/realEstate/add-income" method="POST">
+      <button type="button" onclick="hideForms()" class="xButton">X</button>
       <label for="amount">Amount</label><br><br>
       <input name="amount" type="number" step="0.01" min="0" placeholder="0.00" required><br><br>
 
@@ -98,6 +107,7 @@
     <!--Expense form-->
     <div id="expense_form" style="display:none;">
     <form action="/api/realEstate/add-expense" method="POST">
+      <button type="button" onclick="hideForms()" class="xButton">X</button>
       <label for="amount">Amount</label><br><br>
       <input name="amount" type="number" step="0.01" min="0" placeholder="0.00" required><br><br>
 
@@ -113,6 +123,7 @@
     <form id="editPropForm"><!--add property form-->
 
       <input type="hidden" id="propertyId" />
+      <button type="button" onclick="hideForms()" class="xButton">X</button>
 
       <label for="name">Name of Property</label><br><br>
       <input id ="pName" name="name" type="text" required><br><br>
@@ -147,6 +158,7 @@
     <form id="editIncForm">
 
       <input type="hidden" id="incomeId" />
+      <button type="button" onclick="hideForms()" class="xButton">X</button>
 
       <label for="amount">Amount</label><br><br>
       <input id="iAmount" name="amount" type="number" step="0.01" min="0" placeholder="0.00" required><br><br>
@@ -163,6 +175,7 @@
     <form id ="editExpForm">
 
       <input type="hidden" id="expenseId" />
+      <button type="button" onclick="hideForms()" class="xButton">X</button>
 
       <label for="amount">Amount</label><br><br>
       <input id="eAmount" name="amount" type="number" step="0.01" min="0" placeholder="0.00" required><br><br>
@@ -289,6 +302,17 @@
         document.getElementById("expenseDisplay").innerHTML ="<p>You are not logged in</p>"
        });
 
+       //calculate finance total
+       Promise.all([
+        fetch('/api/realEstate/get-incomes').then(r => r.json()),
+        fetch('/api/realEstate/get-expenses').then(r => r.json())
+       ])
+       .then(([incomes, expenses]) =>{
+        let total = incomes.reduce((sum,i) => sum + Number(i.amount), 0);
+        total -= expenses.reduce((sum, e) => sum + Number(e.amount),0);
+        document.getElementById('total').innerHTML = total.toFixed(2);
+       })
+
        //delete property call
        function deleteProperty(propId){
         fetch(`/api/realEstate/delete-property/${propId}`,{
@@ -319,7 +343,7 @@
 
        //delete expense call
        function deleteExpense(expId){
-        fetch(`/api/RealEstate/delete-expense/${expId}`,{
+        fetch(`/api/realEstate/delete-expense/${expId}`,{
              method: 'DELETE'})
         .then(res => res.json())
         .then(data =>{
@@ -394,42 +418,97 @@
 
        //for toggling on the forms
        function showFormProp(){
+         hideForms();
+         hideButtons();
         document.getElementById("property_form").style.display = "flex";
         hideDisplays();
        }
 
        function showFormInc(){
+         hideForms();
+         hideButtons();
         document.getElementById("income_form").style.display = "flex";
         hideDisplays();
        }
 
        function showFormExp(){
+         hideForms();
+         hideButtons();
         document.getElementById("expense_form").style.display = "flex";
         hideDisplays();
        }
 
        function updatePropertyForm(id){
+         hideForms();
+         hideButtons();
         document.getElementById("property_form_update").style.display = "flex";
         document.getElementById("propertyId").value = id;
         hideDisplays();
        }
 
        function updateIncomeForm(id){
+         hideForms();
+         hideButtons();
         document.getElementById("income_form_update").style.display = "flex";
         document.getElementById("incomeId").value = id;
         hideDisplays();
        }
 
        function updateExpenseForm(id){
+        hideForms();
+        hideButtons();
         document.getElementById("expense_form_update").style.display = "flex";
         document.getElementById("expenseId").value = id;
         hideDisplays();
        }
 
+       //TO FIX: add class names to all forms and displays then use that
+
        function hideDisplays(){
         document.getElementById("propertiesDisplay").style.display = "none";
         document.getElementById("incomeDisplay").style.display = "none";
         document.getElementById("expenseDisplay").style.display = "none";
+        document.getElementById("propertyLabel").style.display = "none";
+        document.getElementById("incomeLabel").style.display = "none";
+        document.getElementById("expenseLabel").style.display = "none";
+       }
+
+       function showDisplays(){
+        document.getElementById("propertiesDisplay").style.display = "flex";
+        document.getElementById("incomeDisplay").style.display = "flex";
+        document.getElementById("expenseDisplay").style.display = "flex";
+        document.getElementById("propertyLabel").style.display = "flex";
+        document.getElementById("incomeLabel").style.display = "flex";
+        document.getElementById("expenseLabel").style.display = "flex";
+
+       }
+
+       //hide forms
+       function hideForms(){
+        document.getElementById("property_form").style.display ="none";
+        document.getElementById("income_form").style.display ="none";
+        document.getElementById("expense_form").style.display ="none";
+        document.getElementById("property_form_update").style.display ="none";
+        document.getElementById("income_form_update").style.display ="none";
+        document.getElementById("expense_form_update").style.display ="none";
+        showButtons();
+        showDisplays();
+       }
+
+       //hide buttons
+       function hideButtons(){
+        const buttons = document.getElementsByClassName("addButton");
+        for(let b of buttons){
+          b.style.display ="none";
+        }
+       }
+
+       //show buttons
+       function showButtons(){
+        const buttons = document.getElementsByClassName("addButton");
+        for(let b of buttons){
+          b.style.display ="flex";
+        }
        }
 
       

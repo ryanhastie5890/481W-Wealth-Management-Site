@@ -52,6 +52,14 @@ body {
         border-radius: 20px;
         z-index:999;
 }
+.xButton{
+  position:absolute;
+  top:5px;
+  right:5px;
+  background:none;
+  border: none;
+  z-index:9999;
+}
 #propertiesDisplay, #incomeDisplay, #expenseDisplay{
   height:60vh;
   width:80%;
