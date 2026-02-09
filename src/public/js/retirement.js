@@ -9,6 +9,13 @@ const retirementOptions = {
   "HSA": ["HSA"]
 };
 
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
 // open modal on button click
 addInvestmentsButton.addEventListener('click', () => {
   modal.style.display = 'block';
@@ -47,33 +54,57 @@ function showSubtypeOptions(category) {
   });
 }
 
-function showFinalForm(category, subtype) {
-  modalBody.innerHTML = `
-    <h3>Add ${subtype}</h3>
-    <label>Current Balance</label>
-    <input type="number" id="current_balance" step="0.01">
-    <br><br>
-    <button id="save-account">Save Account</button>
-  `;
+  function showFinalForm(category, subtype) {
+    modalBody.innerHTML = `
+      <h3>Add ${subtype}</h3>
+      <label>Balance</label>
+      <input type="text" id="balance" placeholder="$0" inputmode="numeric" autocomplete="off">
+      <br><br>
+      <button id="save-account">Save Account</button>
+    `;
+    // below code handles input for investment accounts.
+    const balanceInput = document.getElementById('balance');
 
-  document.getElementById('save-account').onclick = async () => {
-    const amount = document.getElementById('current_balance').value;
+    balanceInput.addEventListener('input', (e) => {
+      // remove values that are not a digit
+      let value = e.target.value.replace(/\D/g, '');
 
-    const res = await fetch('/api/retirement/test', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        account_type: subtype,
-        amount
-      })
+      // add commas if value is large enough. e.g. 1,000 1,000,000
+      value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+      e.target.value = value;
     });
 
-    if (res.ok) {
-      console.log('Retirement test sent');
-      modal.style.display = 'none';
-    } 
-    else {
-      console.log('Error sending retirement test');
-    }
-  };
-}
+    document.getElementById('save-account').onclick = async () => {
+      const account_type = subtype;
+      const preAmount = balanceInput.value;
+      const amount = preAmount.replace(/,/g,'');
+
+      // FIX ME: further test isNAN
+      if (!amount || isNaN(amount)) {
+        alert('Please enter a valid amount');
+        return;
+      }
+
+      const res = await fetch('/api/retirement/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          account_type,
+          amount
+        })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        console.log(`Saved ${account_type} with amount ${amount}.`);
+        modal.style.display = 'none';
+        modalBody.innerHTML = '';
+        alert(`Added ${account_type}`);
+      } 
+      else {
+        alert('Error adding account');
+      }
+    };
+  }

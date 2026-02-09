@@ -1,8 +1,8 @@
 import express from 'express';
-import { testRetirement } from '../controllers/retirement.controller.js';
+import { addRetirementAccount } from '../controllers/retirement.controller.js';
 
 const router = express.Router();
 
-router.post('/test', testRetirement);
+router.post('/add', addRetirementAccount);
 
 export default router;

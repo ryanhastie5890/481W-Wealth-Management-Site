@@ -12,8 +12,9 @@ CREATE TABLE users (
 ## temp retirement databse to import to MySQL
 CREATE TABLE retirement_accounts (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  userId INT NOT NULL,
-  account_type VARCHAR(50),           
-  current_balance DECIMAL(12,2),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  userId INT NOT NULL,                 
+  account_type VARCHAR(50) NOT NULL,   
+  current_balance DECIMAL(12,2) NOT NULL, 
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
 );
