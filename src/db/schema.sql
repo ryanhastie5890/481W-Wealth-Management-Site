@@ -29,7 +29,7 @@ CREATE TABLE retirement_accounts (
   id INT AUTO_INCREMENT PRIMARY KEY,
   userId INT NOT NULL,                 
   account_type VARCHAR(50) NOT NULL, 
-  display_name VARCHAR(100);  
+  display_name VARCHAR(100),
   current_balance DECIMAL(12,2) NOT NULL, 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
