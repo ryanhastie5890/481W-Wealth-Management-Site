@@ -16,6 +16,48 @@ window.onclick = function(event) {
   }
 }
 
+// create new rows for retirement-table-body
+async function loadRetirementAccounts() {
+  const res = await fetch('/api/retirement');
+  const accounts = await res.json();
+
+  const tbody = document.getElementById('retirement-table-body');
+  tbody.innerHTML = '';
+
+  accounts.forEach(account => {
+    const row = document.createElement('tr');
+
+    row.innerHTML = `
+      <td>
+        <input
+          type="text"
+          value="${account.display_name}"
+          data-id="${account.id}"
+          class="display-name-input"
+        />
+      </td>
+
+      <td>
+        <input
+          type="text"
+          value="${Number(account.current_balance).toLocaleString()}"
+          data-id="${account.id}"
+          class="balance-input"
+          inputmode="numeric"
+        />
+      </td>
+
+      <td>
+        <button data-id="${account.id}" class="save-btn">Save</button>
+      </td>
+    `;
+
+    tbody.appendChild(row);
+  });
+
+  console.log('Loaded retirement accounts:', accounts);
+}
+
 // open modal on button click
 addInvestmentsButton.addEventListener('click', () => {
   modal.style.display = 'block';
@@ -101,6 +143,7 @@ function showSubtypeOptions(category) {
         console.log(`Saved ${account_type} with amount ${amount}.`);
         modal.style.display = 'none';
         modalBody.innerHTML = '';
+        await loadRetirementAccounts(); // refresh retirement table after adding account
         alert(`Added ${account_type}`);
       } 
       else {
@@ -108,3 +151,42 @@ function showSubtypeOptions(category) {
       }
     };
   }
+
+document.getElementById('retirement-table-body').addEventListener('click', async (e) => {
+  if (!e.target.classList.contains('save-btn')) return;
+
+  const id = e.target.dataset.id;
+  const row = e.target.closest('tr');
+
+  const displayName = row.querySelector('.display-name-input').value;
+  const rawBalance = row.querySelector('.balance-input').value;
+  const balance = rawBalance.replace(/,/g, '');
+
+  if (!displayName || isNaN(balance)) {
+    alert('Invalid input');
+    return;
+  }
+
+  const res = await fetch('/api/retirement/update', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      id,
+      display_name: displayName,
+      amount: balance
+    })
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
+    console.log('Updated account', id);
+    await loadRetirementAccounts();
+  } else {
+    alert('Update failed');
+  }
+});
+
+
+// FIX ME
+document.addEventListener('DOMContentLoaded', loadRetirementAccounts);

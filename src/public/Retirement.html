@@ -16,7 +16,7 @@
       <!--display user while logged in-->
       <div id="user-info" style="position:absolute; top:10px; right:20px; color:white;"></div>
     </header>
-    <!--menu-->
+    <!--main menu-->
     <div id="menu">
       <a href = "RealEstate.html" >Real Estate</a>
       <a href = "Investment.html" >Investment</a>
@@ -27,15 +27,28 @@
 
     <h2>Retirement Accounts</h2>
     <input type="button" id="add-investments-button" value="Add Investments">
-    <!--modal container that will new investment options-->
+    <!--modal container: display new investment options-->
     <div id="investment-modal" class="modal" style="display:none;">
       <div class="modal-content" style="background-color:#01665e; color:white; padding:20px; width: 25%;">
         <span id="close-modal" style="float:right; cursor:pointer;">&times;</span>
         <div id="modal-body"></div>
       </div>
     </div>
+    <!--display user retirement accounts-->
+    <table id="retirement-table" style="margin-top:20px; width:60%; color:white;">
+      <thead>
+        <tr>
+          <th>Account</th>
+          <th>Balance</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="retirement-table-body">
+      <!-- rows inserted here -->
+      </tbody>
+    </table>
 
-    <div id="subtype-container" style="margin-top:10px;"></div>
+    <!--<div id="subtype-container" style="margin-top:10px;"></div>-->
 
     <script src="./js/session.js"></script>
     <script src="./js/retirement.js"></script>

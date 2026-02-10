@@ -5,6 +5,9 @@ import { dbCon } from '../db/database.js';     // connect to DB to run queries
 //   next();
 // }
 
+/*
+*   FIX ME: add description
+*/
 export const addRetirementAccount = (req, res) => {
   console.log('Test: Adding Retirement Account');
 
@@ -16,13 +19,14 @@ export const addRetirementAccount = (req, res) => {
 
   const { account_type, amount } = req.body;
   const sql = `
-    INSERT INTO retirement_accounts (userId, account_type, current_balance)
-    VALUES (?, ?, ?)
+    INSERT INTO retirement_accounts (userId, account_type, display_name, current_balance)
+    VALUES (?, ?, ?, ?)
   `;
-  dbCon.query(sql, [req.session.userId, account_type, amount], (err, result) => {
+
+  dbCon.query(sql, [req.session.userId, account_type, account_type, amount], (err, result) => {
     if (err) {
       console.error('DB INSERT ERROR:', err);
-      return res.status(500).json({ error: 'Database error' });
+      return res.status(500).json({ error: 'Database error. unable to add retirement account.' });
     }
     console.log('Inserted Retirement Account');
     console.log(`User ID: ${req.session.userId}`);
@@ -32,4 +36,58 @@ export const addRetirementAccount = (req, res) => {
 
     res.json({ success: true });
   });
+};
+
+/*
+*   FIX ME: add description
+*/  
+export const getRetirementAccounts = (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ error: 'not logged in' })
+  }
+
+  const sql = `
+    SELECT id, account_type, display_name, current_balance
+    FROM retirement_accounts
+    WHERE userId = ?
+    ORDER BY created_at ASC
+  `;
+
+  dbCon.query(sql, [req.session.userId], (err, results) => {
+    if (err) {
+      console.error('DB FETCH ERROR:', err);
+      return res.status(500).json({ error: 'database error. unable to get retirement account.' });
+    }
+
+    res.json(results);
+  });
+};
+
+/*
+*   FIX ME: add description
+*/
+export const updateRetirementAccount = (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ error: 'not logged in' });
+  }
+
+  const { id, display_name, amount } = req.body;
+
+  const sql = `
+    UPDATE retirement_accounts
+    SET display_name = ?, current_balance = ?
+    WHERE id = ? AND userId = ?
+  `;
+
+  dbCon.query(
+    sql,
+    [display_name, amount, id, req.session.userId],
+    (err) => {
+      if (err) {
+        console.error('DB UPDATE ERROR:', err);
+        return res.status(500).json({ error: 'database error. unable to update retirment account.' });
+      }
+      res.json({ success: true });
+    }
+  );
 };
