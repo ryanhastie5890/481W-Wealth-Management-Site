@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt';                // password hashing
 import { dbCon } from '../db/database.js';     // connect to DB to run queries
-
+/*
+*   FIX ME: add description
+*/
 export async function registerUser(req, res) {
     const { email, password } = req.body;
     try {
@@ -22,14 +24,19 @@ export async function registerUser(req, res) {
         res.status(500).send("Server error");
     }
 }
-
+/*
+*   FIX ME: add description
+*/
 export async function loginUser(req, res) {
     const { email, password } = req.body;
     dbCon.query(
         "SELECT * FROM users WHERE email = ?",
         [email],
         async (err, results) => {
-            if (err || results.length === 0) return res.status(401).send("Invalid credentials");
+            if (err || results.length === 0) {
+              req.session.message = "Invalid credentials";
+              return res.redirect('/');
+            }
 
             const user = results[0];
             const match = await bcrypt.compare(password, user.password_hash);
@@ -44,4 +51,19 @@ export async function loginUser(req, res) {
             return res.redirect('/');
         }
     );
+}
+
+/*
+*   FIX ME: add description
+*/ 
+export const logout = (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      console.error('Logout error:', err);
+      return res.status(500).json({ error: 'Logout failed' });
+    }
+
+    res.clearCookie('connect.sid');
+    res.json({ success: true });
+  })
 }
