@@ -68,7 +68,7 @@ fetch('/api/session/getSession')
     // log user out on button click
     logoutButton.onclick = async () => {
       await fetch('/api/auth/logout', { method: 'POST' });
-      window.location.href = '/index.html';
+      window.location.href = '/login.html';
     };
 
     document.addEventListener('click', () => {

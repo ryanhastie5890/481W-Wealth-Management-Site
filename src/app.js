@@ -11,8 +11,9 @@ const __dirname = dirname(__filename);
 
 const app = express();
 
+
+
 // Global middware
-app.use(express.static(path.join(__dirname, 'public')));  // for static files: HTML/CSS/JS
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(session({
@@ -20,7 +21,13 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
-
+app.get('/', (req, res) => {
+  if (!req.session.userId) {
+    return res.redirect('/login.html');
+  }
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+app.use(express.static(path.join(__dirname, 'public')));  // for static files: HTML/CSS/JS
 // Global routes
 app.use('/api', routes);
 

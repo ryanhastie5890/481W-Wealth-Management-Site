@@ -48,7 +48,7 @@ export async function loginUser(req, res) {
             req.session.userId = user.id; // store logged-in userid in session
             req.session.email = user.email;  // store logged-in user email in session
             req.session.message = "Login successful!";
-            return res.redirect('/');
+            return res.redirect('/Retirement.html');
         }
     );
 }
