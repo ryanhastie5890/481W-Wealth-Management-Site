@@ -1,7 +1,8 @@
 import bcrypt from 'bcrypt';                // password hashing
 import { dbCon } from '../db/database.js';     // connect to DB to run queries
 /*
-*   FIX ME: add description
+*   register new user in the database, error if the user already exists
+*   FIX ME: password restrictions? 2-factor?
 */
 export async function registerUser(req, res) {
     const { email, password } = req.body;
@@ -25,7 +26,8 @@ export async function registerUser(req, res) {
     }
 }
 /*
-*   FIX ME: add description
+*   if user exists in the database, log them in and store user.id & user.email
+*   otherwise respond with an error message.
 */
 export async function loginUser(req, res) {
     const { email, password } = req.body;
@@ -48,13 +50,13 @@ export async function loginUser(req, res) {
             req.session.userId = user.id; // store logged-in userid in session
             req.session.email = user.email;  // store logged-in user email in session
             req.session.message = "Login successful!";
-            return res.redirect('/Retirement.html');
+            return res.redirect('/index.html');
         }
     );
 }
 
 /*
-*   FIX ME: add description
+*   log user out destroying the currrent session and user cookie information
 */ 
 export const logout = (req, res) => {
   req.session.destroy(err => {

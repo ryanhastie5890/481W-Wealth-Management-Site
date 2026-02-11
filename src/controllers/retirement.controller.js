@@ -6,7 +6,7 @@ import { dbCon } from '../db/database.js';     // connect to DB to run queries
 // }
 
 /*
-*   FIX ME: add description
+*   create new retirement account and saves it in the retirement_accounts table.
 */
 export const addRetirementAccount = (req, res) => {
   console.log('Test: Adding Retirement Account');
@@ -39,7 +39,7 @@ export const addRetirementAccount = (req, res) => {
 };
 
 /*
-*   FIX ME: add description
+*   obtain retirement account from the retirement_accounts table to display client side
 */  
 export const getRetirementAccounts = (req, res) => {
   if (!req.session.userId) {
@@ -64,7 +64,7 @@ export const getRetirementAccounts = (req, res) => {
 };
 
 /*
-*   FIX ME: add description
+*   allow user to update existing retirement account in the retirement_accounts able.
 */
 export const updateRetirementAccount = (req, res) => {
   if (!req.session.userId) {

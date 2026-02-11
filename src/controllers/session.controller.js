@@ -1,11 +1,14 @@
-// Server side sessions.
+/*
+*   Server side sessions.
+*/
 export async function sessionMessage(req, res) {
     const msg = req.session.message || "";
     req.session.message = null; // clear message after reading
     res.send(msg);
 }
-
-// Get session info
+/*
+*    Get session info
+*/
 export async function getSession(req, res) {
     // Get user email
     if (req.session.userId != null) {

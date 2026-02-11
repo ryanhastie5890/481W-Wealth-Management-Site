@@ -12,7 +12,7 @@ fetch('api/session/sessionMessage')
   });
 
 /*
-*   session info (user info & logout)
+*   FIX ME: older session info (user info & logout) remove later
 */ 
 // fetch('api/session/getSession')
 //   .then(res => res.json())

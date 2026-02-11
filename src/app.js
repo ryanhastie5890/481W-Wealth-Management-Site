@@ -21,13 +21,14 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+// directs user to login.html if not logged in else to index.html
 app.get('/', (req, res) => {
   if (!req.session.userId) {
     return res.redirect('/login.html');
   }
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
-app.use(express.static(path.join(__dirname, 'public')));  // for static files: HTML/CSS/JS
+app.use(express.static(path.join(__dirname, 'public')));  // static files: HTML/CSS/JS
 // Global routes
 app.use('/api', routes);
 
