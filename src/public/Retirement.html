@@ -13,10 +13,10 @@
       <div style="height: 7vh; ">
         <a href = "index.html" >Wealth Management System</a>
       </div>
-      <!--display user while logged in-->
+      <!--display user while logged in & logout dropdown-->
       <div id="user-info" style="position:absolute; top:10px; right:20px; color:white;"></div>
     </header>
-    <!--menu-->
+    <!--main menu-->
     <div id="menu">
       <a href = "RealEstate.html" >Real Estate</a>
       <a href = "Investment.html" >Investment</a>
@@ -27,37 +27,28 @@
 
     <h2>Retirement Accounts</h2>
     <input type="button" id="add-investments-button" value="Add Investments">
-    <!--modal container that will new investment options-->
+    <!--modal container: display new investment options-->
     <div id="investment-modal" class="modal" style="display:none;">
-      <div class="modal-content" style="background-color:#222; color:white; padding:20px;">
+      <div class="modal-content" style="background-color:#01665e; color:white; padding:20px; width: 25%;">
         <span id="close-modal" style="float:right; cursor:pointer;">&times;</span>
         <div id="modal-body"></div>
       </div>
     </div>
-    <!--<select id="category">
-      <option value="">--Select--</option>
-      <option value="IRA">Individual Retirement Account</option>
-      <option value="ERA">Employer Retirement Account</option>
-      <option value="HSA">Health Savings Account (HSA)</option>
-    </select>-->
+    <!--display user retirement accounts-->
+    <table id="retirement-table" style="margin-top:20px; width:60%; color:white;">
+      <thead>
+        <tr>
+          <th>Account</th>
+          <th>Balance</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="retirement-table-body">
+      <!-- rows inserted here -->
+      </tbody>
+    </table>
 
-    <div id="subtype-container" style="margin-top:10px;"></div>
-    <!--FIX ME: temp fields while working out how to manage the data
-    <label>Current Balance</label>
-    <input type="number" id="current_balance">
-
-    <label>Annual Contribution</label>
-    <input type="number" id="annual_contribution">
-
-    <label>Expected Return (%)</label>
-    <input type="number" id="expected_return">
-
-    <label>Years to Retirement</label>
-    <input type="number" id="years_to_retirement">
-
-    <button id="add-account">Add Account</button>
-
-    <div id="retirement-message" style="margin-top:10px; color:white;"></div>-->
+    <!--<div id="subtype-container" style="margin-top:10px;"></div>-->
 
     <script src="./js/session.js"></script>
     <script src="./js/retirement.js"></script>

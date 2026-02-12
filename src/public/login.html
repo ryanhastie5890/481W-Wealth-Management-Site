@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <title>Login | Wealth Management</title>
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="shortcut icon" href="#"> <!-- to remove 404 error favicon.ico not found -->
+</head>
+<body>
+  <h2>Register</h2>
+  <form action="/api/auth/register" method="POST">
+    <input type="email" name="email" placeholder="Email" required>
+    <br>
+    <input type="password" name="password" placeholder="Password" required>
+    <br>
+    <button type="submit">Register</button>
+  </form>
+  <hr>
+  <h2>Login</h2>
+  <form action="/api/auth/login" method="POST">
+    <input type="email" name="email" placeholder="Email" required>
+    <br>
+    <input type="password" name="password" placeholder="Password" required>
+    <br>
+    <button type="submit">Login</button>
+  </form>
+
+
+
+
+
+  <p id="message"></p>
+
+  <script src="./js/session.js"></script>
+</body>
+</html>
