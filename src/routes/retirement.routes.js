@@ -2,7 +2,8 @@ import express from 'express';
 import { 
   addRetirementAccount, 
   getRetirementAccounts,
-  updateRetirementAccount 
+  updateRetirementAccount,
+  deleteRetirementAccount 
 } from '../controllers/retirement.controller.js';
 
 const router = express.Router();
@@ -13,5 +14,7 @@ router.post('/add', addRetirementAccount);
 router.get('/', getRetirementAccounts);
 // UPDATE /api/retirement/update
 router.put('/update', updateRetirementAccount);
+// DELETE /api/retirement/delete
+router.delete('/:id', deleteRetirementAccount);
 
 export default router;
