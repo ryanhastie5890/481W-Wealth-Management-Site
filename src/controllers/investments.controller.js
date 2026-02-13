@@ -1,6 +1,9 @@
 import { dbCon } from '../db/database.js';
 import { getStockQuote } from "../services/alphaVantage.js"
 
+// create promise wrapper for non-callback flow
+const db = dbCon.promise();
+
 export async function showStock(req, res) {
     try {
         const { symbol } = req.query;
@@ -46,51 +49,53 @@ export async function showStock(req, res) {
  */
 export async function buyStock(req, res) {
     try {
-        const userId = req.session.userId
-        const { symbol, shares } = req.body
+        const userId = req.session.userId;
+        let { symbol, shares } = req.body;
 
         if (!symbol || !shares || shares <= 0) {
-            return res.status(400).json({ error: "symbol and positive shares are required" })
+            return res.status(400).json({ error: "symbol and positive shares are required" });
         }
 
-        // Get live price
-        const quote = await getStockQuote(symbol)
-        const price = parseFloat(quote.price)
+        symbol = symbol.toUpperCase();
 
-        if (!price || isNaN(price)) {
-            return res.status(500).json({ error: "Invalid stock price" })
+        // Get live price
+        const quote = await getStockQuote(symbol);
+        const price = parseFloat(quote['05. price']);
+
+        if (isNaN(price)) {
+            return res.status(500).json({ error: "Invalid stock price" });
         }
 
         // Check existing investment
-        const [rows] = await db.execute(
-            `SELECT shares, average_price 
-             FROM investments 
+        const [rows] = await db.query(
+            `SELECT shares, average_price
+             FROM investments
              WHERE userId = ? AND symbol = ?`,
             [userId, symbol]
-        )
+        );
 
         if (rows.length === 0) {
-            // First time buying this stock
-            await db.execute(
+            // Insert new investment
+            await db.query(
                 `INSERT INTO investments (userId, symbol, shares, average_price)
                  VALUES (?, ?, ?, ?)`,
                 [userId, symbol, shares, price]
-            )
+            );
         } else {
             // Update existing investment
-            const existingShares = parseFloat(rows[0].shares)
-            const existingAvg = parseFloat(rows[0].average_price)
+            const existingShares = Number(rows[0].shares);
+            const existingAvg = Number(rows[0].average_price);
 
-            const totalShares = existingShares + shares
+            const totalShares = existingShares + shares;
             const newAvg =
-                ((existingShares * existingAvg) + (shares * price)) / totalShares
+                ((existingShares * existingAvg) + (shares * price)) / totalShares;
 
-            await db.execute(
+            await db.query(
                 `UPDATE investments
                  SET shares = ?, average_price = ?
                  WHERE userId = ? AND symbol = ?`,
                 [totalShares, newAvg, userId, symbol]
-            )
+            );
         }
 
         res.status(201).json({
@@ -98,9 +103,9 @@ export async function buyStock(req, res) {
             symbol,
             shares,
             price
-        })
+        });
     } catch (error) {
-        console.error(error)
-        res.status(500).json({ error: "Failed to buy stock" })
+        console.error(error);
+        res.status(500).json({ error: "Failed to buy stock" });
     }
 }

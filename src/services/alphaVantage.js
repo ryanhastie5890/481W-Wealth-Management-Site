@@ -9,7 +9,7 @@ const BASE_URL = 'https://www.alphavantage.co/query';
  * @function getStockQuote
  * @param {string} symbol - The stock ticker symbol (e.g., "AAPL", "MSFT").
  * @returns {Promise<{
- *   `Global Quote: {
+ *   `{
  *     "01. symbol": string,
  *     "02. open": string,
  *     "03. high": string,
@@ -20,8 +20,8 @@ const BASE_URL = 'https://www.alphavantage.co/query';
  *     "08. previous close": string,
  *     "09. change": string,
  *     "10. change percent": string
- *   }
- * }>}`
+ *   }`
+ * }>}
  *
  * @throws {Error} If the HTTP request fails or the API returns an error.
  *
@@ -39,5 +39,5 @@ export async function getStockQuote(symbol) {
     },
   });
 
-  return response.data;
+  return response.data['Global Quote'];
 }
