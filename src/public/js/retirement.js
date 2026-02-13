@@ -9,14 +9,18 @@ const retirementOptions = {
   "HSA": ["HSA"]
 };
 
-// When the user clicks anywhere outside of the modal, close it
+/*
+*   When the user clicks anywhere outside of the modal, close it
+*/
 window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
   }
 }
 
-// create new rows for retirement-table-body
+/*
+*   create new rows for retirement-table-body
+*/ 
 async function loadRetirementAccounts() {
   const res = await fetch('/api/retirement');
   const accounts = await res.json();
@@ -48,7 +52,8 @@ async function loadRetirementAccounts() {
       </td>
 
       <td>
-        <button data-id="${account.id}" class="save-btn">Save</button>
+        <button data-id="${account.id}" class="save-button">Save</button>
+        <button data-id="${account.id}" class="delete-button">Delete</button>
       </td>
     `;
 
@@ -58,22 +63,31 @@ async function loadRetirementAccounts() {
   console.log('Loaded retirement accounts:', accounts);
 }
 
-// open modal on button click
+/*
+*   open modal on button click
+*/
 addInvestmentsButton.addEventListener('click', () => {
   modal.style.display = 'block';
   showCategoryOptions();
 });
 
-// close modal
+/*
+*   close modal
+*/
 closeModal.addEventListener('click', () => {
   modal.style.display = 'none';
 });
 
-// close modal if user clicks outside content
+/*
+*   close modal if user clicks outside content
+*/
 window.addEventListener('click', (e) => {
   if (e.target === modal) modal.style.display = 'none';
 });
 
+/*
+*   FIX ME: add helpful description
+*/
 function showCategoryOptions() {
   modalBody.innerHTML = '<h3>Select Investment Category:</h3>';
   Object.keys(retirementOptions).forEach(cat => {
@@ -85,6 +99,9 @@ function showCategoryOptions() {
   });
 }
 
+/*
+*   FIX ME: add helpful description
+*/
 function showSubtypeOptions(category) {
   modalBody.innerHTML = `<h3>${category} Types:</h3>`;
   retirementOptions[category].forEach(sub => {
@@ -96,64 +113,70 @@ function showSubtypeOptions(category) {
   });
 }
 
-  function showFinalForm(category, subtype) {
-    modalBody.innerHTML = `
-      <h3>Add ${subtype}</h3>
-      <label>Balance</label>
-      <input type="text" id="balance" placeholder="$0" inputmode="numeric" autocomplete="off">
-      <br><br>
-      <button id="save-account">Save Account</button>
-    `;
-    // below code handles input for investment accounts.
-    const balanceInput = document.getElementById('balance');
+/*
+*   FIX ME: add helpful description
+*/
+function showFinalForm(category, subtype) {
+  modalBody.innerHTML = `
+    <h3>Add ${subtype}</h3>
+    <label>Balance</label>
+    <input type="text" id="balance" placeholder="$0" inputmode="numeric" autocomplete="off">
+    <br><br>
+    <button id="save-account">Save Account</button>
+  `;
+  // below code handles input for investment accounts.
+  const balanceInput = document.getElementById('balance');
 
-    balanceInput.addEventListener('input', (e) => {
-      // remove values that are not a digit
-      let value = e.target.value.replace(/\D/g, '');
+  balanceInput.addEventListener('input', (e) => {
+    // remove values that are not a digit
+    let value = e.target.value.replace(/\D/g, '');
 
-      // add commas if value is large enough. e.g. 1,000 1,000,000
-      value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    // add commas if value is large enough. e.g. 1,000 1,000,000
+    value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
-      e.target.value = value;
+    e.target.value = value;
+  });
+
+  document.getElementById('save-account').onclick = async () => {
+    const account_type = subtype;
+    const preAmount = balanceInput.value;
+    const amount = preAmount.replace(/,/g,'');
+
+    // FIX ME: further test isNAN
+    if (!amount || isNaN(amount)) {
+      alert('Please enter a valid amount');
+      return;
+    }
+
+    const res = await fetch('/api/retirement/add', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        account_type,
+        amount
+      })
     });
 
-    document.getElementById('save-account').onclick = async () => {
-      const account_type = subtype;
-      const preAmount = balanceInput.value;
-      const amount = preAmount.replace(/,/g,'');
+    const data = await res.json();
 
-      // FIX ME: further test isNAN
-      if (!amount || isNaN(amount)) {
-        alert('Please enter a valid amount');
-        return;
-      }
+    if (data.success) {
+      console.log(`Saved ${account_type} with amount ${amount}.`);
+      modal.style.display = 'none';
+      modalBody.innerHTML = '';
+      await loadRetirementAccounts(); // refresh retirement table after adding account
+      alert(`Added ${account_type}`);
+    } 
+    else {
+      alert('Error adding account');
+    }
+  };
+}
 
-      const res = await fetch('/api/retirement/add', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          account_type,
-          amount
-        })
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        console.log(`Saved ${account_type} with amount ${amount}.`);
-        modal.style.display = 'none';
-        modalBody.innerHTML = '';
-        await loadRetirementAccounts(); // refresh retirement table after adding account
-        alert(`Added ${account_type}`);
-      } 
-      else {
-        alert('Error adding account');
-      }
-    };
-  }
-
+/*
+*   The save handler for updating an existing retirement account in retirement.html
+*/
 document.getElementById('retirement-table-body').addEventListener('click', async (e) => {
-  if (!e.target.classList.contains('save-btn')) return;
+  if (!e.target.classList.contains('save-button')) return;
 
   const id = e.target.dataset.id;
   const row = e.target.closest('tr');
@@ -182,11 +205,36 @@ document.getElementById('retirement-table-body').addEventListener('click', async
   if (data.success) {
     console.log('Updated account', id);
     await loadRetirementAccounts();
-  } else {
+  } 
+  else {
     alert('Update failed');
   }
 });
 
+/*
+*   The delete handler for deleting an existing retirement account in retirement.html
+*/
+document.getElementById('retirement-table-body').addEventListener('click', async (e) => {
+  if (!e.target.classList.contains('delete-button')) return;
 
-// FIX ME
+  const id = e.target.dataset.id;
+
+  if (!confirm('Delete this retirement account?')) return;
+
+  const res = await fetch(`/api/retirement/${id}`, {
+    method: 'DELETE'
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
+    console.log('Deleted account', id);
+    await loadRetirementAccounts();
+  } 
+  else {
+    alert(data.error || 'Delete failed');
+  }
+});
+
+// FIX ME: add helpful description
 document.addEventListener('DOMContentLoaded', loadRetirementAccounts);
