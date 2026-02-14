@@ -92,7 +92,7 @@ export const updateRetirementAccount = (req, res) => {
       console.log('Updated Retirement Account');
       console.log(`User ID: ${req.session.userId}`);
       console.log(`User Email: ${req.session.email}`);
-      console.log(`Account Type: ${account_type}`);
+      console.log(`Account Type: ${display_name}`);
       console.log(`Amount Entered: ${amount}`);
       res.json({ success: true });
     }
