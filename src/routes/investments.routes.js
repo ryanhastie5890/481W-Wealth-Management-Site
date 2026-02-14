@@ -1,13 +1,24 @@
 import express from 'express';
 import {
-    showStock
+    showStock,
+    buyStock
 } from '../controllers/investments.controller.js';
 
 const router = express.Router();
 
 /**
- * POST /api/investments/show
+ * GET /api/investments/show?symbol=AAPL
  */
-router.post('/show', showStock);
+router.get('/show', showStock);
+
+/**
+ * POST /api/investments/buy
+ * body {
+ *  "userId": 12,
+ *  "symbol": "AAPL",
+ *  "shares": 5
+ * }
+ */
+router.post('/buy', buyStock);
 
 export default router;

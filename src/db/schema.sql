@@ -7,8 +7,10 @@ CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   email VARCHAR(255) NOT NULL UNIQUE,
   password_hash VARCHAR(255) NOT NULL,
+  role ENUM('admin', 'user') NOT NULL DEFAULT 'user',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 
 -- Properties table
 CREATE TABLE properties (
@@ -33,4 +35,20 @@ CREATE TABLE retirement_accounts (
   current_balance DECIMAL(12,2) NOT NULL, 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Stock Investments
+CREATE TABLE investments (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  userId INT NOT NULL,
+  symbol VARCHAR(10) NOT NULL,
+  shares DECIMAL(15,6) NOT NULL,
+  average_price DECIMAL(15,4) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  UNIQUE (userId, symbol),
+
+  FOREIGN KEY (userId)
+    REFERENCES users(id)
+    ON DELETE CASCADE
 );
