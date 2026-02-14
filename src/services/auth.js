@@ -3,6 +3,10 @@ export default function requireAuth(req, res, next) {
         return next();
     }
 
+    if (req.path === '/admin.html' && req.session.role !== 'admin') {
+    return res.redirect('/index.html');
+    }
+
     // Allow auth + public assets
     if (
         req.path === '/login.html' ||
