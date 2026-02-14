@@ -1,16 +1,21 @@
 import bcrypt from 'bcrypt';                // password hashing
 import { dbCon } from '../db/database.js';     // connect to DB to run queries
+
 /*
 *   register new user in the database, error if the user already exists
 *   FIX ME: password restrictions? 2-factor?
 */
 export async function registerUser(req, res) {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;   // <-- added role here
+
+    // basic role validation (only allow 'admin' or 'user')
+    const safeRole = role === 'admin' ? 'admin' : 'user';   // <-- added
+
     try {
         const hash = await bcrypt.hash(password, 10);
         dbCon.query(
-            "INSERT INTO users (email, password_hash) VALUES (?, ?)",
-            [email, hash],
+            "INSERT INTO users (email, password_hash, role) VALUES (?, ?, ?)",   // updated query
+            [email, hash, safeRole],                                             // added safeRole
             (err) => {
                 if (err) {
                     console.error("MYSQL INSERT ERROR:", err);
@@ -25,6 +30,7 @@ export async function registerUser(req, res) {
         res.status(500).send("Server error");
     }
 }
+
 /*
 *   if user exists in the database, log them in and store user.id & user.email
 *   otherwise respond with an error message.
@@ -47,8 +53,10 @@ export async function loginUser(req, res) {
                 req.session.message = "Invalid credentials";
                 return res.redirect('/');
             }
+
             req.session.userId = user.id; // store logged-in userid in session
             req.session.email = user.email;  // store logged-in user email in session
+            req.session.role = user.role;    // store role in session
             req.session.message = "Login successful!";
             return res.redirect('/index.html');
         }

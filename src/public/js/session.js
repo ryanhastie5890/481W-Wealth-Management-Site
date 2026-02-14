@@ -33,6 +33,11 @@ fetch('/api/session/getSession')
   .then(data => {
     if (!data.loggedIn) return;
 
+    if (data.role === 'admin') {
+      const adminTab = document.getElementById('adminTab');
+      if (adminTab) adminTab.style.display = 'inline-block';
+    }
+
     const userInfo = document.getElementById('user-info');
     if (!userInfo) return;
 
