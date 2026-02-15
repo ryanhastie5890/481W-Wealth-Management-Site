@@ -26,6 +26,38 @@ CREATE TABLE properties (
   FOREIGN KEY (userId) REFERENCES users(id) ON DELETE SET NULL
 );
 
+-- Incomes table
+CREATE TABLE incomes (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  userId INT DEFAULT NULL,
+  amount DECIMAL(10,2) DEFAULT NULL,
+  note TEXT,
+  created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,    
+  updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY userId (userId),
+  CONSTRAINT incomes_ibfk_1
+    FOREIGN KEY (userId)
+    REFERENCES users(id)
+    ON DELETE SET NULL
+);
+
+-- Expenses table
+CREATE TABLE expenses (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  userId INT DEFAULT NULL,
+  amount DECIMAL(10,2) DEFAULT NULL,
+  note TEXT,
+  created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY userId (userId),
+  CONSTRAINT expenses_ibfk_1
+    FOREIGN KEY (userId)
+    REFERENCES users(id)
+    ON DELETE SET NULL
+);
+
 -- Temp retirement table
 CREATE TABLE retirement_accounts (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -51,4 +83,8 @@ CREATE TABLE investments (
   FOREIGN KEY (userId)
     REFERENCES users(id)
     ON DELETE CASCADE
+<<<<<<< HEAD
 );
+=======
+);
+>>>>>>> 74ca4c3d1974d6a3db408a1675d5ad2b9e589bd0
