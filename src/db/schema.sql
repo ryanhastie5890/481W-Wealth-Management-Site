@@ -81,4 +81,8 @@ CREATE TABLE investments (
   FOREIGN KEY (userId)
     REFERENCES users(id)
     ON DELETE CASCADE
+<<<<<<< HEAD
 );
+=======
+);
+>>>>>>> 74ca4c3d1974d6a3db408a1675d5ad2b9e589bd0
