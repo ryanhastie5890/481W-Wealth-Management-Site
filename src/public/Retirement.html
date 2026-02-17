@@ -35,6 +35,8 @@
         <div id="modal-body"></div>
       </div>
     </div>
+    <!--chart.js chart-->
+    <canvas id="retirementChart" width="400" height="400" style="max-width:400px; margin-bottom:20px;"></canvas>
     <!--display user retirement accounts-->
     <table id="retirement-table" style="margin-top:20px; width:60%; color:white;">
       <thead>
@@ -44,13 +46,15 @@
           <th>Actions</th>
         </tr>
       </thead>
+      <!--table for retirement accounts-->
       <tbody id="retirement-table-body">
       <!-- rows inserted here -->
       </tbody>
     </table>
 
     <!--<div id="subtype-container" style="margin-top:10px;"></div>-->
-
+    <!--chart.js-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="./js/session.js"></script>
     <script src="./js/retirement.js"></script>
   </body>

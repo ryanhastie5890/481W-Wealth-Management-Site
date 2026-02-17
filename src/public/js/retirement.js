@@ -61,7 +61,7 @@ async function loadRetirementAccounts() {
 
     tbody.appendChild(row);
   });
-
+  renderRetirementChart(accounts);  // renders chart(s) from chart.js
   console.log('Loaded retirement accounts:', accounts);
 }
 
@@ -238,5 +238,85 @@ document.getElementById('retirement-table-body').addEventListener('click', async
   }
 });
 
-// FIX ME: add helpful description
+
+/*
+*   FIX ME: add helpful description
+*/ 
+function renderRetirementChart(accounts) {
+  const ctx = document.getElementById('retirementChart');
+  // FIX ME: for testing remove after
+  if (!ctx) {
+    console.error('retirementChart canvas not found');
+    return;
+  }
+  // destroy old chart if it exists
+  if (retirementChart) {
+    retirementChart.destroy();
+  }
+
+  // if there are no accounts, show an empty chart
+  if (!accounts || accounts.length === 0) {
+    retirementChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['No Accounts'],
+        datasets: [{
+          data: [1],
+          backgroundColor: ['#555']
+        }]
+      },
+      options: {
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: false }
+        }
+      }
+    });
+    return;
+  }
+
+  // if an accounts exist display data
+  const labels = accounts.map(a => a.display_name);
+  const balances = accounts.map(a => {
+    const raw = String(a.current_balance || '').replace(/,/g, '');
+    const value = Number(raw);
+    return isNaN(value) ? 0 : value;
+  });
+  
+  try {
+    retirementChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels,
+        datasets: [{
+          data: balances,
+          backgroundColor: [
+            '#4CAF50',
+            '#2196F3',
+            '#FFC107',
+            '#9C27B0',
+            '#FF5722',
+            '#00BCD4'
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+  }
+  catch (err) {
+    console.error('Chart render failed:', err);
+  }
+}
+
+
+/*
+* FIX ME: add helpful description
+*/
 document.addEventListener('DOMContentLoaded', loadRetirementAccounts);
