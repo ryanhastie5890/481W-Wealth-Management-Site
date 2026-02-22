@@ -88,7 +88,9 @@ window.addEventListener('click', (e) => {
 });
 
 /*
-*   FIX ME: add helpful description
+*   Displays the 1st step of the "Add Investment" modal.
+*   Dynamically creates buttons for each retirement account category based on retirementOptions.
+*   Selecting a category advances the modal to a subtype selection.
 */
 function showCategoryOptions() {
   modalBody.innerHTML = '<h3>Select Investment Category:</h3>';
@@ -102,7 +104,9 @@ function showCategoryOptions() {
 }
 
 /*
-*   FIX ME: add helpful description
+*   Displays the 2nd step of the "Add Investment" modal.
+*   Shows all available account subtypes for the selected category and allows the user to choose one.
+*   Selecting a subtype advances the modal to the balance input form.
 */
 function showSubtypeOptions(category) {
   modalBody.innerHTML = `<h3>${category} Types:</h3>`;
@@ -116,7 +120,10 @@ function showSubtypeOptions(category) {
 }
 
 /*
-*   FIX ME: add helpful description
+*   Displays the final step of the "Add Investment" modal.
+*   Prompts the user to enter an initial balance for the selected
+*   retirement account subtype, validates the input, and submits
+*   the data to the backend to create a new retirement account.
 */
 function showFinalForm(category, subtype) {
   modalBody.innerHTML = `
@@ -238,10 +245,12 @@ document.getElementById('retirement-table-body').addEventListener('click', async
   }
 });
 
-
 /*
-*   FIX ME: add helpful description
-*/ 
+*   Renders / updates the retirement accounts doughnut chart using Chart.js.
+*   If no accounts exist, displays a placeholder chart indicating no data.
+*   When accounts are present, visualizes each account's balance and
+*   automatically destroys and recreates the chart to reflect updates.
+*/
 function renderRetirementChart(accounts) {
   const ctx = document.getElementById('retirementChart');
   // FIX ME: for testing remove after
@@ -302,6 +311,7 @@ function renderRetirementChart(accounts) {
       },
       options: {
         responsive: true,
+        maintainAspectRatio: true,
         plugins: {
           legend: {
             position: 'bottom'
@@ -317,6 +327,8 @@ function renderRetirementChart(accounts) {
 
 
 /*
-* FIX ME: add helpful description
+*   Initializes the retirement page once the DOM is fully loaded.
+*   Fetches the user's retirement accounts from the server,
+*   populates the table, and renders the retirement chart.
 */
 document.addEventListener('DOMContentLoaded', loadRetirementAccounts);
