@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<!--webpage for retirement--> 
+  <head>
+    <meta charset="utf-8">
+    <title>COSC 481 Project</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/retirement.css">
+    <link rel="shortcut icon" href="#"> <!--to remove 404 error favicon.ico not found -->
+  </head>
+  <body>
+    <header>
+      <!--header section of the website-->
+      <div style="height: 7vh; ">
+        <a href = "index.html" >Wealth Management System</a>
+      </div>
+      <!--display user while logged in & logout dropdown-->
+      <div id="user-info" style="position:absolute; top:10px; right:20px; color:white;"></div>
+    </header>
+    <!--main menu-->
+    <div id="menu">
+      <a href = "RealEstate.html" >Real Estate</a>
+      <a href = "Investment.html" >Investment</a>
+      <a href = "Retirement.html" style="color: lightgreen;">Retirement</a>
+      <a href = "Accounts.html" >Account</a>
+      <a href="admin.html" id="adminTab" >Admin</a>
+    </div>
+    <p id="message"></p>
+
+    <h2 style="text-align: center">Retirement Accounts</h2>
+    <!--chart.js chart-->
+    <div id="retirement-chart-container">
+      <canvas id="retirementChart" width="350" height="350" style="max-width:350px; margin-bottom:20px;"></canvas>
+    </div>
+    
+    <!--modal container: display new investment options-->
+    <div id="investment-modal" class="modal" style="display:none;">
+      <div class="modal-content" style="background-color:#01665e; color:white; padding:20px; width: 25%;">
+        <span id="close-modal" style="float:right; cursor:pointer;">&times;</span>
+        <div id="modal-body"></div>
+      </div>
+    </div>
+
+    <!--display user retirement accounts-->
+    <div id="retirement-table-container">
+      <table id="retirement-table" style="margin-top:20px; margin-bottom:20px;  color:black;">
+        <thead>
+          <tr>
+            <th>Account</th>
+            <th>Balance</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <!--table for retirement accounts-->
+        <tbody id="retirement-table-body">
+        <!-- rows inserted here -->
+        </tbody>
+      </table>
+    </div>
+
+    <div id="add-investments-button-container">
+      <input type="button" id="add-investments-button" value="Add Investments">
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="./js/session.js"></script>
+    <script src="./js/retirement.js"></script>
+  </body>
+</html>

@@ -67,8 +67,8 @@ body {
         box-sizing: border-box; 
 
 }
-
-#property_form{
+#property_form, #income_form, #expense_form, #property_form_update,
+#income_form_update, #expense_form_update{
         position: fixed;
         top: 25%;
         left: 50%;
@@ -84,12 +84,33 @@ body {
         border-radius: 20px;
         z-index:999;
 }
-
-.property-item{
+.xButton{
+  position:absolute;
+  top:5px;
+  right:5px;
+  background:none;
+  border: none;
+  z-index:9999;
+}
+#propertiesDisplay, #incomeDisplay, #expenseDisplay{
+  height:60vh;
+  width:80%;
+  margin:0 auto;
+  display: flex;
+  justify-content: space-evenly; 
+  flex-direction: row;
+  align-items: center;
+  box-sizing: border-box;  
+  overflow-x: auto;    
+  white-space: nowrap;
+  gap: 20px;
+}
+.property-item, .income-item, .expense-item{
   background: white;
   padding: 10px;
   margin: 10px auto;
-  width: 50%;
+  width: 30%;
+  flex-shrink:0;
   border-radius: 20px;
   display: flex;
   justify-content: space-evenly; 
@@ -97,7 +118,6 @@ body {
   align-items: center;
   box-sizing: border-box;  
 }
-
 #heading{
         height:7vh;
         width:100%;
