@@ -17,7 +17,7 @@
   <header>
     <header>
       <!--Header section of the website-->
-      <div style="height: 7vh;">
+      <div class="heading" style="height: 7vh;">
         <a href="index.html">Wealth Management System</a>
       </div>
       <!--Display user while logged in-->
@@ -27,11 +27,12 @@
 
     <!-- menu-->
     <div class="menu">
-      <a href="RealEstate.html" style="color: lightgreen;"><i class="bi bi-house"></i>Real Estate</a>
-      <a href="Investment.html"><i class="bi bi-bank"></i>Investment</a>
-      <a href="Retirement.html"><i class="bi bi-sunglasses"></i>Retirement</a>
-      <a href="Accounts.html"><i class="bi bi-file-person"></i>Account</a>
-      <a href="admin.html" id="adminTab"><i class="bi bi-tools"></i>Admin</a>
+      <a class="menu-option" href="RealEstate.html" style="color: lightgreen;"><i class="bi bi-house"></i>Real
+        Estate</a>
+      <a class="menu-option" href="Investment.html"><i class="bi bi-bank"></i>Investment</a>
+      <a class="menu-option" href="Retirement.html"><i class="bi bi-sunglasses"></i>Retirement</a>
+      <a class="menu-option" href="Accounts.html"><i class="bi bi-file-person"></i>Account</a>
+      <a class="menu-option" href="admin.html" id="adminTab"><i class="bi bi-tools"></i>Admin</a>
 
     </div>
 
@@ -71,9 +72,50 @@
 
     </div>
 
-    <div id="property_form" style="display:none;">
+    <form action="/api/realEstate/add-property" method="POST">
+      <div id="property_form" style="display:none;">
+        <button type="button" class="btn-close" onclick="hideForms()" aria-label="Close"></button>
+
+        <h3 class="heading">Add Property</h3>
+        <div>
+
+          <div class="row align-items-center mb-3">
+          <div class="col-sm-4">
+            <label for="propertyName" class="form-label">Name of Property</label>
+          </div>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" id="propertyName" placeholder="Enter name of Property" name="name" required>
+          </div>
+          </div>
+
+          <div class ="row align-items-center mb-3">
+            <div class="col-sm-4">
+              <label for="propertyDescription" class="form-label mb-0">Description of Property</label>
+              </div>
+              <div class="col-sm-8">
+              <input type="text" class="form-control" id="propertyDescription" placeholder="Enter description of Property" name="description" required>
+          </div>
+        </div>
+    </form>
+
+    <div class ="row align-items-center mb-3">
+      <div class="col-sm-4">
+        <label for="propertyType" class="form-label mb-0">Type of Property</label>
+        </div>
+
+        <div class="form-group col-sm-8">
+          <select class = "propertyType" id="propertyTypeDropdown">
+            <option>Apartment Complex</option>
+            <option>House</option>
+            <option>Parcel of land</option>
+          </select>
+        </div>
+        <br>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Property</button>
+    <!--
       <button type="button" onclick="hideForms()" class="xButton">X</button>
-      <form action="/api/realEstate/add-property" method="POST"><!--add property form-->
+      <form action="/api/realEstate/add-property" method="POST">
         <label for="name">Name of Property</label><br><br>
         <input name="name" type="text" required><br><br>
 
@@ -101,6 +143,7 @@
         <button type="submit">Add Property</button>
       </form>
     </div>
+  -->
 
     <!--Income form-->
     <div id="income_form" style="display:none;">
