@@ -35,6 +35,9 @@
 <h2>Incomes - Expenses:</h2>
 <h2 id="total"></h2>
 
+<h2>Taxes</h2>
+<h2 id="taxes"></h2>
+
 <div id="buttons">
 <!--add property button-->
 <button class="addButton" onclick="showFormProp()" style="display:flex">Add Property</button><br>
@@ -313,6 +316,7 @@
         let total = incomes.reduce((sum,i) => sum + Number(i.amount), 0);
         total -= expenses.reduce((sum, e) => sum + Number(e.amount),0);
         document.getElementById('total').innerHTML = total.toFixed(2);
+        document.getElementById('taxes').innerHTML = (total*.06).toFixed(2);
        })
 
        //delete property call

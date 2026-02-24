@@ -51,6 +51,27 @@ const addExpense = (req, res)=>{//create expense
   )}
 }
 
+const addNotification = (req, res)=>{//create notification
+  const { type, message } = req.body;
+  const userId = req.session.userId || null;
+
+  if(userId != null){
+  dbCon.query("INSERT INTO real_estate_notifications (userId, type, message) VALUES (?,?,?)",
+    [userId, type, message],
+    (err, result) =>{
+      if(err){
+        console.error("DATA INSERT ERROR:",err);
+        return res.status(500).send("Error creating Notification");
+      }
+      return res.status(201).json({
+        message: "Notification created",
+        id: result.insertId
+      });
+     
+    }
+  )}
+}
+
 const getProperties = (req, res) =>{//retrieve properties to display
   if(!req.session.userId){
     return res.status(401).json({error: "You are not logged in"});
@@ -99,6 +120,22 @@ const getExpenses = (req, res) =>{//retrieve incomes to display
   );
 };
 
+const getNotifications = (req, res) =>{//retrieve notifications to display
+  if(!req.session.userId){
+    return res.status(401).json({error: "You are not logged in"});
+  }
+  dbCon.query("SELECT id, type, message, created_at FROM real_estate_noifications WHERE userId = ?",
+    [req.session.userId],
+    (err, results) => {
+      if(err){
+        console.error("Failed to retrieve notifications:", err);
+        return res.status(500).json({error: "Db error"});
+      }
+      res.json(results);
+    }
+  );
+};
+
 const deleteProperty = (req, res) =>{//deletes a property
   if(!req.session.userId){
     return res.status(401).json({error: "You are not logged in"});
@@ -140,6 +177,22 @@ const deleteExpense = (req, res) =>{//deletes an expense
     (err, results) => {
       if(err){
         console.error("Failed to delete expense:", err);
+        return res.status(500).json({error: "Db error"});
+      }
+      res.json({success: results.affectedRows > 0});
+    }
+  );
+};
+
+const deleteNotification = (req, res) =>{//deletes a notification
+  if(!req.session.userId){
+    return res.status(401).json({error: "You are not logged in"});
+  }
+  dbCon.query("DELETE FROM real_estate_notifications WHERE id = ?",
+    [req.params.id],
+    (err, results) => {
+      if(err){
+        console.error("Failed to delete notification:", err);
         return res.status(500).json({error: "Db error"});
       }
       res.json({success: results.affectedRows > 0});
@@ -206,12 +259,15 @@ export default {
   addProperty,
   addIncome,
   addExpense,
+  addNotification,
   getProperties,
   getIncomes,
   getExpenses,
+  getNotifications,
   deleteProperty,
   deleteIncome,
   deleteExpense,
+  deleteNotification,
   updateProperty,
   updateIncome,
   updateExpense

@@ -58,6 +58,28 @@ CREATE TABLE expenses (
     ON DELETE SET NULL
 );
 
+--RealEstateNotification table
+CREATE TABLE real_estate_notifications(
+   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+   userId INT DEFAULT NULL,
+   type ENUM(
+        'PROPERTY',
+        'INCOME',
+        'EXPENSE',
+        'TAX'
+    ) NOT NULL,
+
+    message TEXT NOT NULL,
+     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    KEY userId (userId),
+    CONSTRAINT real_estate_notifications_ibfk_1
+      FOREIGN KEY (userId)
+      REFERENCES users(id)
+      ON DELETE SET NULL
+);
+
 -- Temp retirement table
 CREATE TABLE retirement_accounts (
   id INT AUTO_INCREMENT PRIMARY KEY,
