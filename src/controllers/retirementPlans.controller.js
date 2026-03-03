@@ -8,13 +8,19 @@ export const createPlan = async (req, res) => {
     return res.status(401).json({ error: 'Not logged in' });
   }
 
-  const {
+  let {
     name,
     current_age,
     retirement_age,
     annual_contribution,
     expected_return
   } = req.body;
+
+  // if no expected return provided insert default 5.5
+  // FIX ME: see if this can be corrected else where
+  if (!expected_return || expected_return === '') {
+    expected_return = 5.5;
+  }
 
   const sql = `
     INSERT INTO retirement_plans
