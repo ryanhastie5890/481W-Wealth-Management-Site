@@ -58,7 +58,7 @@ CREATE TABLE expenses (
     ON DELETE SET NULL
 );
 
--- Temp retirement table
+-- retirement table (piza)
 CREATE TABLE retirement_accounts (
   id INT AUTO_INCREMENT PRIMARY KEY,
   userId INT NOT NULL,                 
@@ -67,6 +67,19 @@ CREATE TABLE retirement_accounts (
   current_balance DECIMAL(12,2) NOT NULL, 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- retirement plan (piza)
+CREATE TABLE retirement_plans (
+  id SERIAL PRIMARY KEY,
+  user_id INT NOT NULL,
+  name VARCHAR(100) NOT NULL,
+  current_age INT NOT NULL,
+  retirement_age INT NOT NULL,
+  annual_contribution DECIMAL(12,2) NOT NULL,
+  expected_return DECIMAL(5,2) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- Stock Investments
