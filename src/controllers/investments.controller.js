@@ -4,6 +4,14 @@ import { getStockQuote } from "../services/alphaVantage.js"
 // create promise wrapper for non-callback flow
 const db = dbCon.promise();
 
+/**
+ * Helper function for delays to ahere to ratelimits
+ * @param {number} ms - time in miliseconds
+ */
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 export async function showStock(req, res) {
     try {
         const { symbol } = req.query;
@@ -155,5 +163,53 @@ export async function sellStock(req, res) {
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Failed to sell stock" });
+    }
+}
+
+export async function getPortfolioValue(req, res) {
+    try {
+        const userId = req.session.userId;
+
+        const [rows] = await db.query(
+            `SELECT symbol, shares, average_price
+             FROM investments
+             WHERE userId = ?`,
+            [userId]
+        );
+
+        let portfolio = [];
+        let totalValue = 0;
+
+        for (const stock of rows) {
+            await sleep(1000); // AlphaVantage rate limit
+            const quote = await getStockQuote(stock.symbol);
+
+            if (!quote || !quote['05. price']) {
+                continue; // skip this stock
+            }
+            const price = parseFloat(quote['05. price']);
+
+            const value = price * stock.shares;
+            const profit = (price - stock.average_price) * stock.shares;
+
+            totalValue += value;
+
+            portfolio.push({
+                symbol: stock.symbol,
+                shares: stock.shares,
+                price,
+                value,
+                profit
+            });
+        }
+
+        res.json({
+            totalValue,
+            portfolio
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed to calculate portfolio value" });
     }
 }
