@@ -109,3 +109,51 @@ export async function buyStock(req, res) {
         res.status(500).json({ error: "Failed to buy stock" });
     }
 }
+
+export async function sellStock(req, res) {
+    try {
+        const userId = req.session.userId;
+        let { symbol, shares } = req.body;
+
+        if (!symbol || !shares || shares <= 0) {
+            return res.status(400).json({ error: "symbol and positive shares required" });
+        }
+
+        symbol = symbol.toUpperCase();
+
+        const [rows] = await db.query(
+            `SELECT shares FROM investments WHERE userId=? AND symbol=?`,
+            [userId, symbol]
+        );
+
+        if (rows.length === 0) {
+            return res.status(400).json({ error: "Stock not owned" });
+        }
+
+        const ownedShares = rows[0].shares;
+
+        if (shares > ownedShares) {
+            return res.status(400).json({ error: "Not enough shares" });
+        }
+
+        const remainingShares = ownedShares - shares;
+
+        if (remainingShares === 0) {
+            await db.query(
+                `DELETE FROM investments WHERE userId=? AND symbol=?`,
+                [userId, symbol]
+            );
+        } else {
+            await db.query(
+                `UPDATE investments SET shares=? WHERE userId=? AND symbol=?`,
+                [remainingShares, userId, symbol]
+            );
+        }
+
+        res.json({ message: "Stock sold", symbol, shares });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to sell stock" });
+    }
+}
