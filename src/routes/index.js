@@ -10,6 +10,7 @@ import sessionRoutes from './session.routes.js';
 import investmentsRoutes from './investments.routes.js';
 import realEstateRoutes from './realEstate.routes.js';
 import retirementRoutes from './retirement.routes.js';
+import retirementPlans from './retirementPlans.routes.js';
 
 const router = express.Router();
 
@@ -19,5 +20,6 @@ router.use('/session', sessionRoutes);
 router.use('/investments', investmentsRoutes);
 router.use('/realEstate',realEstateRoutes);
 router.use('/retirement', retirementRoutes);
+router.use('/retirementPlans', retirementPlans);
 
 export default router;

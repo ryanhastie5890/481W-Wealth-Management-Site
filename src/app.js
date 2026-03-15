@@ -12,8 +12,6 @@ const __dirname = dirname(__filename);
 
 const app = express();
 
-
-
 // Global middware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

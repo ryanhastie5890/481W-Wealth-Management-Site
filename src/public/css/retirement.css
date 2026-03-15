@@ -2,7 +2,7 @@
 *   Chart Style
 */
 #retirement-chart-container {
-  width: 320px;
+  width: 300px;
   margin: 20px auto;
 }
 
@@ -15,7 +15,7 @@
 *   Retirement Table Style
 */
 #retirement-table-container {
-  width: 320px;        
+  width: auto;        
   margin: 0 auto;    
 }
 
@@ -28,7 +28,7 @@
 #retirement-table th {
   margin-top:20px;
   text-align: left;
-  padding-left: 4px;
+  padding-left: 2px;
 }
 
 #retirement-table td {

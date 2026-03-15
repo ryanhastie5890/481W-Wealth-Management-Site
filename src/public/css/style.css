@@ -39,9 +39,6 @@ body {
   border-bottom: 2px solid black;
 }
 
-.menu-option:hover{
-      color: lightgreen;
-    }
 
 .menu{  
           height: 5vh;
