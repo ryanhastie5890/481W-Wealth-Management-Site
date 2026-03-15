@@ -38,6 +38,12 @@
 <h2>Taxes</h2>
 <h2 id="taxes"></h2>
 
+<!--temp notifications area-->
+<button onclick="notificationsControl()"  style="display:flex">Notifications</button>
+
+<h2 id="notifText" style="display:none;">Your Notifications: </h2>
+<div id = "notifications" style="display:none;"></div>
+
 <div id="buttons">
 <!--add property button-->
 <button class="addButton" onclick="showFormProp()" style="display:flex">Add Property</button><br>
@@ -307,6 +313,37 @@
         document.getElementById("expenseDisplay").innerHTML ="<p>You are not logged in</p>"
        });
 
+       //get notifications
+       fetch('/api/realEstate/get-notifications', {cache: "no-store"})
+       .then(res => {
+        if(!res.ok) throw new Error("You are not logged in");
+        return res.json();
+       })
+       .then(expense => {
+        const display = document.getElementById("notifications");
+
+        if(expense.length == 0){
+            display.innerHTML ="<p>You have no notifications";
+            return;
+        }
+        expense.forEach(n =>{
+            const div = document.createElement("div");
+            div.className ="notification";
+
+            //populate with data
+            div.innerHTML =`
+                <h3>Type: ${n.type}</h3><br>
+                <p>Message: ${n.message}</p><br>
+                <button onclick= "acceptNotification(${n.id})">Ok</button>
+                `;
+
+            display.appendChild(div);
+        });
+       })
+       .catch(err =>{
+        document.getElementById("expenseDisplay").innerHTML ="<p>You are not logged in</p>"
+       });
+
        //calculate finance total
        Promise.all([
         fetch('/api/realEstate/get-incomes').then(r => r.json()),
@@ -474,18 +511,22 @@
         document.getElementById("propertiesDisplay").style.display = "none";
         document.getElementById("incomeDisplay").style.display = "none";
         document.getElementById("expenseDisplay").style.display = "none";
+         document.getElementById("notifications").style.display = "none";
         document.getElementById("propertyLabel").style.display = "none";
         document.getElementById("incomeLabel").style.display = "none";
         document.getElementById("expenseLabel").style.display = "none";
+        document.getElementById("notificationLabel").style.display = "none";
        }
 
        function showDisplays(){
         document.getElementById("propertiesDisplay").style.display = "flex";
         document.getElementById("incomeDisplay").style.display = "flex";
         document.getElementById("expenseDisplay").style.display = "flex";
+         document.getElementById("notifications").style.display = "none";
         document.getElementById("propertyLabel").style.display = "flex";
         document.getElementById("incomeLabel").style.display = "flex";
         document.getElementById("expenseLabel").style.display = "flex";
+         document.getElementById("notificationLabel").style.display = "none";
 
        }
 
@@ -517,6 +558,37 @@
         }
        }
 
+       function showNotifications(){
+        document.getElementById("notifications").style.display = "flex";
+        document.getElementById("notifText").style.display = "flex";
+       }
+
+       function hideNotifications(){
+        document.getElementById("notifications").style.display = "none";
+        document.getElementById("notifText").style.display = "none";
+       }
+
+       function notificationsControl(){
+       if(document.getElementById("notifText").style.display == "none"){
+        showNotifications();
+       }
+       else{
+        hideNotifications();
+       }
+       }
+
+       function acceptNotification(id){
+        fetch(`/api/realEstate/delete-notification/${id}`,{
+             method: 'DELETE'})
+        .then(res => res.json())
+        .then(data =>{
+          console.log(data);
+          if(data.success){
+            location.reload();//reload page
+          }
+        })
+        .catch(err => console.error(err));
+       }
       
     </script>
   </body>

@@ -5,6 +5,7 @@ const addProperty =  (req, res)=>{//create property
   const userId = req.session.userId || null;
 
   if(userId != null){
+    createNotification(req.session.userId, 'Property', "Property has been updated");
   dbCon.query("INSERT INTO properties (userId, name, description, type, status, occupants) VALUES (?,?,?,?,?,?)",
     [userId, name, description, type, status, occupants],
     (err, result) =>{
@@ -14,7 +15,11 @@ const addProperty =  (req, res)=>{//create property
       }
       res.redirect('/RealEstate.html')
     }
-  )}
+  )
+
+}
+
+  
 }
 
 const addIncome = (req, res)=>{//create income
@@ -22,6 +27,7 @@ const addIncome = (req, res)=>{//create income
   const userId = req.session.userId || null;
 
   if(userId != null){
+    createNotification(req.session.userId, 'INCOME', "Income has been added");
   dbCon.query("INSERT INTO incomes (userId, amount, note) VALUES (?,?,?)",
     [userId, amount, note],
     (err, result) =>{
@@ -31,7 +37,9 @@ const addIncome = (req, res)=>{//create income
       }
       res.redirect('/RealEstate.html')
     }
-  )}
+  )
+
+}
 }
 
 const addExpense = (req, res)=>{//create expense
@@ -39,7 +47,8 @@ const addExpense = (req, res)=>{//create expense
   const userId = req.session.userId || null;
 
   if(userId != null){
-  dbCon.query("INSERT INTO expenses (userId, amount, note) VALUES (?,?,?)",
+    createNotification(req.session.userId, 'EXPENSE', "Expense has been added");
+    dbCon.query("INSERT INTO expenses (userId, amount, note) VALUES (?,?,?)",
     [userId, amount, note],
     (err, result) =>{
       if(err){
@@ -48,7 +57,9 @@ const addExpense = (req, res)=>{//create expense
       }
       res.redirect('/RealEstate.html')
     }
-  )}
+  )
+
+}
 }
 
 const addNotification = (req, res)=>{//create notification
@@ -124,7 +135,7 @@ const getNotifications = (req, res) =>{//retrieve notifications to display
   if(!req.session.userId){
     return res.status(401).json({error: "You are not logged in"});
   }
-  dbCon.query("SELECT id, type, message, created_at FROM real_estate_noifications WHERE userId = ?",
+  dbCon.query("SELECT id, type, message, created_at FROM real_estate_notifications WHERE userId = ?",
     [req.session.userId],
     (err, results) => {
       if(err){
@@ -140,6 +151,7 @@ const deleteProperty = (req, res) =>{//deletes a property
   if(!req.session.userId){
     return res.status(401).json({error: "You are not logged in"});
   }
+  createNotification(req.session.userId, 'Property', "Property has been deleted");
   dbCon.query("DELETE FROM properties WHERE id = ?",
     [req.params.id],
     (err, results) => {
@@ -150,12 +162,14 @@ const deleteProperty = (req, res) =>{//deletes a property
       res.json({success: results.affectedRows > 0});
     }
   );
+
 };
 
 const deleteIncome = (req, res) =>{//deletes an income
   if(!req.session.userId){
     return res.status(401).json({error: "You are not logged in"});
   }
+  createNotification(req.session.userId, 'INCOME', "Income has been deleted");
   dbCon.query("DELETE FROM incomes WHERE id = ?",
     [req.params.id],
     (err, results) => {
@@ -166,12 +180,14 @@ const deleteIncome = (req, res) =>{//deletes an income
       res.json({success: results.affectedRows > 0});
     }
   );
+
 };
 
 const deleteExpense = (req, res) =>{//deletes an expense
   if(!req.session.userId){
     return res.status(401).json({error: "You are not logged in"});
   }
+  createNotification(req.session.userId, 'EXPENSE', "Expense has been deleted");
   dbCon.query("DELETE FROM expenses WHERE id = ?",
     [req.params.id],
     (err, results) => {
@@ -205,6 +221,7 @@ const updateProperty = (req, res) =>{//update property data
     if(!req.session.userId){
     return res.status(401).json({error: "You are not logged in"});
   }
+  createNotification(req.session.userId, 'Property', "Property has been updated");
   dbCon.query("UPDATE properties SET name = ?, description = ?, type = ?, status = ?, occupants = ? WHERE id = ? AND userId = ?;",
     [name,description,type,status,occupants,req.params.id, req.session.userId],
     (err, results)=>{
@@ -216,6 +233,7 @@ const updateProperty = (req, res) =>{//update property data
     }
   )
 
+
 }
 
 const updateIncome = (req, res) =>{//update income data
@@ -223,6 +241,7 @@ const updateIncome = (req, res) =>{//update income data
     if(!req.session.userId){
     return res.status(401).json({error: "You are not logged in"});
   }
+  createNotification(req.session.userId, 'INCOME', "Income has been updated");
   dbCon.query("UPDATE incomes SET amount = ?, note = ? WHERE id = ? AND userId = ?;",
     [amount,note,req.params.id, req.session.userId],
     (err, results)=>{
@@ -233,6 +252,7 @@ const updateIncome = (req, res) =>{//update income data
         res.json({success: results.affectedRows > 0});
     }
   )
+  
 
 
 }
@@ -242,6 +262,7 @@ const updateExpense = (req, res) =>{//update expense data
     if(!req.session.userId){
     return res.status(401).json({error: "You are not logged in"});
   }
+  createNotification(req.session.userId, 'EXPENSE', "Expense has been updated");
   dbCon.query("UPDATE expenses SET amount = ?, note = ? WHERE id = ? AND userId = ?;",
     [amount,note,req.params.id, req.session.userId],
     (err, results)=>{
@@ -255,6 +276,12 @@ const updateExpense = (req, res) =>{//update expense data
 
 }
 
+function createNotification(userId, type, message){
+  dbCon.query(
+    "INSERT INTO real_estate_notifications (userId, type, message) VALUES (?,?,?)",
+    [userId, type, message]
+  );
+}
 export default {
   addProperty,
   addIncome,

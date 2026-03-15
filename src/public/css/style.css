@@ -92,7 +92,7 @@ body {
   border: none;
   z-index:9999;
 }
-#propertiesDisplay, #incomeDisplay, #expenseDisplay{
+#propertiesDisplay, #incomeDisplay, #expenseDisplay, #notifications{
   height:60vh;
   width:80%;
   margin:0 auto;
@@ -105,7 +105,7 @@ body {
   white-space: nowrap;
   gap: 20px;
 }
-.property-item, .income-item, .expense-item{
+.property-item, .income-item, .expense-item, .notification{
   background: white;
   padding: 10px;
   margin: 10px auto;
