@@ -262,10 +262,10 @@
         .then(r => r.json())
         .then(data => {
           if (data.userId) {
-            document.getElementById("message").innerHTML = "Logged in as: " + data.email;
+            document.getElementById("user-info").innerHTML = "Logged in as: " + data.email;
           }
           else {
-            document.getElementById("message").innerHTML = "You are not logged in";
+            document.getElementById("user-info").innerHTML = "You are not logged in";
           }
         })
 
