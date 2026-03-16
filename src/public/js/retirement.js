@@ -12,15 +12,6 @@ const retirementOptions = {
 let retirementChart = null;
 
 /*
-*   When the user clicks anywhere outside of the modal, close it
-*/
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-
-/*
 *   create new rows for retirement-table-body
 */ 
 async function loadRetirementAccounts() {
@@ -69,7 +60,7 @@ async function loadRetirementAccounts() {
 *   open modal on button click
 */
 addInvestmentsButton.addEventListener('click', () => {
-  modal.style.display = 'block';
+  modal.classList.add('show');
   showCategoryOptions();
 });
 
@@ -77,14 +68,15 @@ addInvestmentsButton.addEventListener('click', () => {
 *   close modal
 */
 closeModal.addEventListener('click', () => {
-  modal.style.display = 'none';
+  modal.classList.remove('show');
 });
 
 /*
 *   close modal if user clicks outside content
 */
 window.addEventListener('click', (e) => {
-  if (e.target === modal) modal.style.display = 'none';
+  // if (e.target === modal) modal.style.display = 'none';
+  if (e.target === modal) modal.classList.remove('show');
 });
 
 /*
@@ -97,7 +89,6 @@ function showCategoryOptions() {
   Object.keys(retirementOptions).forEach(cat => {
     const button = document.createElement('button');
     button.innerText = cat;
-    button.style.margin = '5px';
     button.onclick = () => showSubtypeOptions(cat);
     modalBody.appendChild(button);
   });
@@ -113,7 +104,6 @@ function showSubtypeOptions(category) {
   retirementOptions[category].forEach(sub => {
     const button = document.createElement('button');
     button.innerText = sub;
-    button.style.margin = '5px';
     button.onclick = () => showFinalForm(category, sub);
     modalBody.appendChild(button);
   });
