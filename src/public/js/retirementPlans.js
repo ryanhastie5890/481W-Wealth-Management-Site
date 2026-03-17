@@ -35,7 +35,7 @@ async function loadPlans() {
         <strong>${plan.name}</strong> | Current Age: ${plan.current_age} | Retirement Age: ${plan.retirement_age} | 
         Contribution: $${plan.annual_contribution} | Expected Return: ${plan.expected_return || '5.5%'}% |
         <strong>Projected Balance: $${projected}</strong>
-        <button class="delete-plan" data-id="${plan.id}">Delete</button>
+        <button class="delete-plan" data-id="${plan.id}" style="border-radius: 5px">Delete</button>
       `;
       plansContainer.appendChild(planDiv);
     });

@@ -45,8 +45,8 @@ async function loadRetirementAccounts() {
       </td>
 
       <td>
-        <button data-id="${account.id}" class="save-button">Save</button>
-        <button data-id="${account.id}" class="delete-button">Delete</button>
+        <button data-id="${account.id}" class="save-button" style="border-radius: 5px">Save</button>
+        <button data-id="${account.id}" class="delete-button" style="border-radius: 5px">Delete</button>
       </td>
     `;
 
