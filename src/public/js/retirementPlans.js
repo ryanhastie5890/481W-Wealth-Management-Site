@@ -15,7 +15,6 @@ async function loadPlans() {
     plansContainer.innerHTML = '';
 
     if (!plans || plans.length === 0) {
-      plansContainer.innerHTML = '<p>No plans yet.</p>';
       renderGrowthChart([], []);
       return;
     }

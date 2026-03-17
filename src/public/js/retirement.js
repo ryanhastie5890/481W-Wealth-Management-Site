@@ -19,7 +19,23 @@ async function loadRetirementAccounts() {
   const accounts = await res.json();
 
   const tbody = document.getElementById('retirement-table-body');
+
+  const accountHeader = document.getElementById('account-header');
+  const balanceHeader = document.getElementById('balance-header');
+  const actionsHeader = document.getElementById('actions-header');
+
   tbody.innerHTML = '';
+
+  if (!accounts || accounts.length === 0) {
+    accountHeader.style.display = 'none';
+    balanceHeader.style.display = 'none';
+    actionsHeader.style.display = 'none';
+  } 
+  else {
+    accountHeader.style.display = '';
+    balanceHeader.style.display = '';
+    actionsHeader.style.display = '';
+  }
 
   accounts.forEach(account => {
     const row = document.createElement('tr');

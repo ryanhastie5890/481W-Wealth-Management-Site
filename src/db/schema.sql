@@ -58,7 +58,7 @@ CREATE TABLE expenses (
     ON DELETE SET NULL
 );
 
---RealEstateNotification table
+-- RealEstateNotification table
 CREATE TABLE real_estate_notifications(
    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
    userId INT DEFAULT NULL,
