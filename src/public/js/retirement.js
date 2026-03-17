@@ -75,7 +75,6 @@ closeModal.addEventListener('click', () => {
 *   close modal if user clicks outside content
 */
 window.addEventListener('click', (e) => {
-  // if (e.target === modal) modal.style.display = 'none';
   if (e.target === modal) modal.classList.remove('show');
 });
 
@@ -88,6 +87,7 @@ function showCategoryOptions() {
   modalBody.innerHTML = '<h3>Select Investment Category:</h3>';
   Object.keys(retirementOptions).forEach(cat => {
     const button = document.createElement('button');
+    button.style = "border-radius: 5px";
     button.innerText = cat;
     button.onclick = () => showSubtypeOptions(cat);
     modalBody.appendChild(button);
@@ -103,6 +103,7 @@ function showSubtypeOptions(category) {
   modalBody.innerHTML = `<h3>${category} Types:</h3>`;
   retirementOptions[category].forEach(sub => {
     const button = document.createElement('button');
+    button.style = "border-radius: 5px";
     button.innerText = sub;
     button.onclick = () => showFinalForm(category, sub);
     modalBody.appendChild(button);
@@ -121,7 +122,7 @@ function showFinalForm(category, subtype) {
     <label>Balance</label>
     <input type="text" id="balance" placeholder="$0" inputmode="numeric" autocomplete="off">
     <br><br>
-    <button id="save-account">Save Account</button>
+    <button id="save-account" style="border-radius: 5px">Save Account</button>
   `;
   // below code handles input for investment accounts.
   const balanceInput = document.getElementById('balance');

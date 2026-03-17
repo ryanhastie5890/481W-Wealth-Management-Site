@@ -1,6 +1,7 @@
 const plansContainer = document.getElementById('plans-container');
 const addPlanButton = document.getElementById('add-plan-button');
 const planFormContainer = document.getElementById('plan-form-container');
+// modal variables used are declared in retirement.js
 let growthChart = null;
 
 /*
@@ -15,6 +16,7 @@ async function loadPlans() {
 
     if (!plans || plans.length === 0) {
       plansContainer.innerHTML = '<p>No plans yet.</p>';
+      renderGrowthChart([], []);
       return;
     }
 
@@ -32,9 +34,9 @@ async function loadPlans() {
       const planDiv = document.createElement('div');
       planDiv.className = 'plan';
       planDiv.innerHTML = `
-        <strong>${plan.name}</strong> | Current Age: ${plan.current_age} | Retirement Age: ${plan.retirement_age} | 
-        Contribution: $${plan.annual_contribution} | Expected Return: ${plan.expected_return || '5.5%'}% |
-        <strong>Projected Balance: $${projected}</strong>
+        <strong>${plan.name}</strong> | <strong>Current Age:</strong> ${plan.current_age} | <strong>Retirement Age:</strong> ${plan.retirement_age} | 
+        <strong>Contribution:</strong> $${plan.annual_contribution} | <strong>Expected Return:</strong> ${plan.expected_return || '5.5%'}% |
+        <strong>Projected Balance:</strong> $${projected}
         <button class="delete-plan" data-id="${plan.id}" style="border-radius: 5px">Delete</button>
       `;
       plansContainer.appendChild(planDiv);
@@ -63,14 +65,37 @@ async function loadPlans() {
 *   show form to add new plan
 */
 addPlanButton.addEventListener('click', () => {
-  planFormContainer.innerHTML = `
-    <h3>Add New Plan</h3>
-    <input type="text" id="plan-name" placeholder="Plan Name"><br>
-    <input type="number" id="current-age" placeholder="Current Age"><br>
-    <input type="number" id="retirement-age" placeholder="Retirement Age"><br>
-    <input type="number" id="annual-contribution" placeholder="Annual Contribution"><br>
-    <input type="number" id="expected-return" placeholder="Expected Return (%)"><br><br>
-    <button id="save-plan">Save Plan</button>
+  modal.classList.add('show');
+
+  modalBody.innerHTML = `
+    <h3>Add Retirement Plan</h3>
+
+    <div class="modal-field">
+      <label>Plan Name</label>
+      <input type="text" id="plan-name" placeholder="Plan Name"><br>
+    </div>
+
+    <div class="modal-field">
+      <label>Current Age</label>
+      <input type="text" id="current-age" placeholder="Current Age" inputmode="numeric" autocomplete="off"><br>
+    </div>
+
+    <div class="modal-field">
+      <label>Retirement Age</label>
+      <input type="text" id="retirement-age" placeholder="Retirement Age" inputmode="numeric" autocomplete="off"><br>
+    </div>
+
+    <div class="modal-field">
+      <label>Annual Contribution</label>
+      <input type="text" id="annual-contribution" placeholder="Annual Contribution" inputmode="numeric" autocomplete="off"><br>
+    </div>
+
+    <div class="modal-field">
+      <label>Expected Return (%)</label>
+      <input type="test" id="expected-return" placeholder="0.0" inputmode="numeric" autocomplete="off"><br><br>
+    </div>
+
+    <button id="save-plan" style="border-radius: 5px">Save Plan</button>
   `;
 
   document.getElementById('save-plan').addEventListener('click', async () => {
@@ -90,7 +115,8 @@ addPlanButton.addEventListener('click', () => {
       const data = await res.json();
       if (data.error) throw new Error(data.error);
 
-      planFormContainer.innerHTML = '';
+      modal.classList.remove('show');
+      modalBody.innerHTML = '';
       loadPlans();
     } 
     catch (err) {

@@ -60,7 +60,20 @@
 #modal-body {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+}
+
+.modal-field {
+  flex-direction: column;
+  width: 100%;            
+}
+
+.modal-field label {
+  font-weight: bold;
+}
+
+.modal-field input {
+  font-size: 14px;
+  box-sizing: border-box;
 }
 
 #close-modal {
