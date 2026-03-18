@@ -100,7 +100,7 @@ window.addEventListener('click', (e) => {
 *   Selecting a category advances the modal to a subtype selection.
 */
 function showCategoryOptions() {
-  modalBody.innerHTML = '<h3>Select Investment Category:</h3>';
+  modalBody.innerHTML = '<h3>Select Investment Category</h3>';
   Object.keys(retirementOptions).forEach(cat => {
     const button = document.createElement('button');
     button.style = "border-radius: 5px";
