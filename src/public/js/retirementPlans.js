@@ -14,6 +14,16 @@ async function loadPlans() {
 
     plansContainer.innerHTML = '';
 
+    // limit plans to just 5
+    if (plans.length >= 5) {
+    addPlanButton.disabled = true;
+    addPlanButton.innerText = "Max 5 Plans Reached";
+    } else {
+    addPlanButton.disabled = false;
+    addPlanButton.innerText = "Add Plan";
+    }
+
+    // do not display a line if no plans are present
     if (!plans || plans.length === 0) {
       renderGrowthChart([], []);
       return;
@@ -40,19 +50,33 @@ async function loadPlans() {
       `;
       plansContainer.appendChild(planDiv);
     });
-    // FIX ME: BUG will only display for 1 plan. if multiple are added, it will not work.
+
     if (plans.length > 0) {
-      const firstPlan = plans[0];
+    const datasets = [];
+    let labels = [];
 
-      const growth = generateGrowthData(
+    plans.slice(0, 5).forEach((plan, index) => {
+        const growth = generateGrowthData(
         initialBalance,
-        firstPlan.current_age,
-        firstPlan.retirement_age,
-        firstPlan.annual_contribution,
-        firstPlan.expected_return
-      );
+        plan.current_age,
+        plan.retirement_age,
+        plan.annual_contribution,
+        plan.expected_return
+        );
 
-      renderGrowthChart(growth.labels, growth.data);
+        // Use labels from first plan
+        if (index === 0) {
+        labels = growth.labels;
+        }
+
+        datasets.push({
+        label: plan.name,
+        data: growth.data,
+        tension: 0.3
+        });
+    });
+
+      renderGrowthChart(labels, datasets);
     }
   } 
   catch (err) {
@@ -67,7 +91,7 @@ addPlanButton.addEventListener('click', () => {
   modal.classList.add('show');
 
   modalBody.innerHTML = `
-    <h3>Add Retirement Plan</h3>
+    <h3>Add Retirement Plan: Limit 5.</h3>
 
     <div class="modal-field">
       <label>Plan Name</label>
@@ -196,7 +220,7 @@ async function getExistingRetirementBalance() {
 *
 */
 function generateGrowthData(initialBalance, current_age, retirement_age, annual_contribution, expected_return) {
-  const r = expected_return / 100;
+  const r = expected_return ? expected_return / 100 : 0.055; // FIX ME: possible fix for NaN bug
   const C = Number(annual_contribution);
   let balance = Number(initialBalance);
 
@@ -217,7 +241,7 @@ function generateGrowthData(initialBalance, current_age, retirement_age, annual_
 /*
 *
 */
-function renderGrowthChart(labels, data) {
+function renderGrowthChart(labels, datasets) {
   const ctx = document.getElementById('planGrowthChart').getContext('2d');
 
   if (growthChart) {
@@ -228,16 +252,19 @@ function renderGrowthChart(labels, data) {
     type: 'line',
     data: {
       labels: labels,
-      datasets: [{
-        label: 'Projected Balance Over Time',
-        data: data,
-        tension: 0.3
-      }]
+      datasets: datasets
     },
     options: {
       responsive: true,
       plugins: {
-        legend: { display: true }
+        legend: { 
+            display: true, 
+            labels: {
+                boxWidth: 12,
+                boxHeight: 12,
+                padding: 10
+            }
+        }
       },
       scales: {
         y: {

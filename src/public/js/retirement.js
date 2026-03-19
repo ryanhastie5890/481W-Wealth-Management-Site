@@ -116,7 +116,7 @@ function showCategoryOptions() {
 *   Selecting a subtype advances the modal to the balance input form.
 */
 function showSubtypeOptions(category) {
-  modalBody.innerHTML = `<h3>${category} Types:</h3>`;
+  modalBody.innerHTML = `<h3>${category} Types</h3>`;
   retirementOptions[category].forEach(sub => {
     const button = document.createElement('button');
     button.style = "border-radius: 5px";
@@ -177,7 +177,7 @@ function showFinalForm(category, subtype) {
 
     if (data.success) {
       console.log(`Saved ${account_type} with amount ${amount}.`);
-      modal.style.display = 'none';
+      modal.classList.remove('show');
       modalBody.innerHTML = '';
       await loadRetirementAccounts(); // refresh retirement table after adding account
       alert(`Added ${account_type}`);
