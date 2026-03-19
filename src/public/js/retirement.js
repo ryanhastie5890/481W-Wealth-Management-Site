@@ -12,15 +12,6 @@ const retirementOptions = {
 let retirementChart = null;
 
 /*
-*   When the user clicks anywhere outside of the modal, close it
-*/
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-
-/*
 *   create new rows for retirement-table-body
 */ 
 async function loadRetirementAccounts() {
@@ -28,7 +19,23 @@ async function loadRetirementAccounts() {
   const accounts = await res.json();
 
   const tbody = document.getElementById('retirement-table-body');
+
+  const accountHeader = document.getElementById('account-header');
+  const balanceHeader = document.getElementById('balance-header');
+  const actionsHeader = document.getElementById('actions-header');
+
   tbody.innerHTML = '';
+
+  if (!accounts || accounts.length === 0) {
+    accountHeader.style.display = 'none';
+    balanceHeader.style.display = 'none';
+    actionsHeader.style.display = 'none';
+  } 
+  else {
+    accountHeader.style.display = '';
+    balanceHeader.style.display = '';
+    actionsHeader.style.display = '';
+  }
 
   accounts.forEach(account => {
     const row = document.createElement('tr');
@@ -54,8 +61,8 @@ async function loadRetirementAccounts() {
       </td>
 
       <td>
-        <button data-id="${account.id}" class="save-button">Save</button>
-        <button data-id="${account.id}" class="delete-button">Delete</button>
+        <button data-id="${account.id}" class="save-button" style="border-radius: 5px">Save</button>
+        <button data-id="${account.id}" class="delete-button" style="border-radius: 5px">Delete</button>
       </td>
     `;
 
@@ -69,7 +76,7 @@ async function loadRetirementAccounts() {
 *   open modal on button click
 */
 addInvestmentsButton.addEventListener('click', () => {
-  modal.style.display = 'block';
+  modal.classList.add('show');
   showCategoryOptions();
 });
 
@@ -77,14 +84,14 @@ addInvestmentsButton.addEventListener('click', () => {
 *   close modal
 */
 closeModal.addEventListener('click', () => {
-  modal.style.display = 'none';
+  modal.classList.remove('show');
 });
 
 /*
 *   close modal if user clicks outside content
 */
 window.addEventListener('click', (e) => {
-  if (e.target === modal) modal.style.display = 'none';
+  if (e.target === modal) modal.classList.remove('show');
 });
 
 /*
@@ -93,11 +100,11 @@ window.addEventListener('click', (e) => {
 *   Selecting a category advances the modal to a subtype selection.
 */
 function showCategoryOptions() {
-  modalBody.innerHTML = '<h3>Select Investment Category:</h3>';
+  modalBody.innerHTML = '<h3>Select Investment Category</h3>';
   Object.keys(retirementOptions).forEach(cat => {
     const button = document.createElement('button');
+    button.style = "border-radius: 5px";
     button.innerText = cat;
-    button.style.margin = '5px';
     button.onclick = () => showSubtypeOptions(cat);
     modalBody.appendChild(button);
   });
@@ -109,11 +116,11 @@ function showCategoryOptions() {
 *   Selecting a subtype advances the modal to the balance input form.
 */
 function showSubtypeOptions(category) {
-  modalBody.innerHTML = `<h3>${category} Types:</h3>`;
+  modalBody.innerHTML = `<h3>${category} Types</h3>`;
   retirementOptions[category].forEach(sub => {
     const button = document.createElement('button');
+    button.style = "border-radius: 5px";
     button.innerText = sub;
-    button.style.margin = '5px';
     button.onclick = () => showFinalForm(category, sub);
     modalBody.appendChild(button);
   });
@@ -131,7 +138,7 @@ function showFinalForm(category, subtype) {
     <label>Balance</label>
     <input type="text" id="balance" placeholder="$0" inputmode="numeric" autocomplete="off">
     <br><br>
-    <button id="save-account">Save Account</button>
+    <button id="save-account" style="border-radius: 5px">Save Account</button>
   `;
   // below code handles input for investment accounts.
   const balanceInput = document.getElementById('balance');
@@ -170,7 +177,7 @@ function showFinalForm(category, subtype) {
 
     if (data.success) {
       console.log(`Saved ${account_type} with amount ${amount}.`);
-      modal.style.display = 'none';
+      modal.classList.remove('show');
       modalBody.innerHTML = '';
       await loadRetirementAccounts(); // refresh retirement table after adding account
       alert(`Added ${account_type}`);

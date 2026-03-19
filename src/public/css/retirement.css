@@ -1,21 +1,119 @@
 /*
-*   Chart Style
+*   Charts Style
 */
-#retirement-chart-container {
-  width: 320px;
+
+#charts-wrapper {
+  display: flex;
+  justify-content: center;   
+  align-items: flex-start;  
+  gap: 40px;                
   margin: 20px auto;
+  flex-wrap: wrap;           
 }
 
-#retirementChart {
-  width: 100% !important;
-  height: auto !important;
+#retirement-chart-container {
+  width: 300px;
+}
+
+#plan-growth-container {
+  width: 500px;
+}
+
+/*
+*   Add Investments - Modal Style
+*/
+
+/* Modal background overlay */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  display: none;
+  justify-content: center;   
+  align-items: center;       
+
+  background-color: rgba(0,0,0,0.5); 
+  z-index: 1000;
+}
+
+.modal.show {
+  display: flex;                 
+}
+
+/* Modal box */
+.modal-content {
+  background-color: #01665e;
+  color: white;
+  padding: 10px;
+  width: 50%;
+  border-radius: 10px;
+  position: relative;
+}
+
+#modal-body h3 {
+  width: 100%;
+  text-align: center;
+}
+
+#modal-body {
+  display: flex;
+  flex-direction: column;   
+  align-items: center;      
+  justify-content: center;                  
+  width: 100%;
+}
+
+.modal-field {
+  display: flex;
+  flex-direction: column;   
+  align-items: center;      
+  width: 80%;               
+}
+
+.modal-field label {
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.modal-field input {
+  font-size: 14px;
+  box-sizing: border-box;
+  width: 100%;             
+  text-align: center;       
+}
+
+#close-modal {
+  position: absolute;
+  top: 0px;
+  right: 5px;
+  font-size: 32px;
+  cursor: pointer;
+}
+
+/*
+*   Retirement Plans
+*/
+
+#add-plan {
+
+  text-align:center;
+  margin-bottom:10px;
+}
+
+#add-plan-button {
+  border-radius: 5px;
 }
 
 /*
 *   Retirement Table Style
 */
 #retirement-table-container {
-  width: 320px;        
+  width: auto;        
   margin: 0 auto;    
 }
 
@@ -28,7 +126,7 @@
 #retirement-table th {
   margin-top:20px;
   text-align: left;
-  padding-left: 4px;
+  padding-left: 2px;
 }
 
 #retirement-table td {
@@ -37,7 +135,18 @@
   vertical-align: middle;
 }
 
+/*
+*   Add Investments Button - Style
+*/
 #add-investments-button-container {
   text-align: center;
-  margin-bottom: 20px;
+}
+
+
+#add-investments-button {
+  align-items: center;
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+  box-sizing: border-box;
+  border-radius: 5px;
 }

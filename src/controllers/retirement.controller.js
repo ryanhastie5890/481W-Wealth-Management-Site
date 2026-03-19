@@ -1,9 +1,4 @@
 import { dbCon } from '../db/database.js';     // connect to DB to run queries
-// export function logger(req, res, next) {
-//   console.log("Request Method: ", req.method);
-//   console.log("Request URL: ", req.url);
-//   next();
-// }
 
 /*
 *   create new retirement account and saves it in the retirement_accounts table.
@@ -35,7 +30,7 @@ export const addRetirementAccount = (req, res) => {
     console.log(`Account Type: ${account_type}`);
     console.log(`Amount Entered: ${amount}`);
 
-    res.json({ success: true });
+    res.json({ success: true, result });
   });
 };
 

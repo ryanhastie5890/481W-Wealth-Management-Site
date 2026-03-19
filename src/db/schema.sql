@@ -58,6 +58,28 @@ CREATE TABLE expenses (
     ON DELETE SET NULL
 );
 
+-- RealEstateNotification table
+CREATE TABLE real_estate_notifications(
+   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+   userId INT DEFAULT NULL,
+   type ENUM(
+        'PROPERTY',
+        'INCOME',
+        'EXPENSE',
+        'TAX'
+    ) NOT NULL,
+
+    message TEXT NOT NULL,
+     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    KEY userId (userId),
+    CONSTRAINT real_estate_notifications_ibfk_1
+      FOREIGN KEY (userId)
+      REFERENCES users(id)
+      ON DELETE SET NULL
+);
+
 -- Temp retirement table
 CREATE TABLE retirement_accounts (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -67,6 +89,19 @@ CREATE TABLE retirement_accounts (
   current_balance DECIMAL(12,2) NOT NULL, 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- retirement plan (piza)
+CREATE TABLE retirement_plans (
+  id SERIAL PRIMARY KEY,
+  user_id INT NOT NULL,
+  name VARCHAR(100) NOT NULL,
+  current_age INT NOT NULL,
+  retirement_age INT NOT NULL,
+  annual_contribution DECIMAL(12,2) NOT NULL,
+  expected_return DECIMAL(5,2) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- Stock Investments
