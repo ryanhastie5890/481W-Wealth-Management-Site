@@ -1,0 +1,25 @@
+Admin dashboard:
+
+Visually enhance the page. Give it some color and nicer buttons
+
+
+
+
+Retirement.html:
+
+Add some nicer buttons and adjust empty space
+
+
+
+
+Real Estate:
+
+Capitalize the I in "add income" 
+
+Add a nicer notification button. 
+
+Inspect how the "you are not logged in text" appears. Adjust it so it doesn't appear multiple times. 
+
+
+
+Investments page looks good.
