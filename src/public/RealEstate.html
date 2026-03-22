@@ -36,22 +36,25 @@
 
     </div>
 
-<h2>Incomes - Expenses:</h2>
-<h2 id="total"></h2>
+<div style="display: flex; flex-direction: column;align-items: center; justify-content: center;text-align: center; border-bottom: 1px solid black;height:20vh;">
+  <h1 >Your Real Estate Portfolio</h1>
 
+  <div style="display: flex; flex-direction: row;align-items: center; justify-content: center;text-align: center; gap:150px;">
+
+    <div style="display: flex; flex-direction: column;align-items: center; justify-content: center;text-align: center;">
+<h2>Profit</h2>
+<h2 id="total"></h2>
+</div>
+
+<div style="display: flex; flex-direction: column;align-items: center; justify-content: center;text-align: center;">
 <h2>Taxes</h2>
 <h2 id="taxes"></h2>
+</div>
 
-<!--temp notifications area-->
-<button onclick="notificationsControl()"  style="display:flex">Notifications</button>
+  </div>
+</div>
 
-<h2 id="notifText" style="display:none;">Your Notifications: </h2>
-<div id = "notifications" style="display:none;"></div>
-    <h2>Incomes - Expenses:</h2>
-    <br>
-    <h2 id="total"></h2>
-
-    <div id="buttons">
+    <div id="buttons" >
       <!--add property button-->
       <!--<button class="addButton" style="display:flex">Add Property</button><br> -->
       <button type="button" class="btn btn-primary" onclick="showFormProp()">Add Property</button>
@@ -64,11 +67,22 @@
       <!--<button class="addButton" style="display:flex">Add Income</button><br> -->
 
       <!--add expense button-->
-      <button type="button" class="btn btn-danger" onclick="showFormExp()">Add Expense</button>
+      <button type="button" class="btn btn-danger" onclick="showFormExp()">Add Expense</button><br><br>
       <!--<button class="addButton" onclick="showFormExp()" style="display:flex">Add Expense</button> -->
+      <button type="button" class="btn btn-primary" onclick="notificationsControl()">Notifications</button>
     </div>
 
 
+
+
+<!--temp notifications area-->
+
+
+<h2 id="notifText" style="display:none;">Your Notifications: </h2>
+<div id = "notifications" style="display:none;"></div>
+    
+
+    
     <!--Properties display-->
     <h2 id="propertyLabel">Your Properties: </h2>
     <div id="propertiesDisplay"></div>
@@ -121,6 +135,40 @@
         </select>
       </div>
     </div>
+
+    <!-- STATUS -->
+<div class="row align-items-center mb-3">
+  <div class="col-sm-4">
+    <label for="propertyStatus" class="form-label">Status of Property</label>
+  </div>
+
+  <div class="col-sm-8">
+    <select name="status" id="propertyStatus" class="form-control" required>
+      <option value="Self Owned">Self Owned</option>
+      <option value="Rented Out">Rented Out</option>
+      <option value="Selling">Selling</option>
+      <option value="Leasing">Leasing</option>
+    </select>
+  </div>
+</div>
+
+<!-- OCCUPANTS -->
+<div class="row align-items-center mb-3">
+  <div class="col-sm-4">
+    <label for="propertyOccupants" class="form-label">Number of Occupants</label>
+  </div>
+
+  <div class="col-sm-8">
+    <input 
+      type="number" 
+      class="form-control" 
+      id="propertyOccupants" 
+      name="occupants" 
+      min="0" 
+      value="0"
+    >
+  </div>
+</div>
 
     <button type="submit" class="btn btn-primary">Add Property</button>
 
