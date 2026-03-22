@@ -1,13 +1,13 @@
 Admin dashboard:
 
-Visually enhance the page. Give it some color and nicer buttons
+Visually enhance the page. Give it some color and nicer buttons, in progress
 
 
 
 
 Retirement.html:
 
-Add some nicer buttons and adjust empty space
+ adjust empty space
 
 
 
@@ -23,3 +23,6 @@ Inspect how the "you are not logged in text" appears. Adjust it so it doesn't ap
 
 
 Investments page looks good.
+
+
+Wealth management system button: the space upon which the hover gets triggered too wide, inspect that

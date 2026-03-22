@@ -1,27 +1,23 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-<!--webpage for retirement--> 
-  <head>
-    <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
-  integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <meta charset="utf-8">
     <title>COSC 481 Project</title>
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/retirement.css">
-    <link rel="shortcut icon" href="#"> <!--to remove 404 error favicon.ico not found -->
-  </head>
+    <link rel="shortcut icon" href="#"> </head>
   <body>
+    
     <header>
-      <!--header section of the website-->
       <div style="height: 7vh; ">
         <a href = "index.html" >Wealth Management System</a>
       </div>
-      <!--display user while logged in & logout dropdown-->
       <div id="user-info" style="position:absolute; top:10px; right:20px; color:white;"></div>
     </header>
-    <!--main menu-->
+
     <div class="menu">
       <a href = "RealEstate.html" ><i class="bi bi-house"></i>Real Estate</a>
       <a  href = "Investment.html" ><i class="bi bi-bank"></i>Investment</a>
@@ -29,31 +25,33 @@
       <a  href = "Accounts.html"  ><i class="bi bi-file-person"></i>Account</a>
       <a href="admin.html" id="adminTab"><i class="bi bi-tools"></i>Admin</a>
     </div>
+
     <p id="message"></p>
 
-    <h2 style="text-align: center">Retirement Accounts</h2>
+    <div class="content-filler">
+        <h2 style="text-align: center">Retirement Accounts</h2>
+        <h5 style="text-align: center">You must be signed in to get started.</h5>
 
-    <!-- charts wrapper -->
-    <div id="charts-wrapper">
-        <!--chart.js doughnut chart-->
-        <div id="retirement-chart-container">
-            <canvas id="retirementChart" width="350" height="350"></canvas>
-        </div>
+        <div id="charts-wrapper">
+            <div id="retirement-chart-container">
+                <canvas id="retirementChart" width="350" height="150"></canvas>
+            </div>
 
-        <!--chart.js line chart-->
-        <div id="plan-growth-container">
-            <canvas id="planGrowthChart"></canvas>
+            <div id="plan-growth-container">
+                <canvas id="planGrowthChart"></canvas>
+            </div>
         </div>
     </div>
-    <!--container for the retirement plans-->
+    <hr>
+
     <h3 style="text-align:center;">Retirement Plans</h3>
-    <!--<div id="plan-form-container" style="text-align:center; margin-bottom:10px;"></div>-->
-    <div id ="add-plan">
-      <button id="add-plan-button">Add Plan</button>
+    
+    <div id ="add-plan" style="text-align: center; margin-bottom: 10px;">
+      <button type="button" class="btn btn-primary" id="add-plan-button">Add Plan</button>
     </div>
+
     <div id="plans-container" style="text-align:center;"></div>
 
-    <!--modal container: display new investment options-->
     <div id="investment-modal" class="modal">
       <div class="modal-content">
         <span id="close-modal">&times;</span>
@@ -61,9 +59,8 @@
       </div>
     </div>
 
-    <!--display user retirement accounts-->
     <div id="retirement-table-container">
-      <table id="retirement-table" style="margin-top:20px; margin-bottom:20px;  color:black;">
+      <table id="retirement-table" style="color:black;">
         <thead>
           <tr>
             <th>Account</th>
@@ -71,15 +68,13 @@
             <th>Actions</th>
           </tr>
         </thead>
-        <!--table for retirement accounts-->
         <tbody id="retirement-table-body">
-        <!-- rows inserted here -->
         </tbody>
       </table>
     </div>
 
     <div id="add-investments-button-container">
-      <input type="button" id="add-investments-button" value="Add Investments">
+      <button type="button" class="btn btn-success">Add Investments</button>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

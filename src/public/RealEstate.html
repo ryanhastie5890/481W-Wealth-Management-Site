@@ -43,7 +43,7 @@
 <h2 id="taxes"></h2>
 
 <!--temp notifications area-->
-<button onclick="notificationsControl()"  style="display:flex">Notifications</button>
+<button type="button" class="btn btn-info" onclick="notificationsControl()">View Notifications</button>
 
 <h2 id="notifText" style="display:none;">Your Notifications: </h2>
 <div id = "notifications" style="display:none;"></div>
@@ -58,7 +58,7 @@
       <br>
       <br>
       <!--add income button-->
-      <button type="button" class="btn btn-success" onclick="showFormInc()">Add income</button>
+      <button type="button" class="btn btn-success" onclick="showFormInc()">Add Income</button>
       <br>
       <br>
       <!--<button class="addButton" style="display:flex">Add Income</button><br> -->
@@ -303,7 +303,7 @@
           });
         })
         .catch(err => {
-          document.getElementById("propertiesDisplay").innerHTML = "<p>You are not logged in</p>"
+          document.getElementById("propertiesDisplay").innerHTML = "<strong>You are not logged in.</strong>"
         });
 
       fetch('/api/realEstate/get-incomes', { cache: "no-store" })
@@ -315,7 +315,7 @@
           const display = document.getElementById("incomeDisplay");
 
           if (income.length == 0) {
-            display.innerHTML = "<p>You have not added any income";
+            display.innerHTML = "<p>You have not added any income</p>";
             return;
           }
           income.forEach(i => {
@@ -335,7 +335,7 @@
           });
         })
         .catch(err => {
-          document.getElementById("incomeDisplay").innerHTML = "<p>You are not logged in</p>"
+          document.getElementById("incomeDisplay").innerHTML = "<p></p>"
         });
 
       fetch('/api/realEstate/get-expenses', { cache: "no-store" })
@@ -367,7 +367,7 @@
         });
        })
        .catch(err =>{
-        document.getElementById("expenseDisplay").innerHTML ="<p>You are not logged in</p>"
+        document.getElementById("expenseDisplay").innerHTML ="<p></p>"
        });
 
        //get notifications
@@ -398,7 +398,7 @@
         });
        })
        .catch(err =>{
-        document.getElementById("expenseDisplay").innerHTML ="<p>You are not logged in</p>"
+        document.getElementById("expenseDisplay").innerHTML ="<p></p>"
        });
 
       //calculate finance total
