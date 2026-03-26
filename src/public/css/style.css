@@ -134,3 +134,10 @@ a{
         padding: 5px 0;
 
     }
+
+#buttons{
+  display: flex;
+  justify-content: space-evenly; 
+  flex-direction: row;
+  align-items: center;
+}
