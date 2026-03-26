@@ -150,3 +150,25 @@
   box-sizing: border-box;
   border-radius: 5px;
 }
+
+/*
+*   Testing buttons + layout for retirement page
+*/
+.slide-group {
+    text-align: center;
+}
+
+.content-section {
+  display: none;
+}
+
+.content-section.active {
+  display: block;
+}
+
+/* optional styling */
+.slide-group button.active {
+  background-color: darkgreen;
+  color: white;
+  border-radius: 5px;
+}

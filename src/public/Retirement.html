@@ -45,13 +45,56 @@
             <canvas id="planGrowthChart"></canvas>
         </div>
     </div>
-    <!--container for the retirement plans-->
-    <h3 style="text-align:center;">Retirement Plans</h3>
-    <!--<div id="plan-form-container" style="text-align:center; margin-bottom:10px;"></div>-->
-    <div id ="add-plan">
-      <button id="add-plan-button">Add Plan</button>
+
+    <div class="slide-group">
+        <button type="button" data-target="savings-section" style="border-radius: 5px;">Savings</button>
+        <button type="button" data-target="investments-section" style="border-radius: 5px;">Investments</button>
+        <!-- <button type="bnutton">Assets</button>
+        <button type="button">Expenses</button> -->
+        <button type="button" data-target="plans-section" style="border-radius: 5px;">Plans</button>
     </div>
+
+    <div id="plans-section" class="content-section">
+    <h3 style="text-align:center; margin-top: 10px">Retirement Plans</h3>
+
+    <div id="add-plan">
+        <button id="add-plan-button">Add Plan</button>
+    </div>
+
     <div id="plans-container" style="text-align:center;"></div>
+    </div>
+
+    <!-- Investments section -->
+    <div id="investments-section" class="content-section">
+        <h3 style="text-align:center; margin-top: 10px">Retirement Investments</h3>
+				<!--display user retirement accounts-->
+        <div id="retirement-table-container">
+					<table id="retirement-table" style="margin-top:20px; margin-bottom:20px;  color:black;">
+						<thead>
+							<tr>
+								<th id="account-header">Account</th>
+								<th id="balance-header">Balance</th>
+								<th id="actions-header">Actions</th>
+							</tr>
+						</thead>
+						<!--table for retirement accounts-->
+						<tbody id="retirement-table-body">
+							<!-- rows inserted here -->
+						</tbody>
+					</table>
+					<div id="add-investments-button-container">
+						<input type="button" id="add-investments-button" value="Add Investments">
+					</div>
+        </div>
+    </div>
+
+    <!-- Savings section -->
+    <div id="savings-section" class="content-section">
+        <h3 style="text-align:center; margin-top: 10px">Savings</h3>
+        <div style="text-align:center; margin-top:20px;">
+            <h4>Under Construction</h4>
+        </div>
+    </div>
 
     <!--modal container: display new investment options-->
     <div id="investment-modal" class="modal">
@@ -61,31 +104,10 @@
       </div>
     </div>
 
-    <h3 style="text-align:center; margin-top: 10px">Retirement Investments</h3>
-    <!--display user retirement accounts-->
-    <div id="retirement-table-container">
-      <table id="retirement-table" style="margin-top:20px; margin-bottom:20px;  color:black;">
-        <thead>
-          <tr>
-            <th id="account-header">Account</th>
-            <th id="balance-header">Balance</th>
-            <th id="actions-header">Actions</th>
-          </tr>
-        </thead>
-        <!--table for retirement accounts-->
-        <tbody id="retirement-table-body">
-        <!-- rows inserted here -->
-        </tbody>
-      </table>
-    </div>
-
-    <div id="add-investments-button-container">
-      <input type="button" id="add-investments-button" value="Add Investments">
-    </div>
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="./js/session.js"></script>
     <script src="./js/retirement.js"></script>
     <script src="./js/retirementPlans.js"></script>
+    <script src="./js/retirementTabs.js"></script>
   </body>
 </html>
