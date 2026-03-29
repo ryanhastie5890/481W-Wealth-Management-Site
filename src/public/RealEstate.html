@@ -77,30 +77,37 @@
 
 <!--temp notifications area-->
 
-
-<h2 id="notifText" style="display:none;">Your Notifications: </h2>
-<div id = "notifications" style="display:none;"></div>
+<br>
+<h2 id="notifText" style="display:none; text-align:center; width:100%;">Your Notifications</h2>
+<div id = "notifications" style="display:none;"></div><br><br>
     
 
-    
+    <div id="displayHolder">
     <!--Properties display-->
+    <div class="displayColumn">
     <h2 id="propertyLabel">Your Properties: </h2>
     <div id="propertiesDisplay"></div>
+    </div>
 
     <!--Income display-->
+    <div class="displayColumn">
     <h2 id="incomeLabel">Your Incomes: </h2>
     <div id="incomeDisplay"></div>
+    </div>
+
 
     <!--Expense display-->
+    <div class="displayColumn">
     <h2 id="expenseLabel">Your Expenses: </h2>
     <div id="expenseDisplay">
+    </div>
 
+    </div>
     </div>
 
     <form action="/api/realEstate/add-property" method="POST">
   <div id="property_form" style="display:none;">
-    <button type="button" class="btn-close" onclick="hideForms()" aria-label="Close"></button>
-
+    <button type="button" onclick="hideForms()" class="xButton">X</button>
     <h3 class="heading">Add Property</h3>
 
     <div class="row align-items-center mb-3">
@@ -236,6 +243,7 @@
 
     <!--forms for updating items-->
     <div id="property_form_update" style="display:none;">
+      <h2>Edit Property</h2>
       <form id="editPropForm"><!--add property form-->
 
         <input type="hidden" id="propertyId" />
@@ -271,6 +279,7 @@
 
     <!--Income form-->
     <div id="income_form_update" style="display:none;">
+      <h2>Edit Income</h2>
       <form id="editIncForm">
 
         <input type="hidden" id="incomeId" />
@@ -288,6 +297,7 @@
 
     <!--Expense form-->
     <div id="expense_form_update" style="display:none;">
+      <h2>Edit Expense</h2>
       <form id="editExpForm">
 
         <input type="hidden" id="expenseId" />
@@ -434,6 +444,7 @@
         expense.forEach(n =>{
             const div = document.createElement("div");
             div.className ="notification";
+            div.id = `notif-${n.id}`;
 
             //populate with data
             div.innerHTML =`
@@ -619,22 +630,22 @@
         document.getElementById("propertiesDisplay").style.display = "none";
         document.getElementById("incomeDisplay").style.display = "none";
         document.getElementById("expenseDisplay").style.display = "none";
-         document.getElementById("notifications").style.display = "none";
+         //document.getElementById("notifications").style.display = "none";
         document.getElementById("propertyLabel").style.display = "none";
         document.getElementById("incomeLabel").style.display = "none";
         document.getElementById("expenseLabel").style.display = "none";
-        document.getElementById("notifText").style.display = "none";
+        //document.getElementById("notifText").style.display = "none";
        }
 
       function showDisplays() {
         document.getElementById("propertiesDisplay").style.display = "flex";
         document.getElementById("incomeDisplay").style.display = "flex";
         document.getElementById("expenseDisplay").style.display = "flex";
-         document.getElementById("notifications").style.display = "none";
+         //document.getElementById("notifications").style.display = "none";
         document.getElementById("propertyLabel").style.display = "flex";
         document.getElementById("incomeLabel").style.display = "flex";
         document.getElementById("expenseLabel").style.display = "flex";
-         document.getElementById("notifText").style.display = "none";
+         //document.getElementById("notifText").style.display = "none";
 
       }
 
@@ -668,7 +679,7 @@
 
        function showNotifications(){
         document.getElementById("notifications").style.display = "flex";
-        document.getElementById("notifText").style.display = "flex";
+        document.getElementById("notifText").style.display = "block";
        }
 
        function hideNotifications(){
@@ -686,17 +697,23 @@
        }
 
        function acceptNotification(id){
-        fetch(`/api/realEstate/delete-notification/${id}`,{
-             method: 'DELETE'})
-        .then(res => res.json())
-        .then(data =>{
-          console.log(data);
-          if(data.success){
-            location.reload();//reload page
-          }
-        })
-        .catch(err => console.error(err));
-       }
+  fetch(`/api/realEstate/delete-notification/${id}`,{
+    method: 'DELETE'
+  })
+  .then(res => res.json())
+  .then(data =>{
+    if(data.success){
+      const el = document.getElementById(`notif-${id}`);
+      if(el) el.remove();
+
+      const container = document.getElementById("notifications");
+      if(container.children.length === 0){
+        hideNotifications();
+      }
+    }
+  })
+  .catch(err => console.error(err));
+}
       
     </script>
 </body>
