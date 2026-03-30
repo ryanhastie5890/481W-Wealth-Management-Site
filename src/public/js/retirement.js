@@ -30,6 +30,14 @@ async function loadRetirementAccounts() {
     accountHeader.style.display = 'none';
     balanceHeader.style.display = 'none';
     actionsHeader.style.display = 'none';
+
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="3" style="text-align:center; color:white;">
+          No retirement accounts present
+        </td>
+      </tr>
+    `;
   } 
   else {
     accountHeader.style.display = '';
@@ -37,7 +45,9 @@ async function loadRetirementAccounts() {
     actionsHeader.style.display = '';
   }
 
-  accounts.forEach(account => {
+  accounts // .forEach(account => {
+    .filter(acc => acc.account_type !== "Savings")
+    .forEach(account => {
     const row = document.createElement('tr');
 
     row.innerHTML = `

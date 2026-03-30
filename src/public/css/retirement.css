@@ -136,6 +136,33 @@
 }
 
 /*
+*   Savings Table Stle
+*/
+
+#savings-table-container {
+  width: auto;        
+  margin: 0 auto;    
+}
+
+#savings-table {
+  width: auto;
+  margin: 0 auto;
+  border-collapse: collapse; 
+}
+
+#savings-table th {
+  margin-top:20px;
+  text-align: left;
+  padding-left: 2px;
+}
+
+#savings-table td {
+  text-align: left;
+  padding: 2px;
+  vertical-align: middle;
+}
+
+/*
 *   Add Investments Button - Style
 */
 #add-investments-button-container {
