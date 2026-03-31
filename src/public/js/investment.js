@@ -235,6 +235,7 @@ function buildInvestmentModal() {
 
             alert(`Bought ${shares} shares of ${symbol}`);
             hideModal();
+            buildInvestments(); // refresh portfolio
 
         } catch (err) {
             console.error(err);
