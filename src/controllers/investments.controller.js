@@ -166,6 +166,34 @@ export async function sellStock(req, res) {
     }
 }
 
+export async function getPortfolio(req, res) {
+    try {
+        const userId = req.session.userId;
+
+        const [rows] = await db.query(
+            `SELECT symbol, shares, average_price
+             FROM investments
+             WHERE userId = ?`,
+            [userId]
+        );
+
+        let portfolio = [];
+
+        for (const stock of rows) {
+            portfolio.push({
+                symbol: stock.symbol,
+                shares: stock.shares
+            });
+        }
+
+        res.json(portfolio);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed to fetch portfolio makeup" });
+    }
+}
+
 export async function getPortfolioValue(req, res) {
     try {
         const userId = req.session.userId;

@@ -2,6 +2,12 @@ const addInvestmentsButton = document.getElementById("add-general-investments-bu
 const modal = document.getElementById("modal");
 const closeModalButton = document.getElementById("close-modal");
 const modalBody = document.getElementById("modal-body");
+const investmentBody = document.getElementById("investment-body");
+
+// Load investments when page loads
+document.addEventListener("DOMContentLoaded", () => {
+    buildInvestments();
+});
 
 addInvestmentsButton.addEventListener("click", () => {
     showAddInvestmentModal();
@@ -22,6 +28,35 @@ function showModal() {
 
 function hideModal() {
     modal.classList.remove("show");
+}
+
+function createInvestmentDOM(investment) {
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("investment-module");
+
+    const symbol = document.createElement("h3");
+    symbol.textContent = investment.symbol;
+
+    const shares = document.createElement("p");
+    shares.textContent = `Shares: ${investment.shares}`;
+
+    wrapper.appendChild(symbol);
+    wrapper.appendChild(shares);
+
+    return wrapper;
+}
+
+async function buildInvestments() {
+    // Clear the investment body
+    investmentBody.innerHTML = "";
+
+    let response = await fetch("/api/investments/getPortfolio");
+    let investments = await response.json();
+
+    for (const investment of investments) {
+        let investmentModule = createInvestmentDOM(investment);
+        investmentBody.appendChild(investmentModule);
+    }
 }
 
 function buildInvestmentModal() {

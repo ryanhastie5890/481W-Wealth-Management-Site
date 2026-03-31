@@ -1,6 +1,7 @@
 import express from 'express';
 import {
     showStock,
+    getPortfolio,
     getPortfolioValue,
     buyStock,
     sellStock
@@ -14,9 +15,14 @@ const router = express.Router();
 router.get('/show', showStock);
 
 /**
+ * GET /api/investments/getPortfolioValue
+ */
+router.get('/getPortfolioValue', getPortfolioValue);
+
+/**
  * GET /api/investments/getPortfolio
  */
-router.get('/getPortfolio', getPortfolioValue);
+router.get('/getPortfolio', getPortfolio);
 
 /**
  * POST /api/investments/buy
