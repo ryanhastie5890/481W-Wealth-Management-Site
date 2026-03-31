@@ -40,8 +40,16 @@ function createInvestmentDOM(investment) {
     const shares = document.createElement("p");
     shares.textContent = `Shares: ${investment.shares}`;
 
+    const sellButton = document.createElement("button");
+    sellButton.textContent = "Sell";
+
+    sellButton.addEventListener("click", () => {
+        showSellInvestmentModal(investment);
+    });
+
     wrapper.appendChild(symbol);
     wrapper.appendChild(shares);
+    wrapper.appendChild(sellButton);
 
     return wrapper;
 }
@@ -57,6 +65,78 @@ async function buildInvestments() {
         let investmentModule = createInvestmentDOM(investment);
         investmentBody.appendChild(investmentModule);
     }
+}
+
+function showSellInvestmentModal(investment) {
+    showModal();
+
+    modalBody.innerHTML = `
+        <h2>Sell ${investment.symbol}</h2>
+
+        <form id="sell-form">
+            <p>You currently own ${investment.shares} shares</p>
+
+            <label>
+                Shares to Sell:
+                <input 
+                    type="number" 
+                    id="sell-shares" 
+                    min="1" 
+                    max="${investment.shares}" 
+                    required
+                />
+            </label>
+
+            <br><br>
+
+            <button type="submit">
+                Sell Shares
+            </button>
+        </form>
+    `;
+
+    const form = document.getElementById("sell-form");
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const shares = Number(document.getElementById("sell-shares").value);
+
+        if (shares <= 0 || shares > investment.shares) {
+            alert("Invalid number of shares.");
+            return;
+        }
+
+        try {
+            const res = await fetch(`/api/investments/sell`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    symbol: investment.symbol,
+                    shares
+                })
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                alert(data.error || "Failed to sell stock");
+                return;
+            }
+
+            alert(`Sold ${shares} shares of ${investment.symbol}`);
+
+            hideModal();
+            buildInvestments(); // refresh portfolio
+
+        } catch (err) {
+            console.error(err);
+            alert("Error selling stock");
+        }
+    });
 }
 
 function buildInvestmentModal() {
