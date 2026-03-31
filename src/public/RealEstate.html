@@ -36,22 +36,25 @@
 
     </div>
 
-<h2>Incomes - Expenses:</h2>
-<h2 id="total"></h2>
+<div style="display: flex; flex-direction: column;align-items: center; justify-content: center;text-align: center; border-bottom: 1px solid black;height:20vh;">
+  <h1 >Your Real Estate Portfolio</h1>
 
+  <div style="display: flex; flex-direction: row;align-items: center; justify-content: center;text-align: center; gap:150px;">
+
+    <div style="display: flex; flex-direction: column;align-items: center; justify-content: center;text-align: center;">
+<h2>Profit</h2>
+<h2 id="total"></h2>
+</div>
+
+<div style="display: flex; flex-direction: column;align-items: center; justify-content: center;text-align: center;">
 <h2>Taxes</h2>
 <h2 id="taxes"></h2>
+</div>
 
-<!--temp notifications area-->
-<button onclick="notificationsControl()"  style="display:flex">Notifications</button>
+  </div>
+</div>
 
-<h2 id="notifText" style="display:none;">Your Notifications: </h2>
-<div id = "notifications" style="display:none;"></div>
-    <h2>Incomes - Expenses:</h2>
-    <br>
-    <h2 id="total"></h2>
-
-    <div id="buttons">
+    <div id="buttons" >
       <!--add property button-->
       <!--<button class="addButton" style="display:flex">Add Property</button><br> -->
       <button type="button" class="btn btn-primary" onclick="showFormProp()">Add Property</button>
@@ -64,29 +67,47 @@
       <!--<button class="addButton" style="display:flex">Add Income</button><br> -->
 
       <!--add expense button-->
-      <button type="button" class="btn btn-danger" onclick="showFormExp()">Add Expense</button>
+      <button type="button" class="btn btn-danger" onclick="showFormExp()">Add Expense</button><br><br>
       <!--<button class="addButton" onclick="showFormExp()" style="display:flex">Add Expense</button> -->
+      <button type="button" class="btn btn-primary" onclick="notificationsControl()">Notifications</button>
     </div>
 
 
+
+
+<!--temp notifications area-->
+
+<br>
+<h2 id="notifText" style="display:none; text-align:center; width:100%;">Your Notifications</h2>
+<div id = "notifications" style="display:none;"></div><br><br>
+    
+
+    <div id="displayHolder">
     <!--Properties display-->
+    <div class="displayColumn">
     <h2 id="propertyLabel">Your Properties: </h2>
     <div id="propertiesDisplay"></div>
+    </div>
 
     <!--Income display-->
+    <div class="displayColumn">
     <h2 id="incomeLabel">Your Incomes: </h2>
     <div id="incomeDisplay"></div>
+    </div>
+
 
     <!--Expense display-->
+    <div class="displayColumn">
     <h2 id="expenseLabel">Your Expenses: </h2>
     <div id="expenseDisplay">
+    </div>
 
+    </div>
     </div>
 
     <form action="/api/realEstate/add-property" method="POST">
   <div id="property_form" style="display:none;">
-    <button type="button" class="btn-close" onclick="hideForms()" aria-label="Close"></button>
-
+    <button type="button" onclick="hideForms()" class="xButton">X</button>
     <h3 class="heading">Add Property</h3>
 
     <div class="row align-items-center mb-3">
@@ -121,6 +142,40 @@
         </select>
       </div>
     </div>
+
+    <!-- STATUS -->
+<div class="row align-items-center mb-3">
+  <div class="col-sm-4">
+    <label for="propertyStatus" class="form-label">Status of Property</label>
+  </div>
+
+  <div class="col-sm-8">
+    <select name="status" id="propertyStatus" class="form-control" required>
+      <option value="Self Owned">Self Owned</option>
+      <option value="Rented Out">Rented Out</option>
+      <option value="Selling">Selling</option>
+      <option value="Leasing">Leasing</option>
+    </select>
+  </div>
+</div>
+
+<!-- OCCUPANTS -->
+<div class="row align-items-center mb-3">
+  <div class="col-sm-4">
+    <label for="propertyOccupants" class="form-label">Number of Occupants</label>
+  </div>
+
+  <div class="col-sm-8">
+    <input 
+      type="number" 
+      class="form-control" 
+      id="propertyOccupants" 
+      name="occupants" 
+      min="0" 
+      value="0"
+    >
+  </div>
+</div>
 
     <button type="submit" class="btn btn-primary">Add Property</button>
 
@@ -188,6 +243,7 @@
 
     <!--forms for updating items-->
     <div id="property_form_update" style="display:none;">
+      <h2>Edit Property</h2>
       <form id="editPropForm"><!--add property form-->
 
         <input type="hidden" id="propertyId" />
@@ -223,6 +279,7 @@
 
     <!--Income form-->
     <div id="income_form_update" style="display:none;">
+      <h2>Edit Income</h2>
       <form id="editIncForm">
 
         <input type="hidden" id="incomeId" />
@@ -240,6 +297,7 @@
 
     <!--Expense form-->
     <div id="expense_form_update" style="display:none;">
+      <h2>Edit Expense</h2>
       <form id="editExpForm">
 
         <input type="hidden" id="expenseId" />
@@ -386,6 +444,7 @@
         expense.forEach(n =>{
             const div = document.createElement("div");
             div.className ="notification";
+            div.id = `notif-${n.id}`;
 
             //populate with data
             div.innerHTML =`
@@ -571,22 +630,22 @@
         document.getElementById("propertiesDisplay").style.display = "none";
         document.getElementById("incomeDisplay").style.display = "none";
         document.getElementById("expenseDisplay").style.display = "none";
-         document.getElementById("notifications").style.display = "none";
+         //document.getElementById("notifications").style.display = "none";
         document.getElementById("propertyLabel").style.display = "none";
         document.getElementById("incomeLabel").style.display = "none";
         document.getElementById("expenseLabel").style.display = "none";
-        document.getElementById("notifText").style.display = "none";
+        //document.getElementById("notifText").style.display = "none";
        }
 
       function showDisplays() {
         document.getElementById("propertiesDisplay").style.display = "flex";
         document.getElementById("incomeDisplay").style.display = "flex";
         document.getElementById("expenseDisplay").style.display = "flex";
-         document.getElementById("notifications").style.display = "none";
+         //document.getElementById("notifications").style.display = "none";
         document.getElementById("propertyLabel").style.display = "flex";
         document.getElementById("incomeLabel").style.display = "flex";
         document.getElementById("expenseLabel").style.display = "flex";
-         document.getElementById("notifText").style.display = "none";
+         //document.getElementById("notifText").style.display = "none";
 
       }
 
@@ -620,7 +679,7 @@
 
        function showNotifications(){
         document.getElementById("notifications").style.display = "flex";
-        document.getElementById("notifText").style.display = "flex";
+        document.getElementById("notifText").style.display = "block";
        }
 
        function hideNotifications(){
@@ -638,17 +697,23 @@
        }
 
        function acceptNotification(id){
-        fetch(`/api/realEstate/delete-notification/${id}`,{
-             method: 'DELETE'})
-        .then(res => res.json())
-        .then(data =>{
-          console.log(data);
-          if(data.success){
-            location.reload();//reload page
-          }
-        })
-        .catch(err => console.error(err));
-       }
+  fetch(`/api/realEstate/delete-notification/${id}`,{
+    method: 'DELETE'
+  })
+  .then(res => res.json())
+  .then(data =>{
+    if(data.success){
+      const el = document.getElementById(`notif-${id}`);
+      if(el) el.remove();
+
+      const container = document.getElementById("notifications");
+      if(container.children.length === 0){
+        hideNotifications();
+      }
+    }
+  })
+  .catch(err => console.error(err));
+}
       
     </script>
 </body>

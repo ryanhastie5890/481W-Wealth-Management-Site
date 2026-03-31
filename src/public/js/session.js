@@ -12,20 +12,6 @@ fetch('api/session/sessionMessage')
   });
 
 /*
-*   FIX ME: older session info (user info & logout) remove later
-*/ 
-// fetch('api/session/getSession')
-//   .then(res => res.json())
-//   .then(data => {
-//     if (data.loggedIn) {
-//       const userInfo = document.getElementById('user-info');
-//       if (userInfo) {
-//         userInfo.innerText = data.email;
-//       }
-//     }
-//   });
-
-/*
 *   session info (user info & logout)
 */ 
 fetch('/api/session/getSession')

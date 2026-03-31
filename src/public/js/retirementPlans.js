@@ -25,11 +25,16 @@ async function loadPlans() {
 
     // do not display a line if no plans are present
     if (!plans || plans.length === 0) {
+      plansContainer.innerHTML = `
+        <div style="text-align:center; color:white; margin-top:10px;">
+          No retirement plans present
+        </div>
+      `;
       renderGrowthChart([], []);
       return;
     }
 
-    const initialBalance = await getExistingRetirementBalance();
+    const initialBalance = await getExistingRetirementBalance(true);
 
     plans.forEach(plan => {
       const projected = calculateProjectedBalance(
@@ -204,10 +209,12 @@ async function getExistingRetirementBalance() {
     if (!accounts || accounts.length === 0) return 0;
 
     // sum any / all account balances
-    return accounts.reduce((sum, acc) => {
-      const value = Number(String(acc.current_balance).replace(/,/g, ''));
-      return sum + (isNaN(value) ? 0 : value);
-    }, 0);
+    return accounts// .reduce((sum, acc) => {
+      .filter(acc => includeSavings || acc.account_type !== "Savings")
+      .reduce((sum, acc) => {
+        const value = Number(String(acc.current_balance).replace(/,/g, ''));
+        return sum + (isNaN(value) ? 0 : value);
+      }, 0);
   } 
   catch (err) {
     console.error('Error fetching existing accounts:', err);

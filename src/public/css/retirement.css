@@ -136,6 +136,33 @@
 }
 
 /*
+*   Savings Table Stle
+*/
+
+#savings-table-container {
+  width: auto;        
+  margin: 0 auto;    
+}
+
+#savings-table {
+  width: auto;
+  margin: 0 auto;
+  border-collapse: collapse; 
+}
+
+#savings-table th {
+  margin-top:20px;
+  text-align: left;
+  padding-left: 2px;
+}
+
+#savings-table td {
+  text-align: left;
+  padding: 2px;
+  vertical-align: middle;
+}
+
+/*
 *   Add Investments Button - Style
 */
 #add-investments-button-container {
@@ -148,5 +175,27 @@
   border-top: 2px solid black;
   border-bottom: 2px solid black;
   box-sizing: border-box;
+  border-radius: 5px;
+}
+
+/*
+*   Testing buttons + layout for retirement page
+*/
+.slide-group {
+    text-align: center;
+}
+
+.content-section {
+  display: none;
+}
+
+.content-section.active {
+  display: block;
+}
+
+/* optional styling */
+.slide-group button.active {
+  background-color: darkgreen;
+  color: white;
   border-radius: 5px;
 }

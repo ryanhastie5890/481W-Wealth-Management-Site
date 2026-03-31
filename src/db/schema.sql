@@ -80,7 +80,7 @@ CREATE TABLE real_estate_notifications(
       ON DELETE SET NULL
 );
 
--- Temp retirement table
+-- retirement table (piza)
 CREATE TABLE retirement_accounts (
   id INT AUTO_INCREMENT PRIMARY KEY,
   userId INT NOT NULL,                 
