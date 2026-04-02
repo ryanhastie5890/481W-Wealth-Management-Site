@@ -27,9 +27,11 @@ fetch('/api/session/getSession')
     const userInfo = document.getElementById('user-info');
     if (!userInfo) return;
 
+    const nameToShow = data.displayName || data.email; // prefer display name if available
+    
     userInfo.innerHTML = `
       <span id="user-email" style="cursor:pointer;">
-        ${data.email} ▾
+        ${nameToShow} ▾
       </span>
       <div id="logout-menu"
         style="

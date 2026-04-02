@@ -6,7 +6,7 @@ import { dbCon } from '../db/database.js';     // connect to DB to run queries
 *   FIX ME: password restrictions? 2-factor?
 */
 export async function registerUser(req, res) {
-    const { email, password, role } = req.body;   // <-- added role here
+    const { email, password, role, displayName } = req.body;   // <-- added role here
 
     // basic role validation (only allow 'admin' or 'user')
     const safeRole = role === 'admin' ? 'admin' : 'user';   // <-- added
@@ -14,8 +14,8 @@ export async function registerUser(req, res) {
     try {
         const hash = await bcrypt.hash(password, 10);
         dbCon.query(
-            "INSERT INTO users (email, password_hash, role) VALUES (?, ?, ?)",   // updated query
-            [email, hash, safeRole],                                             // added safeRole
+            "INSERT INTO users (email, password_hash, role, display_name) VALUES (?, ?, ?, ?)",   // updated query
+            [email, hash, safeRole, displayName],                                             // added safeRole and displayName
             (err) => {
                 if (err) {
                     console.error("MYSQL INSERT ERROR:", err);
@@ -57,6 +57,7 @@ export async function loginUser(req, res) {
             req.session.userId = user.id; // store logged-in userid in session
             req.session.email = user.email;  // store logged-in user email in session
             req.session.role = user.role;    // store role in session
+            req.session.displayName = user.display_name; // store display name in session
             req.session.message = "Login successful!";
             return res.redirect('/index.html');
         }
