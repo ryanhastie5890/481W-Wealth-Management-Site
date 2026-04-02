@@ -1,38 +1,98 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <!--webpage for accounts--> 
-  <head>
-    <!-- Bootstrap CSS -->
+<head>
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
-  integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <meta charset="utf-8">
-    <title>COSC 481 Project</title>
-    <link rel="stylesheet" href="./css/style.css">
-    <link rel="shortcut icon" href="#"> <!-- to remove 404 error favicon.ico not found -->
-  </head>
-  <body>
-    <header>
-      <!--Header section of the website-->
-      <div class="heading" style="height: 7vh;">
-        <a href = "index.html" >Wealth Management System</a>
-      </div>
-      <!--Display user while logged in-->
-      <div id="user-info" style="position:absolute; top:10px; right:20px; color:white;"></div>
-    </header>
+  <meta charset="utf-8">
+  <title>COSC 481 Project</title>
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="shortcut icon" href="#"> <!-- to remove 404 error favicon.ico not found -->
+</head>
 
-    <!--menu-->
-    <div class="menu">
-      <a class= "menu-option" href = "RealEstate.html" ><i class="bi bi-house"></i>Real Estate</a>
-      <a class= "menu-option" href = "Investment.html" ><i class="bi bi-bank"></i>Investment</a>
-      <a class= "menu-option" href = "Retirement.html" ><i class="bi bi-sunglasses"></i>Retirement</a>
-      <a class= "menu-option" href = "Accounts.html" style="color:lightgreen;" ><i class="bi bi-file-person"></i>Account</a>
-      <a href="admin.html" id="adminTab"><i class="bi bi-tools"></i>Admin</a>
+<body>
+  <header>
+    <!--Header section of the website-->
+    <div class="heading" style="height: 7vh;">
+      <a href="index.html">Wealth Management System</a>
     </div>
-    <h2 style="text-align: center;">User Accounts</h2>
-    <h5 style="text-align: center;">User and admin account management.</h5>
-    <div class="bottom-line"></div>
-    <script src="./js/session.js"></script>
-  </body>
+    <!--Display user while logged in-->
+    <div id="user-info" style="position:absolute; top:10px; right:20px; color:white;"></div>
+  </header>
+
+  <!--menu-->
+  <div class="menu">
+    <a class="menu-option" href="RealEstate.html"><i class="bi bi-house"></i>Real Estate</a>
+    <a class="menu-option" href="Investment.html"><i class="bi bi-bank"></i>Investment</a>
+    <a class="menu-option" href="Retirement.html"><i class="bi bi-sunglasses"></i>Retirement</a>
+    <a class="menu-option" href="Accounts.html" style="color:lightgreen;"><i class="bi bi-file-person"></i>Account</a>
+    <a href="admin.html" id="adminTab"><i class="bi bi-tools"></i>Admin</a>
+  </div>
+
+  <h2 style="text-align: center;">User Accounts</h2>
+  <h5 style="text-align: center;">User and admin account management.</h5>
+  <div class="bottom-line"></div>
+
+  <!-- USERNAME CHANGE SECTION -->
+  <div class="container mt-4" style="max-width: 500px;">
+    <h4>Change Display Name</h4>
+
+    <div class="mb-3">
+      <label for="displayNameInput" class="form-label">New Display Name</label>
+      <input type="text" id="displayNameInput" class="form-control" placeholder="Enter new display name">
+    </div>
+
+    <button id="saveDisplayNameBtn" class="btn btn-primary">Save</button>
+
+    <p id="displayNameMessage" style="margin-top:10px; color:lightgreen;"></p>
+  </div>
+
+  <!-- session handling -->
+  <script src="./js/session.js"></script>
+
+  <!-- username update logic -->
+  <script>
+    document.getElementById("saveDisplayNameBtn").onclick = async () => {
+      const newName = document.getElementById("displayNameInput").value.trim();
+      const msg = document.getElementById("displayNameMessage");
+
+      if (!newName) {
+        msg.style.color = "red";
+        msg.innerText = "Display name cannot be empty.";
+        return;
+      }
+
+      const res = await fetch('/api/session/displayname', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ displayName: newName })
+      });
+
+      if (res.ok) {
+        msg.style.color = "lightgreen";
+        msg.innerText = "Display name updated!";
+
+        // refresh session so the top-right username updates
+        const sessionRes = await fetch('/api/session/getSession');
+        const sessionData = await sessionRes.json();
+
+        if (sessionData.displayName) {
+          const userInfo = document.getElementById("user-info");
+          if (userInfo) {
+            const nameToShow = sessionData.displayName || sessionData.email;
+            const emailSpan = userInfo.querySelector("#user-email");
+            if (emailSpan) emailSpan.innerText = nameToShow + " ▾";
+          }
+        }
+      } else {
+        msg.style.color = "red";
+        msg.innerText = "Error updating display name.";
+      }
+    };
+  </script>
+
+</body>
 </html>
