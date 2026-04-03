@@ -47,6 +47,12 @@ export async function loginUser(req, res) {
             }
 
             const user = results[0];
+
+            if (user.locked === 1) {
+                req.session.message = "Your account is locked. Contact an administrator.";
+                return res.redirect('/');
+            }
+
             const match = await bcrypt.compare(password, user.password_hash);
 
             if (!match) {
@@ -63,6 +69,7 @@ export async function loginUser(req, res) {
         }
     );
 }
+
 
 /*
 *   log user out destroying the currrent session and user cookie information

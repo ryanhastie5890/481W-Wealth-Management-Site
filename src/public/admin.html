@@ -35,7 +35,9 @@
       <thead class="table-dark">
         <tr>
           <th>Email</th>
+          <th>Display Name</th>
           <th>Role</th>
+          <th>Locked</th>
           <th>Delete</th>
         </tr>
       </thead>
@@ -58,9 +60,18 @@
 
         row.innerHTML = `
           <td>${user.email}</td>
+          <td>${user.display_name || "(none)"}</td>
           <td>${user.role}</td>
-          <td><button class="btn btn-danger btn-sm" onclick="deleteUser(${user.id})">Delete</button></td>
+          <td>
+            <input type="checkbox" 
+              ${user.locked ? "checked" : ""} 
+              onchange="toggleLock(${user.id}, this.checked)">
+         </td>
+         <td>
+           <button class="btn btn-danger btn-sm" onclick="deleteUser(${user.id})">Delete</button>
+         </td>
         `;
+
 
         tbody.appendChild(row);
       });
@@ -70,6 +81,17 @@
       await fetch(`/api/admin/users/${id}`, { method: 'DELETE' });
       loadUsers();
     }
+
+    async function toggleLock(id, locked) {
+  await fetch(`/api/admin/users/${id}/lock`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ locked })
+  });
+
+  loadUsers();
+  }
+
 
     loadUsers();
   </script>
