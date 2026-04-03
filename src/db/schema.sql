@@ -9,7 +9,8 @@ CREATE TABLE users (
   password_hash VARCHAR(255) NOT NULL,
   role ENUM('admin', 'user') NOT NULL DEFAULT 'user',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  display_name VARCHAR(45) NULL
+  display_name VARCHAR(45) NULL,
+  locked TINYINT(1) NOT NULL DEFAULT 0;
 );
 
 
