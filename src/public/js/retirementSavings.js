@@ -7,7 +7,7 @@ const balanceHeader = document.getElementById('savings-balance-header');
 const actionsHeader = document.getElementById('savings-actions-header');
 
 /*
-* Load savings accounts
+* Load savings accounts only
 */
 async function loadSavingsAccounts() {
   const res = await fetch('/api/retirement');
@@ -149,10 +149,11 @@ savingsTableBody.addEventListener('click', async (e) => {
 
     const data = await res.json();
     if (data.success) loadSavingsAccounts();
+    document.dispatchEvent(new CustomEvent('accountDeleted'));
   }
 });
 
 /*
-* Load when tab is opened
+*   Initializes savings table when the DOM is fully loaded
 */
 document.addEventListener('DOMContentLoaded', loadSavingsAccounts);

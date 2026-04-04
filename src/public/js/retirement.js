@@ -3,6 +3,9 @@ const modal = document.getElementById('investment-modal');
 const modalBody = document.getElementById('modal-body');
 const closeModal = document.getElementById('close-modal');
 
+/*
+*   key: values for creating a retirement account
+*/
 const retirementOptions = {
   "Individual Retirement Accounts": ["IRA", "Roth IRA"],
   "Employer Retirement Accounts": ["401k", "403b"],
@@ -12,7 +15,7 @@ const retirementOptions = {
 let retirementChart = null;
 
 /*
-*   create new rows for retirement-table-body
+*   Create new rows for retirement-table-body
 */ 
 async function loadRetirementAccounts() {
   const res = await fetch('/api/retirement');
@@ -83,7 +86,7 @@ async function loadRetirementAccounts() {
 }
 
 /*
-*   open modal on button click
+*   Open modal on button click
 */
 addInvestmentsButton.addEventListener('click', () => {
   modal.classList.add('show');
@@ -91,14 +94,14 @@ addInvestmentsButton.addEventListener('click', () => {
 });
 
 /*
-*   close modal
+*   Close modal
 */
 closeModal.addEventListener('click', () => {
   modal.classList.remove('show');
 });
 
 /*
-*   close modal if user clicks outside content
+*   Close modal if user clicks outside content
 */
 window.addEventListener('click', (e) => {
   if (e.target === modal) modal.classList.remove('show');
@@ -256,6 +259,7 @@ document.getElementById('retirement-table-body').addEventListener('click', async
   if (data.success) {
     console.log('Deleted account', id);
     await loadRetirementAccounts();
+    document.dispatchEvent(new CustomEvent('accountDeleted'));
   } 
   else {
     alert(data.error || 'Delete failed');
@@ -270,7 +274,6 @@ document.getElementById('retirement-table-body').addEventListener('click', async
 */
 function renderRetirementChart(accounts) {
   const ctx = document.getElementById('retirementChart');
-  // FIX ME: for testing remove after
   if (!ctx) {
     console.error('retirementChart canvas not found');
     return;

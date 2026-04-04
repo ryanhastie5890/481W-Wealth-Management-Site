@@ -5,7 +5,8 @@ const planFormContainer = document.getElementById('plan-form-container');
 let growthChart = null;
 
 /*
-*   load plans on page load
+*   Fetches all retirement plans from the server and renders them in the plans container
+*   Maximum of 5 plans by disabling the Add Plan button when the limit is reached
 */
 async function loadPlans() {
   try {
@@ -49,8 +50,8 @@ async function loadPlans() {
       planDiv.className = 'plan';
       planDiv.innerHTML = `
         <strong>${plan.name}</strong> | <strong>Current Age:</strong> ${plan.current_age} | <strong>Retirement Age:</strong> ${plan.retirement_age} | 
-        <strong>Contribution:</strong> $${plan.annual_contribution} | <strong>Expected Return:</strong> ${plan.expected_return || '5.5%'}% |
-        <strong>Projected Balance:</strong> $${projected}
+        <strong>Contribution:</strong> $${Number(plan.annual_contribution).toLocaleString()} | <strong>Expected Return:</strong> ${plan.expected_return || '5.5%'}% |
+        <strong>Projected Balance:</strong> $${Number(projected).toLocaleString()}
         <button class="delete-plan" data-id="${plan.id}" style="border-radius: 5px">Delete</button>
       `;
       plansContainer.appendChild(planDiv);
@@ -90,7 +91,8 @@ async function loadPlans() {
 }
 
 /*
-*   show form to add new plan
+*   Opens the Add Plan modal and renders a form for the user to input plan details
+*   On save strips commas before submitting data to the server then refreshes the plans list
 */
 addPlanButton.addEventListener('click', () => {
   modal.classList.add('show');
@@ -126,11 +128,17 @@ addPlanButton.addEventListener('click', () => {
     <button id="save-plan" style="border-radius: 5px">Save Plan</button>
   `;
 
+  document.getElementById('annual-contribution').addEventListener('input', (e) => {
+    let value = e.target.value.replace(/\D/g, '');
+    value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    e.target.value = value;
+  });
+
   document.getElementById('save-plan').addEventListener('click', async () => {
     const name = document.getElementById('plan-name').value;
     const current_age = document.getElementById('current-age').value;
     const retirement_age = document.getElementById('retirement-age').value;
-    const annual_contribution = document.getElementById('annual-contribution').value;
+    const annual_contribution = document.getElementById('annual-contribution').value.replace(/,/g, '');
     const expected_return = document.getElementById('expected-return').value;
 
     try {
@@ -154,7 +162,9 @@ addPlanButton.addEventListener('click', () => {
 });
 
 /*
-*   handle delete button clicks
+*   Handle delete button clicks
+*   Prompts the user for confirmation
+*   Refreshes the plans list after a successful deletion
 */
 plansContainer.addEventListener('click', async (e) => {
   if (!e.target.classList.contains('delete-plan')) return;
@@ -175,9 +185,10 @@ plansContainer.addEventListener('click', async (e) => {
 });
 
 /*
-*   calculates projected balance with defaults
+*   Calculates projected balance with defaults
 *   current_age, retirement_age, annual_contribution are required
 *   expected_return is optional. if not provided, default is 5.5% real return
+*   (7.0% stock growth + 1.5% dividend yield - 3.0% inflation)
 */
 function calculateProjectedBalance(initialBalance, current_age, retirement_age, annual_contribution, expected_return) {
   const n = retirement_age - current_age;
@@ -199,9 +210,10 @@ function calculateProjectedBalance(initialBalance, current_age, retirement_age, 
 }
 
 /*
-*
+*   Fetches all retirement and savings accounts from the server and sums their balances.
+*   Defaults to false (savings excluded) unless explicitly passed as true.
 */
-async function getExistingRetirementBalance() {
+async function getExistingRetirementBalance(includeSavings = false) {
   try {
     const res = await fetch('/api/retirement');
     const accounts = await res.json();
@@ -209,7 +221,7 @@ async function getExistingRetirementBalance() {
     if (!accounts || accounts.length === 0) return 0;
 
     // sum any / all account balances
-    return accounts// .reduce((sum, acc) => {
+    return accounts
       .filter(acc => includeSavings || acc.account_type !== "Savings")
       .reduce((sum, acc) => {
         const value = Number(String(acc.current_balance).replace(/,/g, ''));
@@ -224,7 +236,8 @@ async function getExistingRetirementBalance() {
 
 
 /*
-*
+*   Generates year-by-year balance data for the growth chart between current_age and retirement_age.
+*   Returns an object containing labels (ages) and data (balances) arrays for use with Chart.js.
 */
 function generateGrowthData(initialBalance, current_age, retirement_age, annual_contribution, expected_return) {
   const r = expected_return ? expected_return / 100 : 0.055; // FIX ME: possible fix for NaN bug
@@ -246,7 +259,8 @@ function generateGrowthData(initialBalance, current_age, retirement_age, annual_
 }
 
 /*
-*
+*   Renders || re-renders the projected balance line chart using Chart.js.
+*   Accepts labels (ages) and datasets (one per plan) to support multiple plans.
 */
 function renderGrowthChart(labels, datasets) {
   const ctx = document.getElementById('planGrowthChart').getContext('2d');
@@ -283,6 +297,11 @@ function renderGrowthChart(labels, datasets) {
 }
 
 /*
-*  Load plans when page is ready
+*   Initializes plans list after DOM is fully loaded
 */
 document.addEventListener('DOMContentLoaded', loadPlans);
+
+/*
+*   Re-fetches and re-renders plans when an account is deleted
+*/
+document.addEventListener('accountDeleted', loadPlans);

@@ -23,13 +23,6 @@ export const addRetirementAccount = (req, res) => {
       console.error('DB INSERT ERROR:', err);
       return res.status(500).json({ error: 'Database error. unable to add retirement account.' });
     }
-    // FIX ME: remove console logs before final build
-    console.log('Added Retirement Account');
-    console.log(`User ID: ${req.session.userId}`);
-    console.log(`User Email: ${req.session.email}`);
-    console.log(`Account Type: ${account_type}`);
-    console.log(`Amount Entered: ${amount}`);
-
     res.json({ success: true, result });
   });
 };
@@ -83,12 +76,6 @@ export const updateRetirementAccount = (req, res) => {
         console.error('DB UPDATE ERROR:', err);
         return res.status(500).json({ error: 'Database error. Unable to update retirment account.' });
       }
-      // FIX ME: remove console logs before final build
-      console.log('Updated Retirement Account');
-      console.log(`User ID: ${req.session.userId}`);
-      console.log(`User Email: ${req.session.email}`);
-      console.log(`Account Type: ${display_name}`);
-      console.log(`Amount Entered: ${amount}`);
       res.json({ success: true });
     }
   );

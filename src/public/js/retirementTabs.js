@@ -1,6 +1,9 @@
 const buttons = document.querySelectorAll('.slide-group button');
 const sections = document.querySelectorAll('.content-section');
 
+/*
+*   Will display or hide tab section depending on which tab is currently active
+*/
 function showSection(targetId) {
   // hide all
   sections.forEach(sec => sec.classList.remove('active'));
@@ -17,7 +20,9 @@ function showSection(targetId) {
   if (activeBtn) activeBtn.classList.add('active');
 }
 
-// attach listeners
+/*
+*   attach listeners to each button (tab)
+*/ 
 buttons.forEach(button => {
   button.addEventListener('click', () => {
     const target = button.getAttribute('data-target');
@@ -25,7 +30,9 @@ buttons.forEach(button => {
   });
 });
 
-// default view 
+/* 
+*   Default view 
+*/
 document.addEventListener('DOMContentLoaded', () => {
   showSection('plans-section');
 });
