@@ -10,7 +10,7 @@
   <meta charset="utf-8">
   <title>COSC 481 Project</title>
   <link rel="stylesheet" href="./css/style.css">
-  <link rel="shortcut icon" href="#"> <!-- to remove 404 error favicon.ico not found -->
+  <link rel="shortcut icon" href="#">
 </head>
 
 <body>
@@ -50,6 +50,56 @@
     <p id="displayNameMessage" style="margin-top:10px; color:lightgreen;"></p>
   </div>
 
+  <!-- 2FA TOGGLE SECTION -->
+  <div class="container mt-5" style="max-width: 500px;">
+    <h4>Security</h4>
+
+    <label class="switch">
+      <input type="checkbox" id="toggle2FA">
+      <span class="slider round"></span>
+    </label>
+    <span style="margin-left: 10px;">Enable Two-Factor Authentication</span>
+
+    <p id="twoFAUpdateMessage" style="margin-top:10px;"></p>
+  </div>
+
+  <!-- Toggle switch styling -->
+  <style>
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+    .switch input { display: none; }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0;
+      right: 0; bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #4CAF50;
+    }
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+  </style>
+
   <!-- session handling -->
   <script src="./js/session.js"></script>
 
@@ -75,7 +125,6 @@
         msg.style.color = "lightgreen";
         msg.innerText = "Display name updated!";
 
-        // refresh session so the top-right username updates
         const sessionRes = await fetch('/api/session/getSession');
         const sessionData = await sessionRes.json();
 
@@ -92,6 +141,41 @@
         msg.innerText = "Error updating display name.";
       }
     };
+
+    /*2FA TOGGLE LOGIC (Step 2)*/
+    async function load2FAStatus() {
+      const res = await fetch("/api/auth/get-2fa-status");
+      const data = await res.json();
+
+      if (data.success) {
+        document.getElementById("toggle2FA").checked = data.enabled;
+      }
+    }
+
+    document.getElementById("toggle2FA").addEventListener("change", async (e) => {
+      const enabled = e.target.checked;
+
+      const res = await fetch("/api/auth/set-2fa-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ enabled })
+      });
+
+      const data = await res.json();
+      const msg = document.getElementById("twoFAUpdateMessage");
+
+      if (data.success) {
+        msg.style.color = "green";
+        msg.innerText = enabled
+          ? "Two-factor authentication enabled."
+          : "Two-factor authentication disabled.";
+      } else {
+        msg.style.color = "red";
+        msg.innerText = data.error || "Error updating 2FA setting.";
+      }
+    });
+
+    load2FAStatus();
   </script>
 
 </body>
