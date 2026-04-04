@@ -10,8 +10,11 @@ CREATE TABLE users (
   role ENUM('admin', 'user') NOT NULL DEFAULT 'user',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   display_name VARCHAR(45) NULL,
-  locked TINYINT(1) NOT NULL DEFAULT 0;
-);
+  locked TINYINT(1) NOT NULL DEFAULT 0,
+  two_factor_enabled TINYINT(1) NOT NULL DEFAULT 0,
+  two_factor_code VARCHAR(10) NULL,
+  two_factor_expires DATETIME NULL
+  );
 
 
 -- Properties table
