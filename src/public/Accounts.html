@@ -1,38 +1,182 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <!--webpage for accounts--> 
-  <head>
-    <!-- Bootstrap CSS -->
+<head>
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
-  integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <meta charset="utf-8">
-    <title>COSC 481 Project</title>
-    <link rel="stylesheet" href="./css/style.css">
-    <link rel="shortcut icon" href="#"> <!-- to remove 404 error favicon.ico not found -->
-  </head>
-  <body>
-    <header>
-      <!--Header section of the website-->
-      <div class="heading" style="height: 7vh;">
-        <a href = "index.html" >Wealth Management System</a>
-      </div>
-      <!--Display user while logged in-->
-      <div id="user-info" style="position:absolute; top:10px; right:20px; color:white;"></div>
-    </header>
+  <meta charset="utf-8">
+  <title>COSC 481 Project</title>
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="shortcut icon" href="#">
+</head>
 
-    <!--menu-->
-    <div class="menu">
-      <a class= "menu-option" href = "RealEstate.html" ><i class="bi bi-house"></i>Real Estate</a>
-      <a class= "menu-option" href = "Investment.html" ><i class="bi bi-bank"></i>Investment</a>
-      <a class= "menu-option" href = "Retirement.html" ><i class="bi bi-sunglasses"></i>Retirement</a>
-      <a class= "menu-option" href = "Accounts.html" style="color:lightgreen;" ><i class="bi bi-file-person"></i>Account</a>
-      <a href="admin.html" id="adminTab"><i class="bi bi-tools"></i>Admin</a>
+<body>
+  <header>
+    <!--Header section of the website-->
+    <div class="heading" style="height: 7vh;">
+      <a href="index.html">Wealth Management System</a>
     </div>
-    <h2 style="text-align: center;">User Accounts</h2>
-    <h5 style="text-align: center;">User and admin account management.</h5>
-    <div class="bottom-line"></div>
-    <script src="./js/session.js"></script>
-  </body>
+    <!--Display user while logged in-->
+    <div id="user-info" style="position:absolute; top:10px; right:20px; color:white;"></div>
+  </header>
+
+  <!--menu-->
+  <div class="menu">
+    <a class="menu-option" href="RealEstate.html"><i class="bi bi-house"></i>Real Estate</a>
+    <a class="menu-option" href="Investment.html"><i class="bi bi-bank"></i>Investment</a>
+    <a class="menu-option" href="Retirement.html"><i class="bi bi-sunglasses"></i>Retirement</a>
+    <a class="menu-option" href="Accounts.html" style="color:lightgreen;"><i class="bi bi-file-person"></i>Account</a>
+    <a href="admin.html" id="adminTab" style="display:none;"><i class="bi bi-tools"></i>Admin</a>
+  </div>
+
+  <h2 style="text-align: center;">User Accounts</h2>
+  <h5 style="text-align: center;">User and admin account management.</h5>
+  <div class="bottom-line"></div>
+
+  <!-- USERNAME CHANGE SECTION -->
+  <div class="container mt-4" style="max-width: 500px;">
+    <h4>Change Display Name</h4>
+
+    <div class="mb-3">
+      <label for="displayNameInput" class="form-label">New Display Name</label>
+      <input type="text" id="displayNameInput" class="form-control" placeholder="Enter new display name">
+    </div>
+
+    <button id="saveDisplayNameBtn" class="btn btn-primary">Save</button>
+
+    <p id="displayNameMessage" style="margin-top:10px; color:lightgreen;"></p>
+  </div>
+
+  <!-- 2FA TOGGLE SECTION -->
+  <div class="container mt-5" style="max-width: 500px;">
+    <h4>Security</h4>
+
+    <label class="switch">
+      <input type="checkbox" id="toggle2FA">
+      <span class="slider round"></span>
+    </label>
+    <span style="margin-left: 10px;">Enable Two-Factor Authentication</span>
+
+    <p id="twoFAUpdateMessage" style="margin-top:10px;"></p>
+  </div>
+
+  <!-- Toggle switch styling -->
+  <style>
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+    .switch input { display: none; }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0;
+      right: 0; bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #4CAF50;
+    }
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+  </style>
+
+  <!-- session handling -->
+  <script src="./js/session.js"></script>
+
+  <!-- username update logic -->
+  <script>
+    document.getElementById("saveDisplayNameBtn").onclick = async () => {
+      const newName = document.getElementById("displayNameInput").value.trim();
+      const msg = document.getElementById("displayNameMessage");
+
+      if (!newName) {
+        msg.style.color = "red";
+        msg.innerText = "Display name cannot be empty.";
+        return;
+      }
+
+      const res = await fetch('/api/session/displayname', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ displayName: newName })
+      });
+
+      if (res.ok) {
+        msg.style.color = "lightgreen";
+        msg.innerText = "Display name updated!";
+
+        const sessionRes = await fetch('/api/session/getSession');
+        const sessionData = await sessionRes.json();
+
+        if (sessionData.displayName) {
+          const userInfo = document.getElementById("user-info");
+          if (userInfo) {
+            const nameToShow = sessionData.displayName || sessionData.email;
+            const emailSpan = userInfo.querySelector("#user-email");
+            if (emailSpan) emailSpan.innerText = nameToShow + " ▾";
+          }
+        }
+      } else {
+        msg.style.color = "red";
+        msg.innerText = "Error updating display name.";
+      }
+    };
+
+    /*2FA TOGGLE LOGIC (Step 2)*/
+    async function load2FAStatus() {
+      const res = await fetch("/api/auth/get-2fa-status");
+      const data = await res.json();
+
+      if (data.success) {
+        document.getElementById("toggle2FA").checked = data.enabled;
+      }
+    }
+
+    document.getElementById("toggle2FA").addEventListener("change", async (e) => {
+      const enabled = e.target.checked;
+
+      const res = await fetch("/api/auth/set-2fa-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ enabled })
+      });
+
+      const data = await res.json();
+      const msg = document.getElementById("twoFAUpdateMessage");
+
+      if (data.success) {
+        msg.style.color = "green";
+        msg.innerText = enabled
+          ? "Two-factor authentication enabled."
+          : "Two-factor authentication disabled.";
+      } else {
+        msg.style.color = "red";
+        msg.innerText = data.error || "Error updating 2FA setting.";
+      }
+    });
+
+    load2FAStatus();
+  </script>
+
+</body>
 </html>

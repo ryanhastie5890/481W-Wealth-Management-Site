@@ -13,6 +13,7 @@ export async function getSession(req, res) {
             loggedIn: true,
             userId: req.session.userId,
             email: req.session.email,
+            displayName: req.session.displayName,
             role: req.session.role
         });
     }

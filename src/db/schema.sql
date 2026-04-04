@@ -8,8 +8,13 @@ CREATE TABLE users (
   email VARCHAR(255) NOT NULL UNIQUE,
   password_hash VARCHAR(255) NOT NULL,
   role ENUM('admin', 'user') NOT NULL DEFAULT 'user',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  display_name VARCHAR(45) NULL,
+  locked TINYINT(1) NOT NULL DEFAULT 0,
+  two_factor_enabled TINYINT(1) NOT NULL DEFAULT 0,
+  two_factor_code VARCHAR(10) NULL,
+  two_factor_expires DATETIME NULL
+  );
 
 
 -- Properties table
