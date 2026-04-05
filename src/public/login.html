@@ -7,6 +7,7 @@
   <link rel="shortcut icon" href="#">
 </head>
 <body>
+
   <h2>Register</h2>
   <form action="/api/auth/register" method="POST">
     <input type="email" name="email" placeholder="Email" required>
@@ -27,16 +28,107 @@
   <hr>
 
   <h2>Login</h2>
-  <form action="/api/auth/login" method="POST">
-    <input type="email" name="email" placeholder="Email" required>
+
+  <!-- Login form now uses JS to allow for 2FA popup -->
+  <form id="loginForm">
+    <input id="loginEmail" type="email" placeholder="Email" required>
     <br>
-    <input type="password" name="password" placeholder="Password" required>
+    <input id="loginPassword" type="password" placeholder="Password" required>
     <br>
     <button type="submit">Login</button>
   </form>
 
-  <p id="message"></p>
+  <p id="message" style="color:red;"></p>
 
-  <script src="./js/session.js"></script>
+  <!-- 2FA popup modal -->
+  <div id="twoFAmodal" style="
+    display:none;
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:rgba(0,0,0,0.5);
+  ">
+    <div style="
+  background:white;
+  padding:20px;
+  width:300px;
+  margin:150px auto;
+  border-radius:8px;
+  position:relative;
+">
+  <button id="close2FA" style="
+    position:absolute;
+    top:5px;
+    right:10px;
+    background:none;
+    border:none;
+    font-size:20px;
+    cursor:pointer;
+  ">&times;</button>
+
+      <h3>Two-Factor Authentication</h3>
+      <p>Enter the 6-digit code sent to your email.</p>
+
+      <input id="twoFAcode" maxlength="6" placeholder="123456">
+
+      <button id="verify2FA" style="margin-top:10px;">Verify</button>
+
+      <p id="twoFAerror" style="color:red; margin-top:10px;"></p>
+    </div>
+  </div>
+  
+  <script>
+    // LOGIN HANDLER
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault(); // stop normal form submit
+
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        window.location.href = "/index.html";
+        return;
+      }
+
+      if (data.requires2FA) {
+        document.getElementById("twoFAmodal").style.display = "block";
+        return;
+      }
+
+      document.getElementById("message").innerText = data.error || "Login failed";
+    });
+
+    // 2FA VERIFY HANDLER
+    document.getElementById("verify2FA").addEventListener("click", async () => {
+      const code = document.getElementById("twoFAcode").value;
+
+      const res = await fetch("/api/auth/verify-2fa", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        window.location.href = "/index.html";
+      } else {
+        document.getElementById("twoFAerror").innerText = data.message || "Invalid code";
+      }
+    });
+    document.getElementById("close2FA").addEventListener("click", () => {
+    document.getElementById("twoFAmodal").style.display = "none";
+    });
+
+  </script>
+
 </body>
 </html>
