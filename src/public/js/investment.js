@@ -38,7 +38,7 @@ function createInvestmentDOM(investment) {
     symbol.textContent = investment.symbol;
 
     const shares = document.createElement("p");
-    shares.textContent = `Shares: ${investment.shares}`;
+    shares.textContent = `Shares: ${Number(investment.shares).toFixed(4)}`;
 
     const sellButton = document.createElement("button");
     sellButton.textContent = "Sell";
@@ -81,8 +81,9 @@ function showSellInvestmentModal(investment) {
                 <input 
                     type="number" 
                     id="sell-shares" 
-                    min="1" 
+                    min="0.0001" 
                     max="${investment.shares}" 
+                    step="any"
                     required
                 />
             </label>
@@ -152,7 +153,7 @@ function buildInvestmentModal() {
 
             <label>
                 Shares:
-                <input type="number" id="shares" min="1" required />
+                <input type="number" id="shares" min="0.0001" required />
             </label>
             <br><br>
 
