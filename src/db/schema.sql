@@ -35,8 +35,10 @@ CREATE TABLE properties (
 CREATE TABLE incomes (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   userId INT DEFAULT NULL,
+  propertyId INT UNSIGNED DEFAULT NULL,
   amount DECIMAL(10,2) DEFAULT NULL,
   note TEXT,
+  recorded_date DATE,
   created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,    
   updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
@@ -44,15 +46,22 @@ CREATE TABLE incomes (
   CONSTRAINT incomes_ibfk_1
     FOREIGN KEY (userId)
     REFERENCES users(id)
-    ON DELETE SET NULL
+    ON DELETE SET NULL,
+
+  CONSTRAINT incomes_ibfk_2
+     FOREIGN KEY (propertyId)
+     REFERENCES properties(id)
+     ON DELETE CASCADE
 );
 
 -- Expenses table
 CREATE TABLE expenses (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   userId INT DEFAULT NULL,
+  propertyId INT UNSIGNED DEFAULT NULL,
   amount DECIMAL(10,2) DEFAULT NULL,
   note TEXT,
+  recorded_date DATE,
   created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
@@ -60,7 +69,12 @@ CREATE TABLE expenses (
   CONSTRAINT expenses_ibfk_1
     FOREIGN KEY (userId)
     REFERENCES users(id)
-    ON DELETE SET NULL
+    ON DELETE SET NULL,
+
+  CONSTRAINT expenses_ibfk_2
+    FOREIGN KEY (propertyId)
+    REFERENCES properties(id)
+    ON DELETE CASCADE
 );
 
 -- RealEstateNotification table

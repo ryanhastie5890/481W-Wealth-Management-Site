@@ -64,14 +64,21 @@
   </div>
 </div>
 
-    <div id="buttons" >
+<!--put graph section for profit by month here-->
+
+<div style="width: 75%; margin: auto; padding-top: 20px; align-items: center;">
+  <canvas id="profitChart" style="width:70%;"></canvas>
+</div>
+
+
+    <div id="buttons" style="border-top: 1px solid black;">
       <!--add property button-->
       <!--<button class="addButton" style="display:flex">Add Property</button><br> -->
       <button type="button" class="btn btn-primary" onclick="showFormProp()">Add Property</button>
       <br>
       <br>
       <!--add income button-->
-      <button type="button" class="btn btn-success" onclick="showFormInc()">Add income</button>
+      <button type="button" class="btn btn-success" onclick="showFormInc()">Add Income</button>
       <br>
       <br>
       <!--<button class="addButton" style="display:flex">Add Income</button><br> -->
@@ -241,6 +248,16 @@
         <label for="note">Note</label><br><br>
         <input name="note" type="text" required><br><br>
 
+        <!--Date input-->
+        <label for="recorded_date">Date</label><br><br>
+        <input type="date" name="recorded_date" id="recorded_date_inc" required><br><br>
+
+        <!--property-->
+        <label for="propertyId">Property</label><br><br>
+        <select name="propertyId" id="propertyIdInc" required>
+          <option value="">Select a property</option>
+        </select><br><br>
+
         <button type="submit">Add Income</button>
       </form>
     </div>
@@ -254,9 +271,19 @@
         <label for="amount">Amount</label><br><br>
         <input name="amount" type="number" step="0.01" min="0" placeholder="0.00" required><br><br>
 
-        <!--not input-->
+        <!--note input-->
         <label for="note">Note</label><br><br>
         <input name="note" type="text" required><br><br>
+
+         <!--Date input-->
+        <label for="recorded_date">Date</label><br><br>
+        <input type="date" name="recorded_date" id="recorded_date_exp" required><br><br>
+
+        <!--property-->
+        <label for="propertyId">Property</label><br><br>
+        <select name="propertyId" id="propertyIdExp" required>
+          <option value="">Select a property</option>
+        </select><br><br>
 
         <button type="submit">Add Expense</button>
       </form>
@@ -321,6 +348,16 @@
         <label for="note">Note</label><br><br>
         <input id="iNote" name="note" type="text" required><br><br>
 
+        <!--Date input-->
+        <label for="recorded_date">Date</label><br><br>
+        <input type="date" name="recorded_date" id="recorded_date_incUp" required><br><br>
+
+        <!--property-->
+        <label for="propertyId">Property</label><br><br>
+        <select name="propertyId" id="propertyIdIncUp" required>
+          <option value="">Select a property</option>
+        </select><br><br>
+
         <button type="submit">Update Income</button>
       </form>
     </div>
@@ -341,6 +378,16 @@
         <!--note-->
         <label for="note">Note</label><br><br>
         <input id="eNote" name="note" type="text" required><br><br>
+
+        <!--Date input-->
+        <label for="recorded_date">Date</label><br><br>
+        <input type="date" name="recorded_date" id="recorded_date_expUp" required><br><br>
+
+        <!--property-->
+        <label for="propertyId">Property</label><br><br>
+        <select name="propertyId" id="propertyIdExpUp" required>
+          <option value="">Select a property</option>
+        </select><br><br>
 
         <button type="submit">Update Expense</button>
       </form>
@@ -424,7 +471,8 @@
             div.innerHTML = `
                 <h3>Amount: ${i.amount}</h3><br>
                 <p>Note: ${i.note}</p><br>
-                <p>Created: ${new Date(i.created_at).toLocaleDateString()}</p><br>
+                <p>Created: ${new Date(i.recorded_date).toLocaleDateString()}</p><br>
+                <p>Property: ${i.property_name}</p><br>
                 <button onclick= "updateIncomeForm(${i.id})">Update Income</button><br>
                 <button onclick= "deleteIncome(${i.id})">Remove Income</button>
                 `;
@@ -461,7 +509,8 @@
             div.innerHTML = `
                 <h3>Amount: ${e.amount}</h3><br>
                 <p>Note: ${e.note}</p><br>
-                <p>Created: ${new Date(e.created_at).toLocaleDateString()}</p><br>
+                <p>Created: ${new Date(e.recorded_date).toLocaleDateString()}</p><br>
+                <p>Property: ${e.property_name}</p><br>
                 <button onclick= "updateExpenseForm(${e.id})">Edit Expense</button><br>
                 <button onclick= "deleteExpense(${e.id})">Remove Expense</button>
                 `;
@@ -508,6 +557,35 @@
         document.getElementById("expenseDisplay").innerHTML ="<p>You are not logged in</p>"
        });
 
+
+       //gets options for properties for income and expense forms
+       fetch('/api/realEstate/get-properties', { cache: "no-store" })
+  .then(res => res.json())
+  .then(properties => {
+
+    const incDropdown = document.getElementById("propertyIdInc");
+    const expDropdown = document.getElementById("propertyIdExp");
+
+    const incDropdownUp = document.getElementById("propertyIdIncUp");
+    const expDropdownUp = document.getElementById("propertyIdExpUp");
+
+    properties.forEach(p => {
+      const option1 = document.createElement("option");
+      option1.value = p.id;
+      option1.textContent = p.name;
+
+      const option2 = option1.cloneNode(true);
+      const option3 = option1.cloneNode(true);
+      const option4 = option1.cloneNode(true);
+
+      incDropdown.appendChild(option1);
+      expDropdown.appendChild(option2);
+      incDropdownUp.appendChild(option3);
+      expDropdownUp.appendChild(option4)
+    });
+
+  })
+  .catch(err => console.error(err));
       //calculate finance total
       Promise.all([
         fetch('/api/realEstate/get-incomes').then(r => r.json()),
@@ -528,6 +606,71 @@
         //this is net profit, profit - taxes
         document.getElementById('net').innerHTML = "$"+(profit-total).toFixed(2);
        })
+
+       //calculate profit per month for bar graph
+       Promise.all([
+        fetch('/api/realEstate/get-incomes').then(r => r.json()),
+        fetch('/api/realEstate/get-expenses').then(r => r.json())
+      ])
+      .then(([incomes, expenses]) => {
+
+       function groupByMonth(data) {
+          const result = {};
+
+         data.forEach(item => {
+         const date = new Date(item.recorded_date);
+         const key = date.getFullYear() + "-" + (date.getMonth() + 1); // better sorting
+
+          if (!result[key]) result[key] = 0;
+         result[key] += Number(item.amount);
+      });
+
+    return result;
+  }
+
+     const incomeByMonth = groupByMonth(incomes);
+     const expenseByMonth = groupByMonth(expenses);
+
+     const allMonths = [...new Set([
+      ...Object.keys(incomeByMonth),
+      ...Object.keys(expenseByMonth)
+     ])].sort();
+
+     const labels = allMonths.map(m => {
+       const [year, month] = m.split("-");
+       return new Date(year, month - 1).toLocaleString('default', {
+         month: 'short',
+         year: 'numeric'
+       });
+     });
+
+       const profitData = allMonths.map(month => {
+      return (incomeByMonth[month] || 0) - (expenseByMonth[month] || 0);
+  });
+
+      renderChart(labels, profitData);
+   });
+
+   function renderChart(labels, data) {
+  const ctx = document.getElementById('profitChart').getContext('2d');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Monthly Profit ($)',
+        data: data
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+}
 
       //delete property call
       function deleteProperty(propId) {
@@ -621,8 +764,10 @@
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            propertyId: document.getElementById("propertyIdIncUp").value,
             amount: document.getElementById("iAmount").value,
-            note: document.getElementById("iNote").value
+            note: document.getElementById("iNote").value,
+            recorded_date: document.getElementById("recorded_date_incUp").value
           })
         })
           .then(res => res.json())
@@ -643,8 +788,10 @@
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            propertyId: document.getElementById("propertyIdExpUp"),
             amount: document.getElementById("eAmount").value,
-            note: document.getElementById("eNote").value
+            note: document.getElementById("eNote").value,
+            recorded_date: document.getElementById("recorded_date_expUp").value
           })
         })
           .then(res => res.json())
@@ -814,6 +961,7 @@
       
     </script>
   <script src="./js/session.js"></script> <!--for admin tab display-->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 
 </html>

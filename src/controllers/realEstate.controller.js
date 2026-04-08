@@ -23,13 +23,13 @@ const addProperty =  (req, res)=>{//create property
 }
 
 const addIncome = (req, res)=>{//create income
-  const { amount, note } = req.body;
+  const { propertyId, amount, note, recorded_date } = req.body;
   const userId = req.session.userId || null;
 
   if(userId != null){
     createNotification(req.session.userId, 'INCOME', "Income has been added");
-  dbCon.query("INSERT INTO incomes (userId, amount, note) VALUES (?,?,?)",
-    [userId, amount, note],
+  dbCon.query("INSERT INTO incomes (userId,propertyId, amount, note,recorded_date) VALUES (?,?,?,?,?)",
+    [userId,propertyId, amount, note,recorded_date],
     (err, result) =>{
       if(err){
         console.error("DATA INSERT ERROR:",err);
@@ -43,13 +43,13 @@ const addIncome = (req, res)=>{//create income
 }
 
 const addExpense = (req, res)=>{//create expense
-  const { amount, note } = req.body;
+  const { propertyId, amount, note, recorded_date } = req.body;
   const userId = req.session.userId || null;
 
   if(userId != null){
     createNotification(req.session.userId, 'EXPENSE', "Expense has been added");
-    dbCon.query("INSERT INTO expenses (userId, amount, note) VALUES (?,?,?)",
-    [userId, amount, note],
+    dbCon.query("INSERT INTO expenses (userId,propertyId, amount, note,recorded_date) VALUES (?,?,?,?,?)",
+    [userId,propertyId, amount, note,recorded_date],
     (err, result) =>{
       if(err){
         console.error("DATA INSERT ERROR:",err);
@@ -103,7 +103,7 @@ const getIncomes = (req, res) =>{//retrieve incomes to display
   if(!req.session.userId){
     return res.status(401).json({error: "You are not logged in"});
   }
-  dbCon.query("SELECT id, amount, note, created_at FROM incomes WHERE userId = ?",
+  dbCon.query("SELECT incomes.id, incomes.propertyId, incomes.amount, incomes.note, incomes.recorded_date, incomes.created_at, properties.name AS property_name FROM incomes LEFT JOIN properties ON incomes.propertyId = properties.id WHERE incomes.userId = ?",
     [req.session.userId],
     (err, results) => {
       if(err){
@@ -119,7 +119,7 @@ const getExpenses = (req, res) =>{//retrieve incomes to display
   if(!req.session.userId){
     return res.status(401).json({error: "You are not logged in"});
   }
-  dbCon.query("SELECT id, amount, note, created_at FROM expenses WHERE userId = ?",
+  dbCon.query("SELECT expenses.id, expenses.propertyId, expenses.amount, expenses.note,expenses.recorded_date, expenses.created_at, properties.name AS property_name FROM expenses LEFT JOIN properties ON expenses.propertyId = properties.id WHERE expenses.userId = ?",
     [req.session.userId],
     (err, results) => {
       if(err){
@@ -237,13 +237,13 @@ const updateProperty = (req, res) =>{//update property data
 }
 
 const updateIncome = (req, res) =>{//update income data
-    const { amount, note } = req.body;
+    const { propertyId, amount, note, recorded_date } = req.body;
     if(!req.session.userId){
     return res.status(401).json({error: "You are not logged in"});
   }
   createNotification(req.session.userId, 'INCOME', "Income has been updated");
-  dbCon.query("UPDATE incomes SET amount = ?, note = ? WHERE id = ? AND userId = ?;",
-    [amount,note,req.params.id, req.session.userId],
+  dbCon.query("UPDATE incomes SET propertyId = ?, amount = ?, note = ?, recorded_date =? WHERE id = ? AND userId = ?;",
+    [propertyId, amount,note,recorded_date,req.params.id, req.session.userId],
     (err, results)=>{
         if(err){
             console.error("Failed to update income:",err);
@@ -258,13 +258,13 @@ const updateIncome = (req, res) =>{//update income data
 }
 
 const updateExpense = (req, res) =>{//update expense data
-    const {  amount, note } = req.body;
+    const { propertyId, amount, note, recorded_date } = req.body;
     if(!req.session.userId){
     return res.status(401).json({error: "You are not logged in"});
   }
   createNotification(req.session.userId, 'EXPENSE', "Expense has been updated");
-  dbCon.query("UPDATE expenses SET amount = ?, note = ? WHERE id = ? AND userId = ?;",
-    [amount,note,req.params.id, req.session.userId],
+  dbCon.query("UPDATE expenses SET propertyId=?,amount = ?, note = ?,recorded_date=? WHERE id = ? AND userId = ?;",
+    [propertyId,amount,note,recorded_date,req.params.id, req.session.userId],
     (err, results)=>{
         if(err){
             console.error("Failed to update expense:",err);
