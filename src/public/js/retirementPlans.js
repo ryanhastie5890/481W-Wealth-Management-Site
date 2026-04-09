@@ -154,6 +154,7 @@ addPlanButton.addEventListener('click', () => {
       modal.classList.remove('show');
       modalBody.innerHTML = '';
       loadPlans();
+			alert(`Added plan: ${name}`);
     } 
     catch (err) {
       alert('Error saving plan: ' + err.message);
@@ -234,15 +235,25 @@ async function getExistingRetirementBalance(includeSavings = false) {
   }
 }
 
+/*
+*   Helper function for generateGrowthData() below.
+*   Used to store the random values with a plan name so the curve is stable through mutiple reloads.
+*/
+function seededRandom(seed) {
+  const x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+}
 
 /*
 *   Generates year-by-year balance data for the growth chart between current_age and retirement_age.
 *   Returns an object containing labels (ages) and data (balances) arrays for use with Chart.js.
 */
-function generateGrowthData(initialBalance, current_age, retirement_age, annual_contribution, expected_return) {
-  const r = expected_return ? expected_return / 100 : 0.055; // FIX ME: possible fix for NaN bug
+function generateGrowthData(initialBalance, current_age, retirement_age, annual_contribution, expected_return, planName = '') {
+  const r = expected_return ? expected_return / 100 : 0.055;
   const C = Number(annual_contribution);
   let balance = Number(initialBalance);
+
+  const nameSeed = planName.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
 
   const labels = [];
   const data = [];
@@ -251,8 +262,10 @@ function generateGrowthData(initialBalance, current_age, retirement_age, annual_
     labels.push(age);
     data.push(Number(balance.toFixed(2)));
 
-    // apply growth + contribution for next year
-    balance = balance * (1 + r) + C;
+    const variance = (seededRandom(nameSeed + age) * 0.16) - 0.08;
+    const annualReturn = r + variance;
+
+    balance = balance * (1 + annualReturn) + C;
   }
 
   return { labels, data };

@@ -15,7 +15,7 @@ async function loadSavingsAccounts() {
 
   const savingsAccounts = accounts.filter(acc => acc.account_type === "Savings");
 
-  savingsTableBody.innerHTML = '';
+  savingsTableBody.innerHTML = '';``
 
   if (!savingsAccounts || savingsAccounts.length === 0) {
     accountHeader.style.display = 'none';
@@ -40,7 +40,7 @@ async function loadSavingsAccounts() {
 
     row.innerHTML = `
       <td>
-        <input type="text" value="${account.display_name || 'Savings'}"
+        <input type="text" value="${account.display_name}"
           data-id="${account.id}" class="display-name-input" />
       </td>
 
@@ -109,7 +109,9 @@ addSavingsButton.addEventListener('click', () => {
     if (data.success) {
       modal.classList.remove('show');
       await loadSavingsAccounts();
-    } else {
+      alert(`Added ${name}`);
+    } 
+    else {
       alert('Error adding savings');
     }
   };
