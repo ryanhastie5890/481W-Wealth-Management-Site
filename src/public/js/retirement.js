@@ -3,6 +3,9 @@ const modal = document.getElementById('investment-modal');
 const modalBody = document.getElementById('modal-body');
 const closeModal = document.getElementById('close-modal');
 
+/*
+*   key: values for creating a retirement account
+*/
 const retirementOptions = {
   "Individual Retirement Accounts": ["IRA", "Roth IRA"],
   "Employer Retirement Accounts": ["401k", "403b"],
@@ -12,16 +15,42 @@ const retirementOptions = {
 let retirementChart = null;
 
 /*
-*   create new rows for retirement-table-body
+*   Create new rows for retirement-table-body
 */ 
 async function loadRetirementAccounts() {
   const res = await fetch('/api/retirement');
   const accounts = await res.json();
 
   const tbody = document.getElementById('retirement-table-body');
+
+  const accountHeader = document.getElementById('account-header');
+  const balanceHeader = document.getElementById('balance-header');
+  const actionsHeader = document.getElementById('actions-header');
+
   tbody.innerHTML = '';
 
-  accounts.forEach(account => {
+  if (!accounts || accounts.length === 0) {
+    accountHeader.style.display = 'none';
+    balanceHeader.style.display = 'none';
+    actionsHeader.style.display = 'none';
+
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="3" style="text-align:center; color:white;">
+          No retirement accounts present
+        </td>
+      </tr>
+    `;
+  } 
+  else {
+    accountHeader.style.display = '';
+    balanceHeader.style.display = '';
+    actionsHeader.style.display = '';
+  }
+
+  accounts // .forEach(account => {
+    .filter(acc => acc.account_type !== "Savings")
+    .forEach(account => {
     const row = document.createElement('tr');
 
     row.innerHTML = `
@@ -57,7 +86,7 @@ async function loadRetirementAccounts() {
 }
 
 /*
-*   open modal on button click
+*   Open modal on button click
 */
 addInvestmentsButton.addEventListener('click', () => {
   modal.classList.add('show');
@@ -65,14 +94,14 @@ addInvestmentsButton.addEventListener('click', () => {
 });
 
 /*
-*   close modal
+*   Close modal
 */
 closeModal.addEventListener('click', () => {
   modal.classList.remove('show');
 });
 
 /*
-*   close modal if user clicks outside content
+*   Close modal if user clicks outside content
 */
 window.addEventListener('click', (e) => {
   if (e.target === modal) modal.classList.remove('show');
@@ -84,7 +113,7 @@ window.addEventListener('click', (e) => {
 *   Selecting a category advances the modal to a subtype selection.
 */
 function showCategoryOptions() {
-  modalBody.innerHTML = '<h3>Select Investment Category:</h3>';
+  modalBody.innerHTML = '<h3>Select Investment Category</h3>';
   Object.keys(retirementOptions).forEach(cat => {
     const button = document.createElement('button');
     button.style = "border-radius: 5px";
@@ -100,7 +129,7 @@ function showCategoryOptions() {
 *   Selecting a subtype advances the modal to the balance input form.
 */
 function showSubtypeOptions(category) {
-  modalBody.innerHTML = `<h3>${category} Types:</h3>`;
+  modalBody.innerHTML = `<h3>${category} Types</h3>`;
   retirementOptions[category].forEach(sub => {
     const button = document.createElement('button');
     button.style = "border-radius: 5px";
@@ -161,7 +190,7 @@ function showFinalForm(category, subtype) {
 
     if (data.success) {
       console.log(`Saved ${account_type} with amount ${amount}.`);
-      modal.style.display = 'none';
+      modal.classList.remove('show');
       modalBody.innerHTML = '';
       await loadRetirementAccounts(); // refresh retirement table after adding account
       alert(`Added ${account_type}`);
@@ -230,6 +259,7 @@ document.getElementById('retirement-table-body').addEventListener('click', async
   if (data.success) {
     console.log('Deleted account', id);
     await loadRetirementAccounts();
+    document.dispatchEvent(new CustomEvent('accountDeleted'));
   } 
   else {
     alert(data.error || 'Delete failed');
@@ -244,7 +274,6 @@ document.getElementById('retirement-table-body').addEventListener('click', async
 */
 function renderRetirementChart(accounts) {
   const ctx = document.getElementById('retirementChart');
-  // FIX ME: for testing remove after
   if (!ctx) {
     console.error('retirementChart canvas not found');
     return;

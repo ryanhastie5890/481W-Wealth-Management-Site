@@ -27,7 +27,7 @@ const BASE_URL = 'https://www.alphavantage.co/query';
  *
  * @example
  * const quote = await getStockQuote('AAPL');
- * console.log(quote['Global Quote']['05. price']); // "275.5000"
+ * console.log(quote['05. price']); // "275.5000"
  */
 
 export async function getStockQuote(symbol) {
@@ -39,5 +39,8 @@ export async function getStockQuote(symbol) {
     },
   });
 
+  if (!response.data['Global Quote']) {
+    console.error("Error for getStockQuote:", symbol, response.data);
+  }
   return response.data['Global Quote'];
 }

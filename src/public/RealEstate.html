@@ -8,6 +8,7 @@
     integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <meta charset="utf-8">
+  <!--title-->
   <title>COSC 481 Project</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="shortcut icon" href="#"> <!-- to remove 404 error favicon.ico not found -->
@@ -32,26 +33,38 @@
       <a class="menu-option" href="Investment.html"><i class="bi bi-bank"></i>Investment</a>
       <a class="menu-option" href="Retirement.html"><i class="bi bi-sunglasses"></i>Retirement</a>
       <a class="menu-option" href="Accounts.html"><i class="bi bi-file-person"></i>Account</a>
-      <a class="menu-option" href="admin.html" id="adminTab"><i class="bi bi-tools"></i>Admin</a>
+      <a class="menu-option" href="admin.html" id="adminTab" style="display:none;"><i class="bi bi-tools"></i>Admin</a>
 
     </div>
 
-<h2>Incomes - Expenses:</h2>
-<h2 id="total"></h2>
+<div style="display: flex; flex-direction: column;align-items: center; justify-content: center;text-align: center; border-bottom: 1px solid black;height:20vh;">
+  <!--title of page-->
+  <h1 >Your Real Estate Portfolio</h1>
 
+  <div style="display: flex; flex-direction: row;align-items: center; justify-content: center;text-align: center; gap:150px;">
+
+    <!--display for profit, income - expenses-->
+    <div style="display: flex; flex-direction: column;align-items: center; justify-content: center;text-align: center;">
+<h2>Profit</h2>
+<h2 id="total"></h2>
+</div>
+
+<!--display for taxes-->
+<div style="display: flex; flex-direction: column;align-items: center; justify-content: center;text-align: center;">
 <h2>Taxes</h2>
 <h2 id="taxes"></h2>
+</div>
 
-<!--temp notifications area-->
-<button type="button" class="btn btn-info" onclick="notificationsControl()">View Notifications</button>
+<!--display for net profit, profit - taxes-->
+<div style="display: flex; flex-direction: column;align-items: center; justify-content: center;text-align: center;">
+<h2>Net Profit</h2>
+<h2 id="net"></h2>
+</div>
 
-<h2 id="notifText" style="display:none;">Your Notifications: </h2>
-<div id = "notifications" style="display:none;"></div>
-    <h2>Incomes - Expenses:</h2>
-    <br>
-    <h2 id="total"></h2>
+  </div>
+</div>
 
-    <div id="buttons">
+    <div id="buttons" >
       <!--add property button-->
       <!--<button class="addButton" style="display:flex">Add Property</button><br> -->
       <button type="button" class="btn btn-primary" onclick="showFormProp()">Add Property</button>
@@ -64,31 +77,52 @@
       <!--<button class="addButton" style="display:flex">Add Income</button><br> -->
 
       <!--add expense button-->
-      <button type="button" class="btn btn-danger" onclick="showFormExp()">Add Expense</button>
+      <button type="button" class="btn btn-danger" onclick="showFormExp()">Add Expense</button><br><br>
       <!--<button class="addButton" onclick="showFormExp()" style="display:flex">Add Expense</button> -->
+      <button type="button" class="btn btn-primary" onclick="notificationsControl()">Notifications</button>
     </div>
 
 
+
+
+<!-- notifications area-->
+
+<br>
+<h2 id="notifText" style="display:none; text-align:center; width:100%;">Your Notifications</h2>
+<!--notification display, initially hidden-->
+<div id = "notifications" style="display:none;"></div><br><br>
+    
+    <!--divs that help format everything better-->
+    <div id="displayHolder">
     <!--Properties display-->
+    <div class="displayColumn">
     <h2 id="propertyLabel">Your Properties: </h2>
     <div id="propertiesDisplay"></div>
-
-    <!--Income display-->
-    <h2 id="incomeLabel">Your Incomes: </h2>
-    <div id="incomeDisplay"></div>
-
-    <!--Expense display-->
-    <h2 id="expenseLabel">Your Expenses: </h2>
-    <div id="expenseDisplay">
-
     </div>
 
+    <!--Income display-->
+    <div class="displayColumn">
+    <h2 id="incomeLabel">Your Incomes: </h2>
+    <div id="incomeDisplay"></div>
+    </div>
+
+
+    <!--Expense display-->
+    <div class="displayColumn">
+    <h2 id="expenseLabel">Your Expenses: </h2>
+    <div id="expenseDisplay">
+    </div>
+
+    </div>
+    </div>
+
+    <!--add property form-->
     <form action="/api/realEstate/add-property" method="POST">
   <div id="property_form" style="display:none;">
-    <button type="button" class="btn-close" onclick="hideForms()" aria-label="Close"></button>
-
+    <button type="button" onclick="hideForms()" class="xButton">X</button>
     <h3 class="heading">Add Property</h3>
 
+    <!--name input-->
     <div class="row align-items-center mb-3">
       <div class="col-sm-4">
         <label for="propertyName" class="form-label">Name of Property</label>
@@ -98,6 +132,7 @@
       </div>
     </div>
 
+    <!--description input-->
     <div class="row align-items-center mb-3">
       <div class="col-sm-4">
         <label for="propertyDescription" class="form-label">Description</label>
@@ -107,7 +142,7 @@
       </div>
     </div>
 
-    <!-- TYPE -->
+    <!--type input -->
     <div class="row align-items-center mb-3">
       <div class="col-sm-4">
         <label for="propertyType" class="form-label">Type of Property</label>
@@ -122,6 +157,41 @@
       </div>
     </div>
 
+    <!--status input -->
+<div class="row align-items-center mb-3">
+  <div class="col-sm-4">
+    <label for="propertyStatus" class="form-label">Status of Property</label>
+  </div>
+
+  <!--option set input-->
+  <div class="col-sm-8">
+    <select name="status" id="propertyStatus" class="form-control" required>
+      <option value="Self Owned">Self Owned</option>
+      <option value="Rented Out">Rented Out</option>
+      <option value="Selling">Selling</option>
+      <option value="Leasing">Leasing</option>
+    </select>
+  </div>
+</div>
+
+<!--occupants input-->
+<div class="row align-items-center mb-3">
+  <div class="col-sm-4">
+    <label for="propertyOccupants" class="form-label">Number of Occupants</label>
+  </div>
+
+  <div class="col-sm-8">
+    <input 
+      type="number" 
+      class="form-control" 
+      id="propertyOccupants" 
+      name="occupants" 
+      min="0" 
+      value="0"
+    >
+  </div>
+</div>
+<!-- submit button-->
     <button type="submit" class="btn btn-primary">Add Property</button>
 
   </div>
@@ -162,9 +232,12 @@
     <div id="income_form" style="display:none;">
       <form action="/api/realEstate/add-income" method="POST">
         <button type="button" onclick="hideForms()" class="xButton">X</button>
+
+        <!--amount input-->
         <label for="amount">Amount</label><br><br>
         <input name="amount" type="number" step="0.01" min="0" placeholder="0.00" required><br><br>
 
+        <!--note input-->
         <label for="note">Note</label><br><br>
         <input name="note" type="text" required><br><br>
 
@@ -176,9 +249,12 @@
     <div id="expense_form" style="display:none;">
       <form action="/api/realEstate/add-expense" method="POST">
         <button type="button" onclick="hideForms()" class="xButton">X</button>
+
+        <!--amount input-->
         <label for="amount">Amount</label><br><br>
         <input name="amount" type="number" step="0.01" min="0" placeholder="0.00" required><br><br>
 
+        <!--not input-->
         <label for="note">Note</label><br><br>
         <input name="note" type="text" required><br><br>
 
@@ -188,17 +264,22 @@
 
     <!--forms for updating items-->
     <div id="property_form_update" style="display:none;">
+      <h2>Edit Property</h2>
       <form id="editPropForm"><!--add property form-->
 
+        <!--id input that is populated upon opening-->
         <input type="hidden" id="propertyId" />
         <button type="button" onclick="hideForms()" class="xButton">X</button>
 
+        <!--property name-->
         <label for="name">Name of Property</label><br><br>
         <input id="pName" name="name" type="text" required><br><br>
 
+        <!--property description-->
         <label for="description">Description of Property</label><br><br>
         <input id="pDescription" name="description" type="text" required><br><br>
 
+        <!--type-->
         <label for="type">Type of Property</label><br><br>
         <select id="pType" name="type" required>
           <option value="Apartment">Apartment Complex</option>
@@ -206,6 +287,7 @@
           <option value="Land">Land</option>
         </select><br><br>
 
+        <!--status-->
         <label for="status">Status of Property</label><br><br>
         <select id="pStatus" name="status" required>
           <option value="Self Owned">Self Owned</option>
@@ -214,6 +296,7 @@
           <option value="Leasing">Leasing</option>
         </select><br><br>
 
+        <!--occupants-->
         <label for="occupants">Number of Occupants</label><br><br>
         <input id="pOccupants" name="occupants" type="number" min="0" value="0"><br><br>
 
@@ -223,14 +306,18 @@
 
     <!--Income form-->
     <div id="income_form_update" style="display:none;">
+      <h2>Edit Income</h2>
       <form id="editIncForm">
 
+        <!--id-->
         <input type="hidden" id="incomeId" />
         <button type="button" onclick="hideForms()" class="xButton">X</button>
 
+        <!--amount-->
         <label for="amount">Amount</label><br><br>
         <input id="iAmount" name="amount" type="number" step="0.01" min="0" placeholder="0.00" required><br><br>
 
+        <!--note-->
         <label for="note">Note</label><br><br>
         <input id="iNote" name="note" type="text" required><br><br>
 
@@ -240,14 +327,18 @@
 
     <!--Expense form-->
     <div id="expense_form_update" style="display:none;">
+      <h2>Edit Expense</h2>
       <form id="editExpForm">
 
+        <!--id-->
         <input type="hidden" id="expenseId" />
         <button type="button" onclick="hideForms()" class="xButton">X</button>
 
+        <!--amount-->
         <label for="amount">Amount</label><br><br>
         <input id="eAmount" name="amount" type="number" step="0.01" min="0" placeholder="0.00" required><br><br>
 
+        <!--note-->
         <label for="note">Note</label><br><br>
         <input id="eNote" name="note" type="text" required><br><br>
 
@@ -264,25 +355,27 @@
         .then(r => r.json())
         .then(data => {
           if (data.userId) {
-            document.getElementById("user-info").innerHTML = "Logged in as: " + data.email;
+            document.getElementById("user-info").innerHTML = "Logged in as: " + data.email;//logged in case
           }
           else {
-            document.getElementById("user-info").innerHTML = "You are not logged in";
+            document.getElementById("user-info").innerHTML = "You are not logged in";//not logged in case
           }
         })
 
+      //populate properties
       fetch('/api/realEstate/get-properties', { cache: "no-store" })
         .then(res => {
-          if (!res.ok) throw new Error("You are not logged in");
+          if (!res.ok) throw new Error("You are not logged in");//not logged in
           return res.json();
         })
         .then(property => {
-          const display = document.getElementById("propertiesDisplay");
+          const display = document.getElementById("propertiesDisplay");//get display element
 
           if (property.length == 0) {
-            display.innerHTML = "<p>You have not added any property";
+            display.innerHTML = "<p>You have not added any property";//empty case
             return;
           }
+          //loop through and add elements
           property.forEach(p => {
             const div = document.createElement("div");
             div.className = "property-item";
@@ -306,18 +399,23 @@
           document.getElementById("propertiesDisplay").innerHTML = "<strong>You are not logged in.</strong>"
         });
 
+        //populate incomes
       fetch('/api/realEstate/get-incomes', { cache: "no-store" })
         .then(res => {
+          //not logged in
           if (!res.ok) throw new Error("You are not logged in");
           return res.json();
         })
         .then(income => {
+          //get display
           const display = document.getElementById("incomeDisplay");
 
+          //no income case
           if (income.length == 0) {
             display.innerHTML = "<p>You have not added any income</p>";
             return;
           }
+          //loop through to populate
           income.forEach(i => {
             const div = document.createElement("div");
             div.className = "income-item";
@@ -338,19 +436,24 @@
           document.getElementById("incomeDisplay").innerHTML = "<p></p>"
         });
 
+        //populate expenses
       fetch('/api/realEstate/get-expenses', { cache: "no-store" })
         .then(res => {
+          //not logged in case
           if (!res.ok) throw new Error("You are not logged in");
           return res.json();
         })
         .then(expense => {
+          //get display
           const display = document.getElementById("expenseDisplay");
 
+          //no expense case
           if (expense.length == 0) {
             display.innerHTML = "<p>You have not added any expense";
             return;
           }
           expense.forEach(e => {
+            //loop through to populate with expenses
             const div = document.createElement("div");
             div.className = "expense-item";
 
@@ -373,10 +476,12 @@
        //get notifications
        fetch('/api/realEstate/get-notifications', {cache: "no-store"})
        .then(res => {
+        //not logged in case
         if(!res.ok) throw new Error("You are not logged in");
         return res.json();
        })
        .then(expense => {
+        //get display
         const display = document.getElementById("notifications");
 
         if(expense.length == 0){
@@ -384,8 +489,10 @@
             return;
         }
         expense.forEach(n =>{
+          //loop through and populate notifications
             const div = document.createElement("div");
             div.className ="notification";
+            div.id = `notif-${n.id}`;
 
             //populate with data
             div.innerHTML =`
@@ -409,12 +516,22 @@
        .then(([incomes, expenses]) =>{
         let total = incomes.reduce((sum,i) => sum + Number(i.amount), 0);
         total -= expenses.reduce((sum, e) => sum + Number(e.amount),0);
-        document.getElementById('total').innerHTML = total.toFixed(2);
-        document.getElementById('taxes').innerHTML = (total*.06).toFixed(2);
+        //this is profit, income - expense
+        document.getElementById('total').innerHTML = "$"+total.toFixed(2);
+        let profit = total;
+        total = (total*.06).toFixed(2);
+        if(total < 0){
+          total = 0;
+        }
+        //this is taxes display
+        document.getElementById('taxes').innerHTML = "$"+total;
+        //this is net profit, profit - taxes
+        document.getElementById('net').innerHTML = "$"+(profit-total).toFixed(2);
        })
 
       //delete property call
       function deleteProperty(propId) {
+        //api call
         fetch(`/api/realEstate/delete-property/${propId}`, {
           method: 'DELETE'
         })
@@ -422,14 +539,17 @@
           .then(data => {
             console.log(data);
             if (data.success) {
-              location.reload();//reload page
+              //reload page
+              location.reload();
             }
           })
+          //log any error
           .catch(err => console.error(err));
       }
 
       //delete income call
       function deleteIncome(incId) {
+        //api call
         fetch(`/api/realEstate/delete-income/${incId}`, {
           method: 'DELETE'
         })
@@ -437,14 +557,17 @@
           .then(data => {
             console.log(data);
             if (data.success) {
-              location.reload();//reload page
+              //reload page
+              location.reload();
             }
           })
+          //log error
           .catch(err => console.error(err));
       }
 
       //delete expense call
       function deleteExpense(expId) {
+        //api call
         fetch(`/api/realEstate/delete-expense/${expId}`, {
           method: 'DELETE'
         })
@@ -452,9 +575,11 @@
           .then(data => {
             console.log(data);
             if (data.success) {
-              location.reload();//reload page
+              //reload page
+              location.reload();
             }
           })
+          //log error
           .catch(err => console.error(err));
       }
 
@@ -462,8 +587,10 @@
       document.getElementById('editPropForm').addEventListener('submit', e => {
         e.preventDefault();
 
+        //id of the property
         const id = document.getElementById('propertyId').value;
 
+        //api call
         fetch(`/api/realEstate/update-property/${id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -477,15 +604,19 @@
         })
           .then(res => res.json())
           .then(data => {
+            //reload page
             if (data.success) location.reload();
           });
       })
 
+      //income form event listener
       document.getElementById('editIncForm').addEventListener('submit', e => {
         e.preventDefault();
 
+        //income id
         const id = document.getElementById('incomeId').value;
 
+        //api call
         fetch(`/api/realEstate/update-income/${id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -496,13 +627,16 @@
         })
           .then(res => res.json())
           .then(data => {
+            //reload page to now show added income
             if (data.success) location.reload();
           });
       })
 
+      //event listener for expense form
       document.getElementById('editExpForm').addEventListener('submit', e => {
         e.preventDefault();
 
+        //id for expense element
         const id = document.getElementById('expenseId').value;
 
         fetch(`/api/realEstate/update-expense/${id}`, {
@@ -515,11 +649,13 @@
         })
           .then(res => res.json())
           .then(data => {
+            //reload page
             if (data.success) location.reload();
           });
       })
 
       //for toggling on the forms
+      //show property form
       function showFormProp() {
         hideForms();
         hideButtons();
@@ -527,6 +663,7 @@
         hideDisplays();
       }
 
+      //show income form
       function showFormInc() {
         hideForms();
         hideButtons();
@@ -534,6 +671,7 @@
         hideDisplays();
       }
 
+      //show expense form
       function showFormExp() {
         hideForms();
         hideButtons();
@@ -541,52 +679,61 @@
         hideDisplays();
       }
 
+      //shows update property form
       function updatePropertyForm(id) {
         hideForms();
         hideButtons();
         document.getElementById("property_form_update").style.display = "flex";
+
+        //stores id of property to update
         document.getElementById("propertyId").value = id;
         hideDisplays();
       }
 
+      //shows update income form
       function updateIncomeForm(id) {
         hideForms();
         hideButtons();
         document.getElementById("income_form_update").style.display = "flex";
+        //gets id of income item in order to update
         document.getElementById("incomeId").value = id;
         hideDisplays();
       }
 
+      //shows update expense form
       function updateExpenseForm(id) {
         hideForms();
         hideButtons();
         document.getElementById("expense_form_update").style.display = "flex";
+        //gets id of expense item
         document.getElementById("expenseId").value = id;
         hideDisplays();
       }
 
-      //TO FIX: add class names to all forms and displays then use that
-
+      //hides all displays
+      //notifications commented out as they were causing it to disappear when it should not
       function hideDisplays() {
         document.getElementById("propertiesDisplay").style.display = "none";
         document.getElementById("incomeDisplay").style.display = "none";
         document.getElementById("expenseDisplay").style.display = "none";
-         document.getElementById("notifications").style.display = "none";
+         //document.getElementById("notifications").style.display = "none";
         document.getElementById("propertyLabel").style.display = "none";
         document.getElementById("incomeLabel").style.display = "none";
         document.getElementById("expenseLabel").style.display = "none";
-        document.getElementById("notifText").style.display = "none";
+        //document.getElementById("notifText").style.display = "none";
        }
 
+       //show all displays
+       //notifications again commented out, can be uncommented and tweaked if necessary
       function showDisplays() {
         document.getElementById("propertiesDisplay").style.display = "flex";
         document.getElementById("incomeDisplay").style.display = "flex";
         document.getElementById("expenseDisplay").style.display = "flex";
-         document.getElementById("notifications").style.display = "none";
+         //document.getElementById("notifications").style.display = "none";
         document.getElementById("propertyLabel").style.display = "flex";
         document.getElementById("incomeLabel").style.display = "flex";
         document.getElementById("expenseLabel").style.display = "flex";
-         document.getElementById("notifText").style.display = "none";
+         //document.getElementById("notifText").style.display = "none";
 
       }
 
@@ -606,6 +753,7 @@
       function hideButtons() {
         const buttons = document.getElementsByClassName("addButton");
         for (let b of buttons) {
+          //loops through all buttons
           b.style.display = "none";
         }
       }
@@ -614,20 +762,24 @@
       function showButtons() {
         const buttons = document.getElementsByClassName("addButton");
         for (let b of buttons) {
+          //loops through all buttons
           b.style.display = "flex";
         }
       }
 
+      //shows the notification display, now seperate from rest of displays
        function showNotifications(){
         document.getElementById("notifications").style.display = "flex";
-        document.getElementById("notifText").style.display = "flex";
+        document.getElementById("notifText").style.display = "block";
        }
 
+       //hides notifications
        function hideNotifications(){
         document.getElementById("notifications").style.display = "none";
         document.getElementById("notifText").style.display = "none";
        }
 
+       //hides if shown and shows if hidden
        function notificationsControl(){
        if(document.getElementById("notifText").style.display == "none"){
         showNotifications();
@@ -637,20 +789,31 @@
        }
        }
 
+       //functions that removes a notification
+       //akin to a delete
        function acceptNotification(id){
+        //api call
         fetch(`/api/realEstate/delete-notification/${id}`,{
-             method: 'DELETE'})
-        .then(res => res.json())
-        .then(data =>{
-          console.log(data);
-          if(data.success){
-            location.reload();//reload page
-          }
-        })
-        .catch(err => console.error(err));
-       }
+          method: 'DELETE'
+          })
+         .then(res => res.json())
+         .then(data =>{
+            if(data.success){
+              //code that removes the item without reloading like the other deletes do since reloading hides notification display
+              const element = document.getElementById(`notif-${id}`);
+              if(element) element.remove();
+
+             const container = document.getElementById("notifications");
+             if(container.children.length === 0){
+              hideNotifications();
+             }
+           }
+         })
+         .catch(err => console.error(err));
+}
       
     </script>
+  <script src="./js/session.js"></script> <!--for admin tab display-->
 </body>
 
 </html>

@@ -12,20 +12,6 @@ fetch('api/session/sessionMessage')
   });
 
 /*
-*   FIX ME: older session info (user info & logout) remove later
-*/ 
-// fetch('api/session/getSession')
-//   .then(res => res.json())
-//   .then(data => {
-//     if (data.loggedIn) {
-//       const userInfo = document.getElementById('user-info');
-//       if (userInfo) {
-//         userInfo.innerText = data.email;
-//       }
-//     }
-//   });
-
-/*
 *   session info (user info & logout)
 */ 
 fetch('/api/session/getSession')
@@ -41,9 +27,11 @@ fetch('/api/session/getSession')
     const userInfo = document.getElementById('user-info');
     if (!userInfo) return;
 
+    const nameToShow = data.displayName || data.email; // prefer display name if available
+    
     userInfo.innerHTML = `
       <span id="user-email" style="cursor:pointer;">
-        ${data.email} ▾
+        ${nameToShow} ▾
       </span>
       <div id="logout-menu"
         style="

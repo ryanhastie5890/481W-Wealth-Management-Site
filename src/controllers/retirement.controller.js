@@ -12,24 +12,17 @@ export const addRetirementAccount = (req, res) => {
     return res.status(401).json({ error: 'Not logged in' });
   }
 
-  const { account_type, amount } = req.body;
+  const { account_type, amount, display_name } = req.body;
   const sql = `
     INSERT INTO retirement_accounts (userId, account_type, display_name, current_balance)
     VALUES (?, ?, ?, ?)
   `;
 
-  dbCon.query(sql, [req.session.userId, account_type, account_type, amount], (err, result) => {
+  dbCon.query(sql, [req.session.userId, account_type, display_name || account_type, amount], (err, result) => {
     if (err) {
       console.error('DB INSERT ERROR:', err);
       return res.status(500).json({ error: 'Database error. unable to add retirement account.' });
     }
-    // FIX ME: remove console logs before final build
-    console.log('Added Retirement Account');
-    console.log(`User ID: ${req.session.userId}`);
-    console.log(`User Email: ${req.session.email}`);
-    console.log(`Account Type: ${account_type}`);
-    console.log(`Amount Entered: ${amount}`);
-
     res.json({ success: true, result });
   });
 };
@@ -83,12 +76,6 @@ export const updateRetirementAccount = (req, res) => {
         console.error('DB UPDATE ERROR:', err);
         return res.status(500).json({ error: 'Database error. Unable to update retirment account.' });
       }
-      // FIX ME: remove console logs before final build
-      console.log('Updated Retirement Account');
-      console.log(`User ID: ${req.session.userId}`);
-      console.log(`User Email: ${req.session.email}`);
-      console.log(`Account Type: ${display_name}`);
-      console.log(`Amount Entered: ${amount}`);
       res.json({ success: true });
     }
   );
