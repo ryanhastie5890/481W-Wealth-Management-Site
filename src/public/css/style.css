@@ -183,6 +183,31 @@ a{
         padding: 5px 0;
 
     }
+body.dark-mode{
+  background-color: black;
+  color: white;
+}
+
+
+.dark-mode, .dark-mode h2, .dark-mode label, .dark-mode p {
+  color: white !important;
+}
+
+
+.dark-mode a {
+  color: #add8e6; /* Light blue for visibility */
+}
+
+
+.dark-mode .form-control, .dark-mode input, .dark-mode select {
+  background-color: #2b2b2b;
+  color: white;
+  border: 1px solid #444;
+}
+
+.dark-mode hr {
+  border-color: #555;
+}
 
 #buttons{
   display: flex;

@@ -7,12 +7,18 @@
   <link rel="shortcut icon" href="#">
 </head>
 <body>
-
+  <p class="d-inline-flex gap-1">
+    <button type="button" class="btn" data-bs-toggle="button" onclick="darkModeSwitch()">Toggle dark mode</button>
+    </p>
   <h2>Register</h2>
   <form action="/api/auth/register" method="POST">
-    <input type="email" name="email" placeholder="Email" required>
+    <label for="exampleInputEmail1" class="form-label">Email address</label>
+
+    <input type="email" class="form-control w-25" id="exampleInputEmail1" aria-describedby="emailHelp">
     <br>
-    <input type="password" name="password" placeholder="Password" required>
+    <label for="exampleInputPassword1" class="form-label">Password</label>
+    <input type="password" class="form-control w-25" id="exampleInputPassword1">
+  </div>
     <br>
 
     <label for="role">Account Type:</label><br>
@@ -129,6 +135,11 @@
     });
 
   </script>
-
+<script>
+  function darkModeSwitch() {
+  var element = document.body;
+  element.classList.toggle("dark-mode");
+}
+</script>
 </body>
 </html>
