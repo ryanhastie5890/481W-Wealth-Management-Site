@@ -1,7 +1,8 @@
+// Ryan Piza
 import { dbCon } from '../db/database.js';     // connect to DB to run queries
 
 /*
-*   create a new retirement plan
+*   Create a new retirement plan for a user
 */
 export const createPlan = async (req, res) => {
   if (!req.session.userId) {
@@ -49,7 +50,7 @@ export const createPlan = async (req, res) => {
 };
 
 /*
-*   get all retirement plans for user
+*   Get / obtain all retirement plans for a user
 */
 export const getPlans = (req, res) => {
   if (!req.session.userId) {
@@ -74,7 +75,7 @@ export const getPlans = (req, res) => {
 };
 
 /*
-*   delete retirement plan
+*   Delete selected retirement plan
 */
 export const deletePlan = (req, res) => {
   if (!req.session.userId) {

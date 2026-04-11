@@ -1,10 +1,11 @@
+// Ryan Piza
 const addInvestmentsButton = document.getElementById('add-investments-button');
 const modal = document.getElementById('investment-modal');
 const modalBody = document.getElementById('modal-body');
 const closeModal = document.getElementById('close-modal');
 
 /*
-*   key: values for creating a retirement account
+*   Key: values for creating a retirement account
 */
 const retirementOptions = {
   "Individual Retirement Accounts": ["IRA", "Roth IRA"],
@@ -82,7 +83,6 @@ async function loadRetirementAccounts() {
     tbody.appendChild(row);
   });
   renderRetirementChart(accounts);  // renders chart(s) from chart.js
-  console.log('Loaded retirement accounts:', accounts);
 }
 
 /*
@@ -104,7 +104,9 @@ closeModal.addEventListener('click', () => {
 *   Close modal if user clicks outside content
 */
 window.addEventListener('click', (e) => {
-  if (e.target === modal) modal.classList.remove('show');
+  if (e.target === modal) {
+    modal.classList.remove('show');
+  } 
 });
 
 /*
@@ -171,7 +173,6 @@ function showFinalForm(category, subtype) {
     const preAmount = balanceInput.value;
     const amount = preAmount.replace(/,/g,'');
 
-    // FIX ME: further test isNAN
     if (!amount || isNaN(amount)) {
       alert('Please enter a valid amount');
       return;

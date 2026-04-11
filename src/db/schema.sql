@@ -2,7 +2,7 @@
 CREATE DATABASE IF NOT EXISTS 481db;
 USE 481db;
 
--- Temp users table
+-- Users table 
 CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   email VARCHAR(255) NOT NULL UNIQUE,
@@ -99,7 +99,7 @@ CREATE TABLE real_estate_notifications(
       ON DELETE SET NULL
 );
 
--- retirement table (piza)
+-- retirement table (Ryan Piza)
 CREATE TABLE retirement_accounts (
   id INT AUTO_INCREMENT PRIMARY KEY,
   userId INT NOT NULL,                 
@@ -110,7 +110,7 @@ CREATE TABLE retirement_accounts (
   FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- retirement plan (piza)
+-- retirement plan (Ryan Piza)
 CREATE TABLE retirement_plans (
   id SERIAL PRIMARY KEY,
   user_id INT NOT NULL,

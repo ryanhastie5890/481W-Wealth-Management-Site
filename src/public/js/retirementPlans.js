@@ -1,3 +1,4 @@
+// Ryan Piza
 const plansContainer = document.getElementById('plans-container');
 const addPlanButton = document.getElementById('add-plan-button');
 const planFormContainer = document.getElementById('plan-form-container');
@@ -19,9 +20,10 @@ async function loadPlans() {
     if (plans.length >= 5) {
     addPlanButton.disabled = true;
     addPlanButton.innerText = "Max 5 Plans Reached";
-    } else {
-    addPlanButton.disabled = false;
-    addPlanButton.innerText = "Add Plan";
+    } 
+    else {
+        addPlanButton.disabled = false;
+        addPlanButton.innerText = "Add Plan";
     }
 
     // do not display a line if no plans are present

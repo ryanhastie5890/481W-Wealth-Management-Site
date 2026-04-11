@@ -1,4 +1,4 @@
-/**
+/*
  * FILE FOR ADDING API ROUTES
  * Import and attach your route files below
  */
