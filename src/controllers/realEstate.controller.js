@@ -1,5 +1,8 @@
 import { dbCon } from'../db/database.js'; // connect to DB
 
+//most functions follow format of recieving data from api call
+//sending it to database, then returning error or result
+
 const addProperty =  (req, res)=>{//create property
   const { name, description, type, status, occupants } = req.body;
   const userId = req.session.userId || null;
