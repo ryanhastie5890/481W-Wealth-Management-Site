@@ -14,18 +14,11 @@
   <form action="/api/auth/register" method="POST">
     <label for="exampleInputEmail1" class="form-label">Email address</label>
 
-    <input type="email" class="form-control w-25" id="exampleInputEmail1" aria-describedby="emailHelp">
+    <input type="email" class="form-control w-25" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" required>
     <br>
     <label for="exampleInputPassword1" class="form-label">Password</label>
-    <input type="password" class="form-control w-25" id="exampleInputPassword1">
+    <input type="password" class="form-control w-25" id="exampleInputPassword1" name="password" required>
     <br>
-
-    <label for="role">Account Type:</label><br>
-    <select name="role" id="role">
-      <option value="user" selected>User</option>
-      <option value="admin">Admin</option>
-    </select>
-    <br><br>
 
     <button type="submit">Register</button>
   </form>
