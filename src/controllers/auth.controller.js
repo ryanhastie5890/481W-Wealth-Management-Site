@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';                // password hashing
 import { dbCon } from '../db/database.js';     // connect to DB to run queries
 import { send2FACode } from '../services/emailService.js';
 
+
 /*
 *   register new user in the database, error if the user already exists
 */
@@ -23,6 +24,7 @@ export async function registerUser(req, res) {
                     return res.redirect('/');
                 }
                 req.session.message = "Registration successful";
+                console.log("User registered");
                 return res.redirect('/');
             }
         );

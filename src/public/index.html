@@ -18,7 +18,10 @@
   <header>
     <!--Header section of the website-->
     <div style="height: 7vh;">
-      <a href="index.html" style="color: rgb(38, 134, 38);">Wealth Management System</a>
+      <a href="index.html">Wealth Management System</a>
+    </div>
+    <div id ="darkmode-switch-container" style="position:absolute; top:10px; right:350px;">
+      <button id="darkModeBtn" class="btn btn-secondary btn-sm" data-bs-toggle="button" onclick="darkModeToggle()">Toggle dark mode</button>
     </div>
     <!--Display user while logged in-->
     <div id="user-info" style="position:absolute; top:10px; right:20px; color:white;"></div>
@@ -34,10 +37,22 @@
   </div>
 
   <p id="welcome-message">Welome to the XYZ Investments Platform!</p>
+  <!--<div id="forms">
+    <form action="/register" method="POST">
+      <input name="email" type="email" placeholder="Email" required>
+      <input name="password" type="password" placeholder="Password" required>
+      <button id="registerButton" class="btn btn-primary">Register</button>
+    </form>
+
+    <form action="/login" method="POST">
+      <input name="email" type="email" placeholder="Email" required>
+      <input name="password" type="password" placeholder="Password" required>
+      <button id="submitButton" class="btn btn-success">Login</button>
+    </form> -->
   </div>
 
   <p id="message"></p>
   <script src="./js/session.js"></script>
+  <script src="./js/darkModeToggle.js"></script>
 </body>
-
 </html>
