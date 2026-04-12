@@ -15,14 +15,15 @@
 </head>
 
 <body>
-  <button type="button" class="btn" data-bs-toggle="button" id="darkModeBtn" onclick="darkModeToggle()">Toggle dark mode</button>
+  
   <header>
     <header>
       <!--Header section of the website-->
       <div class="heading" style="height: 7vh;">
         <a href="index.html">Wealth Management System</a>
-        <button type="button" class="btn" data-bs-toggle="button" onclick="darkModeSwitch()">Toggle dark mode</button>
-      </div>
+        <div id ="darkmode-switch-container" style="position:absolute; top:10px; right:350px;">
+          <button id="darkModeBtn" class="btn btn-secondary btn-sm" data-bs-toggle="button" onclick="darkModeToggle()">Toggle dark mode</button>
+        </div>
       <!--Display user while logged in-->
       <div id="user-info" style="position:absolute; top:10px; right:20px; color:white;"></div>
     </header>
@@ -41,7 +42,7 @@
 
 <div style="display: flex; flex-direction: column;align-items: center; justify-content: center;text-align: center; border-bottom: 1px solid black;height:20vh;">
   <!--title of page-->
-  <h1 >Your Real Estate Portfolio</h1>
+  <h1>Your Real Estate Portfolio</h1>
 
   <div style="display: flex; flex-direction: row;align-items: center; justify-content: center;text-align: center; gap:150px;">
 
@@ -66,7 +67,14 @@
   </div>
 </div>
 
-    <div id="buttons" >
+<!--graph section for profit by month-->
+
+<div style="height:50vh;width: 75%; margin: auto; padding-top: 20px;">
+  <canvas id="profitChart" style="width:70%; display:block;margin:auto;"></canvas>
+</div>
+
+
+    <div id="buttons" style="border-top: 1px solid black;">
       <!--add property button-->
       <!--<button class="addButton" style="display:flex">Add Property</button><br> -->
       <button type="button" class="btn btn-primary" onclick="showFormProp()">Add Property</button>
@@ -85,7 +93,21 @@
     </div>
 
 
+<!--area for selecting property-->
+<div id="select" style="border-bottom: 1px solid black;">
+  
+<!--button to select-->
+ <button type="button" class="btn btn-primary" style="margin:15px;" onclick="selectProperty()">Select Property</button>
+  
+  <form id="selectForm">
+ <!--dropdown for properties-->
 
+<select name="properties" id="propertiesSelect" required>
+<option>Select None</option>
+</select>
+ 
+</form>
+</div>
 
 <!-- notifications area-->
 
@@ -97,7 +119,7 @@
     <!--divs that help format everything better-->
     <div id="displayHolder">
     <!--Properties display-->
-    <div class="displayColumn">
+    <div class="displayColumn" id="propertyColumn">
     <h2 id="propertyLabel">Your Properties: </h2>
     <div id="propertiesDisplay"></div>
     </div>
@@ -243,6 +265,16 @@
         <label for="note">Note</label><br><br>
         <input name="note" type="text" required><br><br>
 
+        <!--Date input-->
+        <label for="recorded_date">Date</label><br><br>
+        <input type="date" name="recorded_date" id="recorded_date_inc" required><br><br>
+
+        <!--property-->
+        <label for="propertyId">Property</label><br><br>
+        <select name="propertyId" id="propertyIdInc" required>
+          <option value="">Select a property</option>
+        </select><br><br>
+
         <button type="submit">Add Income</button>
       </form>
     </div>
@@ -256,9 +288,19 @@
         <label for="amount">Amount</label><br><br>
         <input name="amount" type="number" step="0.01" min="0" placeholder="0.00" required><br><br>
 
-        <!--not input-->
+        <!--note input-->
         <label for="note">Note</label><br><br>
         <input name="note" type="text" required><br><br>
+
+         <!--Date input-->
+        <label for="recorded_date">Date</label><br><br>
+        <input type="date" name="recorded_date" id="recorded_date_exp" required><br><br>
+
+        <!--property-->
+        <label for="propertyId">Property</label><br><br>
+        <select name="propertyId" id="propertyIdExp" required>
+          <option value="">Select a property</option>
+        </select><br><br>
 
         <button type="submit">Add Expense</button>
       </form>
@@ -323,6 +365,16 @@
         <label for="note">Note</label><br><br>
         <input id="iNote" name="note" type="text" required><br><br>
 
+        <!--Date input-->
+        <label for="recorded_date">Date</label><br><br>
+        <input type="date" name="recorded_date" id="recorded_date_incUp" required><br><br>
+
+        <!--property-->
+        <label for="propertyId">Property</label><br><br>
+        <select name="propertyId" id="propertyIdIncUp" required>
+          <option value="">Select a property</option>
+        </select><br><br>
+
         <button type="submit">Update Income</button>
       </form>
     </div>
@@ -343,6 +395,16 @@
         <!--note-->
         <label for="note">Note</label><br><br>
         <input id="eNote" name="note" type="text" required><br><br>
+
+        <!--Date input-->
+        <label for="recorded_date">Date</label><br><br>
+        <input type="date" name="recorded_date" id="recorded_date_expUp" required><br><br>
+
+        <!--property-->
+        <label for="propertyId">Property</label><br><br>
+        <select name="propertyId" id="propertyIdExpUp" required>
+          <option value="">Select a property</option>
+        </select><br><br>
 
         <button type="submit">Update Expense</button>
       </form>
@@ -426,7 +488,8 @@
             div.innerHTML = `
                 <h3>Amount: ${i.amount}</h3><br>
                 <p>Note: ${i.note}</p><br>
-                <p>Created: ${new Date(i.created_at).toLocaleDateString()}</p><br>
+                <p>Created: ${new Date(i.recorded_date).toLocaleDateString()}</p><br>
+                <p>Property: ${i.property_name}</p><br>
                 <button onclick= "updateIncomeForm(${i.id})">Update Income</button><br>
                 <button onclick= "deleteIncome(${i.id})">Remove Income</button>
                 `;
@@ -463,7 +526,8 @@
             div.innerHTML = `
                 <h3>Amount: ${e.amount}</h3><br>
                 <p>Note: ${e.note}</p><br>
-                <p>Created: ${new Date(e.created_at).toLocaleDateString()}</p><br>
+                <p>Created: ${new Date(e.recorded_date).toLocaleDateString()}</p><br>
+                <p>Property: ${e.property_name}</p><br>
                 <button onclick= "updateExpenseForm(${e.id})">Edit Expense</button><br>
                 <button onclick= "deleteExpense(${e.id})">Remove Expense</button>
                 `;
@@ -510,6 +574,48 @@
         document.getElementById("expenseDisplay").innerHTML ="<p></p>"
        });
 
+
+       //gets options for properties for income and expense forms
+       fetch('/api/realEstate/get-properties', { cache: "no-store" })
+           .then(res => res.json())
+           .then(properties => {
+
+            //income form
+           const incDropdown = document.getElementById("propertyIdInc");
+           //expense form
+           const expDropdown = document.getElementById("propertyIdExp");
+
+           //income update form
+          const incDropdownUp = document.getElementById("propertyIdIncUp");
+    
+          //expense update form
+          const expDropdownUp = document.getElementById("propertyIdExpUp");
+
+          //select form
+         const selectForm = document.getElementById("propertiesSelect");
+
+         properties.forEach(p => {
+            const option1 = document.createElement("option");
+            option1.value = p.id;
+            option1.textContent = p.name;
+
+           const option2 = option1.cloneNode(true);
+           const option3 = option1.cloneNode(true);
+           const option4 = option1.cloneNode(true);
+           const option5 = option1.cloneNode(true);
+
+          incDropdown.appendChild(option1);
+          expDropdown.appendChild(option2);
+          incDropdownUp.appendChild(option3);
+          expDropdownUp.appendChild(option4);
+          selectForm.appendChild(option5);
+
+    });
+
+    })
+     .catch(err => console.error(err));
+
+
       //calculate finance total
       Promise.all([
         fetch('/api/realEstate/get-incomes').then(r => r.json()),
@@ -517,11 +623,11 @@
        ])
        .then(([incomes, expenses]) =>{
         let total = incomes.reduce((sum,i) => sum + Number(i.amount), 0);
-        total -= expenses.reduce((sum, e) => sum + Number(e.amount),0);
+        total -= expenses.reduce((sum, e) => sum + Number(e.amount),0);//subtract expenses
         //this is profit, income - expense
         document.getElementById('total').innerHTML = "$"+total.toFixed(2);
         let profit = total;
-        total = (total*.06).toFixed(2);
+        total = (total*.06).toFixed(2);//apply 1.06 tax 
         if(total < 0){
           total = 0;
         }
@@ -530,6 +636,87 @@
         //this is net profit, profit - taxes
         document.getElementById('net').innerHTML = "$"+(profit-total).toFixed(2);
        })
+
+       //calculate profit per month for bar graph
+       Promise.all([
+        fetch('/api/realEstate/get-incomes').then(r => r.json()),
+        fetch('/api/realEstate/get-expenses').then(r => r.json())
+      ])
+      .then(([incomes, expenses]) => {
+
+       function groupByMonth(data) {//groups data by month
+          const result = {};
+
+         data.forEach(item => {
+         const date = new Date(item.recorded_date);
+         const key = date.getFullYear() + "-" + (date.getMonth() + 1); 
+
+          if (!result[key]) result[key] = 0;
+         result[key] += Number(item.amount);
+      });
+
+    return result;
+  }
+
+     const incomeByMonth = groupByMonth(incomes);//group incomes
+     const expenseByMonth = groupByMonth(expenses);//group expenses
+
+     const allMonths = [...new Set([
+      ...Object.keys(incomeByMonth),
+      ...Object.keys(expenseByMonth)
+     ])].sort();
+
+     const labels = allMonths.map(m => {
+       const [year, month] = m.split("-");//get month name
+       return new Date(year, month - 1).toLocaleString('default', {
+         month: 'short',
+         year: 'numeric'
+       });
+     });
+
+       const profitData = allMonths.map(month => {
+      return (incomeByMonth[month] || 0) - (expenseByMonth[month] || 0);
+  });
+
+      renderChart(labels, profitData);//create chart
+   });
+
+
+
+   let profitChartInstance = null;//chart variable for following function
+
+   function renderChart(labels, data) {
+     const chart = document.getElementById('profitChart').getContext('2d');
+
+     //get rid of old chart
+     if (profitChartInstance) {
+       profitChartInstance.destroy();
+     }
+
+     //chart information
+     profitChartInstance = new Chart(chart, {
+       type: 'bar',
+       data: {
+        labels: labels,
+        datasets: [{
+          label: 'Monthly Profit ($)',
+          data: data
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            min: 0, 
+            ticks: {
+              callback: value => "$" + value
+          }
+        }
+      }
+    }
+  });
+}
 
       //delete property call
       function deleteProperty(propId) {
@@ -623,8 +810,10 @@
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            propertyId: document.getElementById("propertyIdIncUp").value,
             amount: document.getElementById("iAmount").value,
-            note: document.getElementById("iNote").value
+            note: document.getElementById("iNote").value,
+            recorded_date: document.getElementById("recorded_date_incUp").value
           })
         })
           .then(res => res.json())
@@ -645,8 +834,10 @@
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            propertyId: document.getElementById("propertyIdExpUp"),
             amount: document.getElementById("eAmount").value,
-            note: document.getElementById("eNote").value
+            note: document.getElementById("eNote").value,
+            recorded_date: document.getElementById("recorded_date_expUp").value
           })
         })
           .then(res => res.json())
@@ -812,6 +1003,122 @@
            }
          })
          .catch(err => console.error(err));
+}
+
+    function selectProperty() {
+      const select = document.getElementById("propertiesSelect");
+      const selectedId = select.value;
+      const selectedName = select.options[select.selectedIndex].text;
+
+      if (!selectedId || selectedId === "Select None") {
+       location.reload();//sets page to default state
+       return;
+     }
+
+  
+     document.getElementById("portfolio").innerText = selectedName + " Property";//page title changing
+  
+     Promise.all([//get incomes and expenses that are associated with that property
+       fetch('/api/realEstate/get-incomes').then(r => r.json()),
+       fetch('/api/realEstate/get-expenses').then(r => r.json())
+     ])
+     .then(([incomes, expenses]) => {
+
+    //filter incomes
+       const filteredIncomes = incomes.filter(i =>
+       i.propertyId == selectedId || i.property_id == selectedId
+      );
+    //filter expenses
+       const filteredExpenses = expenses.filter(e =>
+         e.propertyId == selectedId || e.property_id == selectedId
+       );
+
+    //reset income display
+      const incomeDisplay = document.getElementById("incomeDisplay");
+      incomeDisplay.innerHTML = "";
+
+      filteredIncomes.forEach(i => {//repopulates income
+        const div = document.createElement("div");
+        div.className = "income-item";
+
+        div.innerHTML = `
+          <h3>Amount: ${i.amount}</h3>
+          <p>Note: ${i.note}</p>
+          <p>Date: ${new Date(i.recorded_date).toLocaleDateString()}</p>
+        `;
+
+        incomeDisplay.appendChild(div);
+      });
+
+  
+      //reset expense display
+       const expenseDisplay = document.getElementById("expenseDisplay");
+       expenseDisplay.innerHTML = "";
+
+       filteredExpenses.forEach(e => {//repopulate expense display
+         const div = document.createElement("div");
+         div.className = "expense-item"; 
+
+         div.innerHTML = `
+           <h3>Amount: ${e.amount}</h3>
+           <p>Note: ${e.note}</p>
+           <p>Date: ${new Date(e.recorded_date).toLocaleDateString()}</p>
+         `;
+
+         expenseDisplay.appendChild(div);
+       });
+
+   
+       //make total amount based off filters
+       let total = filteredIncomes.reduce((sum, i) => sum + Number(i.amount), 0);
+       total -= filteredExpenses.reduce((sum, e) => sum + Number(e.amount), 0);
+
+       document.getElementById('total').innerHTML = "$" + total.toFixed(2);
+       
+       //make taxes bades off of filters aswell
+       let taxes = Math.max(0, total * 0.06);
+       document.getElementById('taxes').innerHTML = "$" + taxes.toFixed(2);
+       document.getElementById('net').innerHTML = "$" + (total - taxes).toFixed(2);
+
+    
+       function groupByMonth(data) {//group by month declaration again for reuse
+         const result = {};
+         data.forEach(item => {
+           const date = new Date(item.recorded_date);
+           const key = date.getFullYear() + "-" + (date.getMonth() + 1);
+
+           if (!result[key]) result[key] = 0;
+           result[key] += Number(item.amount);
+         });
+        return result;
+    }
+      //prepare everything for a bar graph again
+       const incomeByMonth = groupByMonth(filteredIncomes);
+       const expenseByMonth = groupByMonth(filteredExpenses);
+
+      const allMonths = [...new Set([
+        ...Object.keys(incomeByMonth),
+        ...Object.keys(expenseByMonth)
+      ])].sort();
+
+       const labels = allMonths.map(m => {
+         const [year, month] = m.split("-");
+         return new Date(year, month - 1).toLocaleString('default', {
+        month: 'short',
+        year: 'numeric'
+      });
+    });
+
+       const profitData = allMonths.map(month => {
+         return (incomeByMonth[month] || 0) - (expenseByMonth[month] || 0);
+       });
+
+       document.getElementById("propertyColumn").style.display = "none";//also hide properties
+
+    renderChart(labels, profitData); //renders chart
+
+  })
+  .catch(err => console.error(err));
 }
       
     </script>

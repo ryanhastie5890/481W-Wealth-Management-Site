@@ -2,7 +2,7 @@
 CREATE DATABASE IF NOT EXISTS 481db;
 USE 481db;
 
--- Temp users table
+-- Users table 
 CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   email VARCHAR(255) NOT NULL UNIQUE,
@@ -35,8 +35,10 @@ CREATE TABLE properties (
 CREATE TABLE incomes (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   userId INT DEFAULT NULL,
+  propertyId INT UNSIGNED DEFAULT NULL,
   amount DECIMAL(10,2) DEFAULT NULL,
   note TEXT,
+  recorded_date DATE,
   created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,    
   updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
@@ -44,15 +46,22 @@ CREATE TABLE incomes (
   CONSTRAINT incomes_ibfk_1
     FOREIGN KEY (userId)
     REFERENCES users(id)
-    ON DELETE SET NULL
+    ON DELETE SET NULL,
+
+  CONSTRAINT incomes_ibfk_2
+     FOREIGN KEY (propertyId)
+     REFERENCES properties(id)
+     ON DELETE CASCADE
 );
 
 -- Expenses table
 CREATE TABLE expenses (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   userId INT DEFAULT NULL,
+  propertyId INT UNSIGNED DEFAULT NULL,
   amount DECIMAL(10,2) DEFAULT NULL,
   note TEXT,
+  recorded_date DATE,
   created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
@@ -60,7 +69,12 @@ CREATE TABLE expenses (
   CONSTRAINT expenses_ibfk_1
     FOREIGN KEY (userId)
     REFERENCES users(id)
-    ON DELETE SET NULL
+    ON DELETE SET NULL,
+
+  CONSTRAINT expenses_ibfk_2
+    FOREIGN KEY (propertyId)
+    REFERENCES properties(id)
+    ON DELETE CASCADE
 );
 
 -- RealEstateNotification table
@@ -85,7 +99,7 @@ CREATE TABLE real_estate_notifications(
       ON DELETE SET NULL
 );
 
--- retirement table (piza)
+-- retirement table (Ryan Piza)
 CREATE TABLE retirement_accounts (
   id INT AUTO_INCREMENT PRIMARY KEY,
   userId INT NOT NULL,                 
@@ -96,7 +110,7 @@ CREATE TABLE retirement_accounts (
   FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- retirement plan (piza)
+-- retirement plan (Ryan Piza)
 CREATE TABLE retirement_plans (
   id SERIAL PRIMARY KEY,
   user_id INT NOT NULL,
