@@ -15,12 +15,15 @@
 </head>
 
 <body>
-  <button type="button" class="btn" data-bs-toggle="button" id="darkModeBtn" onclick="darkModeToggle()">Toggle dark mode</button>
+  
   <header>
     <header>
       <!--Header section of the website-->
       <div class="heading" style="height: 7vh;">
         <a href="index.html">Wealth Management System</a>
+        <div id ="darkmode-switch-container" style="position:absolute; top:10px; right:350px;">
+          <button id="darkModeBtn" class="btn btn-secondary btn-sm" data-bs-toggle="button" onclick="darkModeToggle()">Toggle dark mode</button>
+        </div>
       <!--Display user while logged in-->
       <div id="user-info" style="position:absolute; top:10px; right:20px; color:white;"></div>
     </header>
@@ -39,7 +42,7 @@
 
 <div style="display: flex; flex-direction: column;align-items: center; justify-content: center;text-align: center; border-bottom: 1px solid black;height:20vh;">
   <!--title of page-->
-  <h1 >Your Real Estate Portfolio</h1>
+  <h1>Your Real Estate Portfolio</h1>
 
   <div style="display: flex; flex-direction: row;align-items: center; justify-content: center;text-align: center; gap:150px;">
 
