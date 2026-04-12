@@ -1,3 +1,4 @@
+// Ryan Piza
 const buttons = document.querySelectorAll('.slide-group button');
 const sections = document.querySelectorAll('.content-section');
 

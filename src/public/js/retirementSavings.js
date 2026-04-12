@@ -1,3 +1,4 @@
+// Ryan Piza
 // reusing much from retirement.js just want a separate file for calrity and readability
 
 const savingsTableBody = document.getElementById('savings-table-body');
@@ -29,7 +30,8 @@ async function loadSavingsAccounts() {
         </td>
       </tr>
     `;
-    } else {
+    } 
+    else {
       accountHeader.style.display = '';
       balanceHeader.style.display = '';
       actionsHeader.style.display = '';

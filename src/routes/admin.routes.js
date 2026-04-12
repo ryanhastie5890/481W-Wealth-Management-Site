@@ -1,6 +1,7 @@
 import express from 'express';
 import { dbCon } from '../db/database.js';
 import requireAdmin from '../services/requireAdmin.js';
+import { updateUserRole } from "../controllers/auth.controller.js";
 
 const router = express.Router();
 
@@ -43,6 +44,8 @@ router.put('/users/:id/lock', (req, res) => {
     }
   );
 });
+
+router.put("/users/:id/role", updateUserRole);
 
 
 export default router;
