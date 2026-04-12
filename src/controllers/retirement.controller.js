@@ -1,7 +1,8 @@
+// Ryan Piza
 import { dbCon } from '../db/database.js';     // connect to DB to run queries
 
 /*
-*   create new retirement account and saves it in the retirement_accounts table.
+*   Create new retirement account and saves it in the retirement_accounts table.
 */
 export const addRetirementAccount = (req, res) => {
   console.log('Test: Adding Retirement Account');
@@ -28,7 +29,7 @@ export const addRetirementAccount = (req, res) => {
 };
 
 /*
-*   obtain retirement account from the retirement_accounts table to display client side
+*   Obtain retirement account from the retirement_accounts table to display client side
 */  
 export const getRetirementAccounts = (req, res) => {
   if (!req.session.userId) {
@@ -53,7 +54,7 @@ export const getRetirementAccounts = (req, res) => {
 };
 
 /*
-*   allow user to update existing retirement account in the retirement_accounts table.
+*   Allow user to update existing retirement account in the retirement_accounts table.
 */
 export const updateRetirementAccount = (req, res) => {
   if (!req.session.userId) {
@@ -82,7 +83,7 @@ export const updateRetirementAccount = (req, res) => {
 };
 
 /*
-*   allow user to delete existing retirement account in the retirement_accounts table.
+*   Allow user to delete existing retirement account in the retirement_accounts table.
 */
 export const deleteRetirementAccount = (req, res) => {
   if (!req.session.userId) {

@@ -15,7 +15,7 @@ h1 {
 
 #addPropertyButton, #add-retirement-investments-button, #add-general-investments-button {
   position: absolute;
-  right: 10px; /* Distance from the right edge */
+  right: 10px; 
   top: 75px; 
 }
 
@@ -209,10 +209,11 @@ body.dark-mode{
   border-color: #555;
 }
 
-#buttons{
+#buttons, #select{
   display: flex;
   justify-content: space-evenly; 
   flex-direction: row;
   align-items: center;
   border-bottom: 1px solid black;
 }
+
