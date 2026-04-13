@@ -22,9 +22,14 @@
     <div class="heading" style="height: 7vh;">
       <a href="index.html">Wealth Management System</a>
     </div>
+    <div id="darkmode-switch-container" style="position:absolute; top:10px; right:350px;">
+      <button id="darkModeBtn" class="btn btn-secondary btn-sm" data-bs-toggle="button" onclick="darkModeToggle()">Toggle
+        dark mode</button>
+    </div>
     <!--Display user while logged in-->
     <div id="user-info" style="position:absolute; top:10px; right:20px; color:white;"></div>
   </header>
+
   <!-- menu-->
   <div class="menu">
     <a href="RealEstate.html"><i class="bi bi-house"></i>Real Estate</a>
@@ -32,23 +37,21 @@
     <a href="Retirement.html"><i class="bi bi-sunglasses"></i>Retirement</a>
     <a href="Accounts.html"><i class="bi bi-file-person"></i>Account</a>
     <a href="admin.html" id="adminTab" style="display:none;"><i class="bi bi-tools"></i>Admin</a>
-    
-  </div>
-  <div id ="darkmode-switch-container" style="position:absolute; top:10px; right:350px;">
-    <button id="darkModeBtn" class="btn btn-secondary btn-sm" data-bs-toggle="button" onclick="darkModeToggle()">Toggle dark mode</button>
+
   </div>
   <!--Display user while logged in-->
   <div id="user-info" style="position:absolute; top:10px; right:20px; color:white;"></div>
   </header>
   <div id="modal" class="modal">
     <div id="modal-content">
-      <div id="close-modal">&times;</div>
+      
+      <div id="close-modal"><i class="bi bi-x-circle"></i></div>
       <div id="modal-body"></div>
     </div>
   </div>
 
   <h2 style="text-align: center;">Investment Accounts</h2>
-  <input type="button" id="add-general-investments-button" class="btn btn-primary" value="Add Investments">
+  <input type="button" id="add-general-investments-button" style="top:2.5cm" class="btn btn-primary" value="Add Investments">
 
   <div id="investment-content">
     <h3>Investments</h3>
@@ -57,6 +60,7 @@
 
   <script src="./js/session.js"></script>
   <script src="./js/investment.js"></script>
+  <script src="./js/darkModeToggle.js"></script>
 </body>
-<script src="./js/darkModeToggle.js"></script>
+
 </html>

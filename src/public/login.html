@@ -1,27 +1,42 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+
 <head>
   <meta charset="UTF-8">
   <title>Login | Wealth Management</title>
   <link rel="stylesheet" href="./css/style.css">
   <link rel="shortcut icon" href="#">
 </head>
-<body>
-  <h2>Register</h2>
-  <form action="/api/auth/register" method="POST">
-    <input type="email" name="email" placeholder="Email" required>
-    <br>
-    <input type="password" name="password" placeholder="Password" required>
-    <br>
 
-    <label for="role">Account Type:</label><br>
-    <select name="role" id="role">
+<body>
+  <div id ="darkmode-switch-container" style="position:absolute; top:10px; right:350px;">
+    <button id="darkModeBtn" class="btn btn-secondary btn-sm" data-bs-toggle="button" onclick="darkModeToggle()">Toggle dark mode</button>
+  </div> 
+  <h2>Register</h2>
+  <br>
+  <form action="/api/auth/register" method="POST">
+    <input type="email" class="form-control bootstrap-input" placeholder="Email" name="email" required>
+    <br>
+    <input type="password" class="form-control bootstrap-input" placeholder="Password" name="password" required>
+    <br>
+    <!--<select name="role" id="role">
       <option value="user" selected>User</option>
       <option value="admin">Admin</option>
-    </select>
+    </select> -->
+
+    <div class="form-floating">
+      <select class="form-select" style="max-width: 200px;" id="floatingUserSelect" >
+        <option selected value="user"> Standard User</option>
+        <option value="admin">Admin</option>
+      </select>
+      <label for="floatingSelect">Select a user type</label>
+    </div>
+
+
+
     <br><br>
 
-    <button type="submit">Register</button>
+    <button type="submit" class="btn btn-success">Register</button>
   </form>
 
   <hr>
@@ -30,11 +45,12 @@
 
   <!-- Login form now uses JS to allow for 2FA popup -->
   <form id="loginForm">
-    <input id="loginEmail" type="email" placeholder="Email" required>
+    <input type="email" class="form-control bootstrap-input" id="loginEmail" placeholder="Email" required>
     <br>
-    <input id="loginPassword" type="password" placeholder="Password" required>
+    <input type="password" class="form-control bootstrap-input" placeholder="Password" id="loginPassword"
+      name="password" required>
     <br>
-    <button type="submit">Login</button>
+    <button type="submit" class="btn btn-primary">Login</button>
   </form>
 
   <p id="message" style="color:red;"></p>
@@ -55,7 +71,7 @@
   border-radius:8px;
   position:relative;
 ">
-  <button id="close2FA" style="
+      <button id="close2FA" style="
     position:absolute;
     top:5px;
     right:10px;
@@ -124,7 +140,7 @@
       }
     });
     document.getElementById("close2FA").addEventListener("click", () => {
-    document.getElementById("twoFAmodal").style.display = "none";
+      document.getElementById("twoFAmodal").style.display = "none";
     });
-
   </script>
+  <script src="./js/darkModeToggle.js"></script>

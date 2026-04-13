@@ -45,7 +45,12 @@
     font-size: 26px;
     font-weight: bold;
     cursor: pointer;
+    transition: color 0.15s ease-in-out;
 }
+
+#close-modal:hover {
+    color: red;
+  }
 
 /* Modal form spacing */
 #modal-body form {

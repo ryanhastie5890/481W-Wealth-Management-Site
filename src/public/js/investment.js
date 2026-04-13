@@ -156,15 +156,14 @@ function buildInvestmentModal() {
             </label>
             <br><br>
 
-            <button type="button" id="check-price-btn">
-                Check Live Price
+             <button type="submit" class="btn btn-primary">Check Live Price</button>
             </button>
 
             <p id="price-display" style="margin-top:10px;"></p>
 
             <br>
 
-            <button type="submit">
+            <button type="submit" class="btn btn-success">
                 Buy Stock
             </button>
         </form>

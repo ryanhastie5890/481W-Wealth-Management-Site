@@ -1,0 +1,9 @@
+.xButton:hover {
+    color:red
+}
+
+
+.xButton{
+    cursor: pointer;
+    transition: color 0.15s ease-in-out; 
+}
