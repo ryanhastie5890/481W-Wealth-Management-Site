@@ -43,6 +43,43 @@ function createInvestmentDOM(investment) {
     const value = document.createElement("p");
     value.textContent = `Value: $${(investment.shares * investment.average_price).toFixed(2)}`;
 
+    const pl = document.createElement("p");
+    pl.textContent = "P/L: (click update)";
+    pl.classList.add("pl-field");
+
+    const updatePLButton = document.createElement("button");
+    updatePLButton.textContent = "Update P/L";
+
+    updatePLButton.addEventListener("click", async () => {
+        pl.textContent = "Loading P/L...";
+
+        try {
+            const res = await fetch(`/api/investments/show?symbol=${investment.symbol}`);
+            const data = await res.json();
+
+            const price = parseFloat(data["05. price"]);
+
+            if (!price) {
+                pl.textContent = "P/L unavailable";
+                return;
+            }
+
+            const costBasis = investment.average_price * investment.shares;
+            const currentValue = price * investment.shares;
+            const profitLoss = currentValue - costBasis;
+
+            const sign = profitLoss >= 0 ? "+" : "-";
+
+            pl.textContent = `P/L: ${sign}$${Math.abs(profitLoss).toFixed(2)}`;
+
+            pl.style.color = profitLoss >= 0 ? "green" : "red";
+
+        } catch (err) {
+            console.error(err);
+            pl.textContent = "Error fetching P/L";
+        }
+    });
+
     const sellButton = document.createElement("button");
     sellButton.textContent = "Sell";
 
@@ -53,6 +90,10 @@ function createInvestmentDOM(investment) {
     wrapper.appendChild(symbol);
     wrapper.appendChild(shares);
     wrapper.appendChild(value);
+
+    wrapper.appendChild(pl);
+    wrapper.appendChild(updatePLButton);
+
     wrapper.appendChild(sellButton);
 
     return wrapper;
