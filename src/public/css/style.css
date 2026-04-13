@@ -123,6 +123,7 @@ width:100%;
   box-sizing: border-box;  
   overflow-y: auto;    
 }
+
 #notifications{
   height:28vh;
   width:100%;
@@ -150,6 +151,8 @@ width:100%;
   align-items: center;
   box-sizing: border-box;  
 }
+
+
 .notification{
  
   background: white;
@@ -184,7 +187,7 @@ a{
 
     }
 body.dark-mode{
-  background-color: black;
+  background-color: rgb(0, 0, 0);
   color: white;
 }
 
@@ -209,6 +212,14 @@ body.dark-mode{
   border-color: #555;
 }
 
+.dark-mode .menu, .dark-mode #forms,  .dark-mode #buttons, .dark-mode #select .dark-mode #property_form {
+  border-color: #555;
+}
+
+.dark-mode .bottom-line {
+  border-color: #555;
+}
+
 #buttons, #select{
   display: flex;
   justify-content: space-evenly; 
@@ -219,4 +230,12 @@ body.dark-mode{
 
 .bootstrap-input {
   max-width: 250px;
+}
+
+.dark-mode #property_form, .dark-mode #income_form, .dark-mode #expense_form, 
+.dark-mode .property-item, .dark-mode .income-item, 
+.dark-mode .expense-item, .dark-mode #modal-content, .dark-mode .notification {
+  background-color: #2b2b2b;
+  color: white;
+  border: 1px solid #444;
 }
