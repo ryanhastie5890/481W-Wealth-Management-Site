@@ -65,10 +65,20 @@ async function buildInvestments() {
     let response = await fetch("/api/investments/getPortfolio");
     let investments = await response.json();
 
+    renderPortfolioSummary(investments);
+
+    if (investments.length === 0) {
+        investmentBody.innerHTML = `
+        <p>No investments yet. Start by buying your first stock!</p>
+    `;
+        return;
+    }
+
     for (const investment of investments) {
         let investmentModule = createInvestmentDOM(investment);
         investmentBody.appendChild(investmentModule);
     }
+
 }
 
 function showSellInvestmentModal(investment) {
@@ -247,4 +257,19 @@ function buildInvestmentModal() {
             alert("Error buying stock");
         }
     });
+}
+
+function renderPortfolioSummary(investments) {
+    let total = 0;
+
+    for (const inv of investments) {
+        total += inv.shares * inv.average_price;
+    }
+
+    const header = document.getElementById("portfolio-summary");
+
+    header.innerHTML = `
+        <h2>Total Portfolio Value: $${total.toFixed(2)}</h2>
+        <p>Holdings: ${investments.length}</p>
+    `;
 }
