@@ -7,20 +7,15 @@
   <link rel="shortcut icon" href="#">
 </head>
 <body>
-
   <h2>Register</h2>
   <form action="/api/auth/register" method="POST">
-    <input type="email" name="email" placeholder="Email" required>
-    <br>
-    <input type="password" name="password" placeholder="Password" required>
-    <br>
+    <label for="exampleInputEmail1" class="form-label">Email address</label>
 
-    <label for="role">Account Type:</label><br>
-    <select name="role" id="role">
-      <option value="user" selected>User</option>
-      <option value="admin">Admin</option>
-    </select>
-    <br><br>
+    <input type="email" class="form-control w-25" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" required>
+    <br>
+    <label for="exampleInputPassword1" class="form-label">Password</label>
+    <input type="password" class="form-control w-25" id="exampleInputPassword1" name="password" required>
+    <br>
 
     <button type="submit">Register</button>
   </form>
@@ -76,7 +71,7 @@
       <p id="twoFAerror" style="color:red; margin-top:10px;"></p>
     </div>
   </div>
-  
+
   <script>
     // LOGIN HANDLER
     document.getElementById("loginForm").addEventListener("submit", async (e) => {
@@ -129,6 +124,3 @@
     });
 
   </script>
-
-</body>
-</html>

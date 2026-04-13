@@ -15,7 +15,7 @@ h1 {
 
 #addPropertyButton, #add-retirement-investments-button, #add-general-investments-button {
   position: absolute;
-  right: 10px; /* Distance from the right edge */
+  right: 10px; 
   top: 75px; 
 }
 
@@ -183,11 +183,37 @@ a{
         padding: 5px 0;
 
     }
+body.dark-mode{
+  background-color: black;
+  color: white;
+}
 
-#buttons{
+
+.dark-mode, .dark-mode h2, .dark-mode label, .dark-mode p {
+  color: white !important;
+}
+
+
+.dark-mode a {
+  color: #add8e6; /* Light blue for visibility */
+}
+
+
+.dark-mode .form-control, .dark-mode input, .dark-mode select {
+  background-color: #2b2b2b;
+  color: white;
+  border: 1px solid #444;
+}
+
+.dark-mode hr {
+  border-color: #555;
+}
+
+#buttons, #select{
   display: flex;
   justify-content: space-evenly; 
   flex-direction: row;
   align-items: center;
   border-bottom: 1px solid black;
 }
+

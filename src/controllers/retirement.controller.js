@@ -1,7 +1,8 @@
+// Ryan Piza
 import { dbCon } from '../db/database.js';     // connect to DB to run queries
 
 /*
-*   create new retirement account and saves it in the retirement_accounts table.
+*   Create new retirement account and saves it in the retirement_accounts table.
 */
 export const addRetirementAccount = (req, res) => {
   console.log('Test: Adding Retirement Account');
@@ -12,13 +13,13 @@ export const addRetirementAccount = (req, res) => {
     return res.status(401).json({ error: 'Not logged in' });
   }
 
-  const { account_type, amount } = req.body;
+  const { account_type, amount, display_name } = req.body;
   const sql = `
     INSERT INTO retirement_accounts (userId, account_type, display_name, current_balance)
     VALUES (?, ?, ?, ?)
   `;
 
-  dbCon.query(sql, [req.session.userId, account_type, account_type, amount], (err, result) => {
+  dbCon.query(sql, [req.session.userId, account_type, display_name || account_type, amount], (err, result) => {
     if (err) {
       console.error('DB INSERT ERROR:', err);
       return res.status(500).json({ error: 'Database error. unable to add retirement account.' });
@@ -28,7 +29,7 @@ export const addRetirementAccount = (req, res) => {
 };
 
 /*
-*   obtain retirement account from the retirement_accounts table to display client side
+*   Obtain retirement account from the retirement_accounts table to display client side
 */  
 export const getRetirementAccounts = (req, res) => {
   if (!req.session.userId) {
@@ -53,7 +54,7 @@ export const getRetirementAccounts = (req, res) => {
 };
 
 /*
-*   allow user to update existing retirement account in the retirement_accounts table.
+*   Allow user to update existing retirement account in the retirement_accounts table.
 */
 export const updateRetirementAccount = (req, res) => {
   if (!req.session.userId) {
@@ -82,7 +83,7 @@ export const updateRetirementAccount = (req, res) => {
 };
 
 /*
-*   allow user to delete existing retirement account in the retirement_accounts table.
+*   Allow user to delete existing retirement account in the retirement_accounts table.
 */
 export const deleteRetirementAccount = (req, res) => {
   if (!req.session.userId) {

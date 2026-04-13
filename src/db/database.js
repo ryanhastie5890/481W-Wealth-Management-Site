@@ -1,3 +1,4 @@
+// Ryan Piza
 // Module to establish DB connection on localhost
 
 // var mysql = require('mysql2');
