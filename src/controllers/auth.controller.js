@@ -2,34 +2,54 @@ import bcrypt from 'bcrypt';                // password hashing
 import { dbCon } from '../db/database.js';     // connect to DB to run queries
 import { send2FACode } from '../services/emailService.js';
 
+
 /*
 *   register new user in the database, error if the user already exists
 */
 export async function registerUser(req, res) {
-    const { email, password, role, displayName } = req.body;   // <-- added role here
-
-    // basic role validation (only allow 'admin' or 'user')
-    const safeRole = role === 'admin' ? 'admin' : 'user';   // <-- added
+    const { email, password, displayName } = req.body;
 
     try {
-        const hash = await bcrypt.hash(password, 10);
-        dbCon.query(
-            "INSERT INTO users (email, password_hash, role, display_name) VALUES (?, ?, ?, ?)",   // updated query
-            [email, hash, safeRole, displayName],                                             // added safeRole and displayName
-            (err) => {
-                if (err) {
-                    console.error("MYSQL INSERT ERROR:", err);
-                    req.session.message = "User already exists";
-                    return res.redirect('/');
-                }
-                req.session.message = "Registration successful";
+        //Check if this is the first user
+        dbCon.query("SELECT COUNT(*) AS count FROM users", async (err, results) => {
+            if (err) {
+                console.error(err);
+                req.session.message = "Server error";
                 return res.redirect('/');
             }
-        );
+
+            const isFirstUser = results[0].count === 0;
+
+            //First user = admin, everyone else = user
+            const safeRole = isFirstUser ? 'admin' : 'user';
+
+            const hash = await bcrypt.hash(password, 10);
+
+            dbCon.query(
+                "INSERT INTO users (email, password_hash, role, display_name) VALUES (?, ?, ?, ?)",
+                [email, hash, safeRole, displayName],
+                (err) => {
+                    if (err) {
+                        console.error("MYSQL INSERT ERROR:", err);
+                        req.session.message = "User already exists";
+                        return res.redirect('/');
+                    }
+
+                    req.session.message = isFirstUser
+                        ? "Admin account created (first user)."
+                        : "Registration successful";
+
+                    console.log("User registered");
+                    return res.redirect('/');
+                }
+            );
+        });
+
     } catch (err) {
         res.status(500).send("Server error");
     }
 }
+
 
 /*
 *   if user exists in the database, log them in and store user.id & user.email
@@ -156,6 +176,61 @@ export async function get2FAStatus(req, res) {
         success: true,
         enabled: results[0].two_factor_enabled === 1
       });
+    }
+  );
+}
+
+export function updateUserRole(req, res) {
+  // Must be logged in AND an admin
+  if (!req.session.userId || req.session.role !== "admin") {
+    return res.status(403).json({ success: false, error: "Forbidden" });
+  }
+
+  const userId = req.params.id;
+  const { role } = req.body;
+
+  // Only allow valid roles
+  if (role !== "admin" && role !== "user") {
+    return res.json({ success: false, error: "Invalid role" });
+  }
+
+  // Prevent admin from demoting themselves
+  if (req.session.userId == userId) {
+    return res.json({ success: false, error: "You cannot change your own role" });
+  }
+
+  //Check if the account is locked before promoting
+  dbCon.query(
+    "SELECT locked FROM users WHERE id = ?",
+    [userId],
+    (err, results) => {
+      if (err || results.length === 0) {
+        return res.json({ success: false, error: "User not found" });
+      }
+
+      const isLocked = results[0].locked === 1;
+
+      // If locked AND trying to promote to admin then block change
+      if (isLocked && role === "admin") {
+        return res.json({
+          success: false,
+          error: "Cannot promote a locked account to admin"
+        });
+      }
+
+      // Otherwise update normally
+      dbCon.query(
+        "UPDATE users SET role = ? WHERE id = ?",
+        [role, userId],
+        (err2) => {
+          if (err2) {
+            console.error(err2);
+            return res.json({ success: false, error: "Database error" });
+          }
+
+          return res.json({ success: true });
+        }
+      );
     }
   );
 }

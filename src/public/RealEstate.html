@@ -15,12 +15,15 @@
 </head>
 
 <body>
+  
   <header>
     <header>
       <!--Header section of the website-->
       <div class="heading" style="height: 7vh;">
         <a href="index.html">Wealth Management System</a>
-      </div>
+        <div id ="darkmode-switch-container" style="position:absolute; top:10px; right:350px;">
+          <button id="darkModeBtn" class="btn btn-secondary btn-sm" data-bs-toggle="button" onclick="darkModeToggle()">Toggle dark mode</button>
+        </div>
       <!--Display user while logged in-->
       <div id="user-info" style="position:absolute; top:10px; right:20px; color:white;"></div>
     </header>
@@ -39,7 +42,7 @@
 
 <div style="display: flex; flex-direction: column;align-items: center; justify-content: center;text-align: center; border-bottom: 1px solid black;height:20vh;">
   <!--title of page-->
-  <h1 id="portfolio">Your Real Estate Portfolio</h1>
+  <h1 id = "portfolio">Your Real Estate Portfolio</h1>
 
   <div style="display: flex; flex-direction: row;align-items: center; justify-content: center;text-align: center; gap:150px;">
 
@@ -457,7 +460,7 @@
           });
         })
         .catch(err => {
-          document.getElementById("propertiesDisplay").innerHTML = "<p>You are not logged in</p>"
+          document.getElementById("propertiesDisplay").innerHTML = "<strong>You are not logged in.</strong>"
         });
 
         //populate incomes
@@ -473,7 +476,7 @@
 
           //no income case
           if (income.length == 0) {
-            display.innerHTML = "<p>You have not added any income";
+            display.innerHTML = "<p>You have not added any income</p>";
             return;
           }
           //loop through to populate
@@ -495,7 +498,7 @@
           });
         })
         .catch(err => {
-          document.getElementById("incomeDisplay").innerHTML = "<p>You are not logged in</p>"
+          document.getElementById("incomeDisplay").innerHTML = "<p></p>"
         });
 
         //populate expenses
@@ -533,7 +536,7 @@
         });
        })
        .catch(err =>{
-        document.getElementById("expenseDisplay").innerHTML ="<p>You are not logged in</p>"
+        document.getElementById("expenseDisplay").innerHTML ="<p></p>"
        });
 
        //get notifications
@@ -568,7 +571,7 @@
         });
        })
        .catch(err =>{
-        document.getElementById("expenseDisplay").innerHTML ="<p>You are not logged in</p>"
+        document.getElementById("expenseDisplay").innerHTML ="<p></p>"
        });
 
 
@@ -1120,6 +1123,7 @@
       
     </script>
   <script src="./js/session.js"></script> <!--for admin tab display-->
+  <script src="./js/darkModeToggle.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 

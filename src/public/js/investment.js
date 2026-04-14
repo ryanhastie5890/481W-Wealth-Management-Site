@@ -38,7 +38,47 @@ function createInvestmentDOM(investment) {
     symbol.textContent = investment.symbol;
 
     const shares = document.createElement("p");
-    shares.textContent = `Shares: ${investment.shares}`;
+    shares.textContent = `Shares: ${Number(investment.shares).toFixed(4)}`;
+
+    const value = document.createElement("p");
+    value.textContent = `Value: $${(investment.shares * investment.average_price).toFixed(2)}`;
+
+    const pl = document.createElement("p");
+    pl.textContent = "P/L: (click update)";
+    pl.classList.add("pl-field");
+
+    const updatePLButton = document.createElement("button");
+    updatePLButton.textContent = "Update P/L";
+
+    updatePLButton.addEventListener("click", async () => {
+        pl.textContent = "Loading P/L...";
+
+        try {
+            const res = await fetch(`/api/investments/show?symbol=${investment.symbol}`);
+            const data = await res.json();
+
+            const price = parseFloat(data["05. price"]);
+
+            if (!price) {
+                pl.textContent = "P/L unavailable";
+                return;
+            }
+
+            const costBasis = investment.average_price * investment.shares;
+            const currentValue = price * investment.shares;
+            const profitLoss = currentValue - costBasis;
+
+            const sign = profitLoss >= 0 ? "+" : "-";
+
+            pl.textContent = `P/L: ${sign}$${Math.abs(profitLoss).toFixed(2)}`;
+
+            pl.style.color = profitLoss >= 0 ? "green" : "red";
+
+        } catch (err) {
+            console.error(err);
+            pl.textContent = "Error fetching P/L";
+        }
+    });
 
     const sellButton = document.createElement("button");
     sellButton.textContent = "Sell";
@@ -49,6 +89,11 @@ function createInvestmentDOM(investment) {
 
     wrapper.appendChild(symbol);
     wrapper.appendChild(shares);
+    wrapper.appendChild(value);
+
+    wrapper.appendChild(pl);
+    wrapper.appendChild(updatePLButton);
+
     wrapper.appendChild(sellButton);
 
     return wrapper;
@@ -61,10 +106,20 @@ async function buildInvestments() {
     let response = await fetch("/api/investments/getPortfolio");
     let investments = await response.json();
 
+    renderPortfolioSummary(investments);
+
+    if (investments.length === 0) {
+        investmentBody.innerHTML = `
+        <p>No investments yet. Start by buying your first stock!</p>
+    `;
+        return;
+    }
+
     for (const investment of investments) {
         let investmentModule = createInvestmentDOM(investment);
         investmentBody.appendChild(investmentModule);
     }
+
 }
 
 function showSellInvestmentModal(investment) {
@@ -81,8 +136,9 @@ function showSellInvestmentModal(investment) {
                 <input 
                     type="number" 
                     id="sell-shares" 
-                    min="1" 
+                    min="0.0001" 
                     max="${investment.shares}" 
+                    step="any"
                     required
                 />
             </label>
@@ -152,7 +208,7 @@ function buildInvestmentModal() {
 
             <label>
                 Shares:
-                <input type="number" id="shares" min="1" required />
+                <input type="number" id="shares" min="0.0001" step="any" required />
             </label>
             <br><br>
 
@@ -242,4 +298,19 @@ function buildInvestmentModal() {
             alert("Error buying stock");
         }
     });
+}
+
+function renderPortfolioSummary(investments) {
+    let total = 0;
+
+    for (const inv of investments) {
+        total += inv.shares * inv.average_price;
+    }
+
+    const header = document.getElementById("portfolio-summary");
+
+    header.innerHTML = `
+        <h2>Total Portfolio Value: $${total.toFixed(2)}</h2>
+        <p>Holdings: ${investments.length}</p>
+    `;
 }
