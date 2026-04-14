@@ -539,8 +539,8 @@
                 <p>Note: ${e.note}</p><br>
                 <p>Created: ${new Date(e.recorded_date).toLocaleDateString()}</p><br>
                 <p>Property: ${e.property_name}</p><br>
-                <button class "btn btn-primary" onclick= "updateExpenseForm(${e.id})">Edit Expense</button><br>
-                <button class "btn btn-danger" onclick= "deleteExpense(${e.id})">Remove Expense</button>
+                <button class = "btn btn-primary" onclick= "updateExpenseForm(${e.id})">Edit Expense</button><br>
+                <button class = "btn btn-danger" onclick= "deleteExpense(${e.id})">Remove Expense</button>
                 `;
 
             display.appendChild(div);
