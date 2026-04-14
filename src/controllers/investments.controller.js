@@ -182,7 +182,8 @@ export async function getPortfolio(req, res) {
         for (const stock of rows) {
             portfolio.push({
                 symbol: stock.symbol,
-                shares: stock.shares
+                shares: stock.shares,
+                average_price: stock.average_price
             });
         }
 
