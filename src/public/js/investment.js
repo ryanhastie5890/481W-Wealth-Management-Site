@@ -89,7 +89,7 @@ function showSellInvestmentModal(investment) {
 
             <br><br>
 
-            <button type="submit">
+            <button class="btn btn-success" type="submit">
                 Sell Shares
             </button>
         </form>

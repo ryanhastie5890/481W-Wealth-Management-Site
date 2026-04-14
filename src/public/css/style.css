@@ -53,6 +53,11 @@ body {
         
     }
 
+.dark-mode .menu{
+  border-top: 1px solid rgb(233, 233, 233);
+  border-bottom: 1px solid rgb(233, 233, 233);
+}
+
 #forms{
         height:20vh;
         width:100%;
@@ -64,6 +69,7 @@ body {
         box-sizing: border-box; 
 
 }
+
 #property_form, #income_form, #expense_form, #property_form_update,
 #income_form_update, #expense_form_update{
         position: fixed;
@@ -81,6 +87,7 @@ body {
         border-radius: 20px;
         z-index:999;
 }
+
 .xButton{
   position:absolute;
   top:5px;
@@ -89,6 +96,7 @@ body {
   border: none;
   z-index:9999;
 }
+
 #propertiesDisplay, #incomeDisplay, #expenseDisplay{
  
   width:100%;
@@ -154,7 +162,7 @@ width:100%;
 
 
 .notification{
- 
+
   background: white;
   padding: 10px;
   margin: 10px auto;
@@ -167,6 +175,7 @@ width:100%;
   align-items: center;
   box-sizing: border-box;  
 }
+
 #heading{
         height:7vh;
         width:100%;
@@ -186,6 +195,7 @@ a{
         padding: 5px 0;
 
     }
+
 body.dark-mode{
   background-color: rgb(0, 0, 0);
   color: white;
@@ -202,18 +212,31 @@ body.dark-mode{
 }
 
 
-.dark-mode .form-control, .dark-mode input, .dark-mode select {
+.dark-mode .form-control, .dark-mode input, .dark-mode select, 
+.dark-mode .form-select .dark-mode #floating-label {
   background-color: #2b2b2b;
-  color: white;
+  color: white !important;
   border: 1px solid #444;
+}
+
+
+#floating-label {
+  color: #000000; 
+  opacity: 1 !important;    
+  font-weight: 600;          
+}
+
+
+.dark-mode #floating-label::after {
+  background-color: #2b2b2b !important; /* Matches your dark-mode select background */
 }
 
 .dark-mode hr {
   border-color: #555;
 }
 
-.dark-mode .menu, .dark-mode #forms,  .dark-mode #buttons, .dark-mode #select .dark-mode #property_form {
-  border-color: #555;
+.dark-mode .form-control::placeholder{
+  color:white;
 }
 
 .dark-mode .bottom-line {
@@ -233,9 +256,12 @@ body.dark-mode{
 }
 
 .dark-mode #property_form, .dark-mode #income_form, .dark-mode #expense_form, 
-.dark-mode .property-item, .dark-mode .income-item, 
-.dark-mode .expense-item, .dark-mode #modal-content, .dark-mode .notification {
+.dark-mode .property-item, .dark-mode .income-item, .dark-mode #property_form_update,
+.dark-mode #income_form_update, .dark-mode #expense_form_update,.dark-mode .expense-item, 
+.dark-mode #modal-content, .dark-mode .notification {
   background-color: #2b2b2b;
   color: white;
   border: 1px solid #444;
+  border-color: #555;
 }
+

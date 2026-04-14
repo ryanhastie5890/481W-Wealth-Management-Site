@@ -137,7 +137,7 @@
 }
 
 /*
-*   Savings Table Stle
+*   Savings Table Style
 */
 
 #savings-table-container {
@@ -199,4 +199,11 @@
   background-color: darkgreen;
   color: white;
   border-radius: 5px;
+}
+
+/* Dark mode styling */
+
+ .dark-mode #plan-growth-container {
+  background-color: #128ec7;
+  border-radius: 10px;
 }

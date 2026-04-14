@@ -22,9 +22,9 @@
       <div class="heading" style="height: 7vh;">
         <a href="index.html">Wealth Management System</a>
       </div>
-      <div id="darkmode-switch-container" style="position:absolute; top:10px; right:335px;">
-        <button id="darkModeBtn" class="btn btn-secondary btn-sm" data-bs-toggle="button">Toggle
-          dark mode</button>
+      <div class="form-check form-switch" id="darkmode-switch-container" style="position:absolute; top:10px; right:350px;">
+        <input class="form-check-input" type="checkbox" role="switch" id="darkModeSwitch">
+        <label class="form-check-label" for="darkModeSwitch">Dark Mode <i class="bi bi-moon"></i></label>
       </div>
       <!--Display user while logged in-->
       <div id="user-info" style="position:absolute; top:10px; right:20px; color:white;"></div>
@@ -323,7 +323,7 @@
 
         <!--id input that is populated upon opening-->
         <input type="hidden" id="propertyId" />
-        <button type="button" onclick="hideForms()" class="xButton">X</button>
+        <button type="button" onclick="hideForms()" class="xButton"><i class="bi bi-x-circle"></i></button>
 
         <!--property name-->
         <label for="name">Name of Property</label><br><br>
@@ -354,7 +354,7 @@
         <label for="occupants">Number of Occupants</label><br><br>
         <input id="pOccupants" name="occupants" type="number" min="0" value="0"><br><br>
 
-        <button type="submit">Update Property</button>
+        <button class="btn btn-success"type="submit">Update Property</button>
       </form>
     </div>
 
@@ -365,7 +365,7 @@
 
         <!--id-->
         <input type="hidden" id="incomeId" />
-        <button type="button" onclick="hideForms()" class="xButton"></button>
+        <button type="button" onclick="hideForms()" class="xButton"><i class="bi bi-x-circle"></i></button>
 
         <!--amount-->
         <label for="amount">Amount</label><br><br>
@@ -386,7 +386,7 @@
           <option value="">Select a property</option>
         </select><br><br>
 
-        <button type="submit">Update Income</button>
+        <button class="btn btn-success" type="submit">Update Income</button>
       </form>
     </div>
 
@@ -397,7 +397,7 @@
 
         <!--id-->
         <input type="hidden" id="expenseId" />
-        <button type="button" onclick="hideForms()" class="xButton">X</button>
+        <button type="button" onclick="hideForms()" class="xButton"><i class="bi bi-x-circle"></i></button>
 
         <!--amount-->
         <label for="amount">Amount</label><br><br>
@@ -417,7 +417,7 @@
           <option value="">Select a property</option>
         </select><br><br>
 
-        <button type="submit">Update Expense</button>
+        <button class="btn btn-success" type="submit">Update Expense</button>
       </form>
     </div>
 
@@ -463,8 +463,8 @@
                 <p>Status: ${p.status}</p><br>
                 <p>Occupants: ${p.occupants}</p><br>
                 <p>Created: ${new Date(p.created_at).toLocaleDateString()}</p><br>
-                <button onclick= "updatePropertyForm(${p.id})">Edit Property</button><br>
-                <button onclick= "deleteProperty(${p.id})">Remove Property</button>
+                <button class="btn btn-primary "onclick= "updatePropertyForm(${p.id})">Edit Property</button><br>
+                <button class="btn btn-danger" onclick= "deleteProperty(${p.id})">Remove Property</button>
                 `;
 
             display.appendChild(div);
@@ -501,8 +501,8 @@
                 <p>Note: ${i.note}</p><br>
                 <p>Created: ${new Date(i.recorded_date).toLocaleDateString()}</p><br>
                 <p>Property: ${i.property_name}</p><br>
-                <button onclick= "updateIncomeForm(${i.id})">Update Income</button><br>
-                <button onclick= "deleteIncome(${i.id})">Remove Income</button>
+                <button class="btn btn-success" onclick= "updateIncomeForm(${i.id})">Update Income</button><br>
+                <button class="btn btn-danger" onclick= "deleteIncome(${i.id})">Remove Income</button>
                 `;
 
             display.appendChild(div);

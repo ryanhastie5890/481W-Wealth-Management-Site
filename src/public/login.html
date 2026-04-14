@@ -9,15 +9,16 @@
 </head>
 
 <body>
-  <div id ="darkmode-switch-container" style="position:absolute; top:10px; right:350px;">
-    <button id="darkModeBtn" class="btn btn-secondary btn-sm" data-bs-toggle="button" onclick="darkModeToggle()">Toggle dark mode</button>
-  </div> 
+  <div class="form-check form-switch" id="darkmode-switch-container" style="position:absolute; top:10px; right:350px;">
+    <input class="form-check-input" type="checkbox" role="switch" id="darkModeSwitch">
+    <label class="form-check-label" for="darkModeSwitch">Dark Mode <i class="bi bi-moon"></i></label>
+</div>
   <h2>Register</h2>
   <br>
   <form action="/api/auth/register" method="POST">
-    <input type="email" class="form-control bootstrap-input" placeholder="Email" name="email" required>
+    <input type="email" class="form-control bootstrap-input form-placeholder" placeholder="Email" name="email" required>
     <br>
-    <input type="password" class="form-control bootstrap-input" placeholder="Password" name="password" required>
+    <input type="password" class="form-control bootstrap-input form-placeholder" placeholder="Password" name="password" required>
     <br>
     <!--<select name="role" id="role">
       <option value="user" selected>User</option>
@@ -29,7 +30,7 @@
         <option selected value="user"> Standard User</option>
         <option value="admin">Admin</option>
       </select>
-      <label for="floatingSelect">Select a user type</label>
+      <label id="floating-label" for="floatingUserSelect">Select a user type</label>
     </div>
 
 

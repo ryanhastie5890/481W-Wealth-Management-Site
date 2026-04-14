@@ -41,10 +41,10 @@ fetch('/api/session/getSession')
           margin-top:5px;
           background:#222;
           border:1px solid #444;
-          padding:5px;
+          padding:10px;
           z-index:1000;
         ">
-        <div id="logout-btn" style="cursor:pointer;">Logout</div>
+        <div class="btn btn-danger" id="logout-btn" style="cursor:pointer;">Logout <i class="bi bi-door-open"></i></div>
       </div>
     `;
 
