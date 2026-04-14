@@ -26,6 +26,10 @@
     <div class="heading" style="height: 7vh;">
       <a href="index.html">Wealth Management System</a>
     </div>
+    <div class="form-check form-switch" id="darkmode-switch-container" style="position:absolute; top:10px; right:350px;">
+      <input class="form-check-input" type="checkbox" role="switch" id="darkModeSwitch">
+      <label class="form-check-label" for="darkModeSwitch">Dark Mode <i class="bi bi-moon"></i></label>
+    </div>
     <div id="user-info" style="position:absolute; top:10px; right:20px; color:white;"></div>
   </header>
 
@@ -113,6 +117,8 @@ fetch('/api/session/getSession')
     loadUsers();
   });
   </script>
+
+  <script src="./js/darkModeToggle.js"></script>
 
 </body>
 </html>

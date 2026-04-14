@@ -109,7 +109,7 @@
 </select>
 -->
 
-<select class="form-select" style="max-width: 200px;" id="floatingPropertySelect" >
+<select id="propertiesSelect" class="form-select" style="max-width: 200px;" id="floatingPropertySelect" >
   <option selected> Select None</option>
 </select>
 </form>
@@ -285,7 +285,7 @@
           <option value="">Select a property</option>
         </select><br><br>
 
-        <button type="submit">Add Income</button>
+        <button class = "btn btn-primary" type="submit">Add Income</button>
       </form>
     </div>
 
@@ -312,7 +312,7 @@
           <option value="">Select a property</option>
         </select><br><br>
 
-        <button type="submit">Add Expense</button>
+        <button class ="btn btn-primary" type="submit">Add Expense</button>
       </form>
     </div>
 
@@ -539,8 +539,8 @@
                 <p>Note: ${e.note}</p><br>
                 <p>Created: ${new Date(e.recorded_date).toLocaleDateString()}</p><br>
                 <p>Property: ${e.property_name}</p><br>
-                <button onclick= "updateExpenseForm(${e.id})">Edit Expense</button><br>
-                <button onclick= "deleteExpense(${e.id})">Remove Expense</button>
+                <button class "btn btn-primary" onclick= "updateExpenseForm(${e.id})">Edit Expense</button><br>
+                <button class "btn btn-danger" onclick= "deleteExpense(${e.id})">Remove Expense</button>
                 `;
 
             display.appendChild(div);
