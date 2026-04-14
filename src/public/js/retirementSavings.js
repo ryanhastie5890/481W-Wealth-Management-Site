@@ -111,6 +111,7 @@ addSavingsButton.addEventListener('click', () => {
     if (data.success) {
       modal.classList.remove('show');
       await loadSavingsAccounts();
+      await loadRetirementAccounts();
       alert(`Added ${name}`);
     } 
     else {
@@ -141,7 +142,10 @@ savingsTableBody.addEventListener('click', async (e) => {
     });
 
     const data = await res.json();
-    if (data.success) loadSavingsAccounts();
+    if (data.success) {
+        await loadSavingsAccounts();
+        await loadRetirementAccounts();
+    }
   }
 
   if (e.target.classList.contains('delete-button')) {
@@ -152,7 +156,10 @@ savingsTableBody.addEventListener('click', async (e) => {
     });
 
     const data = await res.json();
-    if (data.success) loadSavingsAccounts();
+    if (data.success) {
+        await loadSavingsAccounts();
+        await loadRetirementAccounts();
+    }
     document.dispatchEvent(new CustomEvent('accountDeleted'));
   }
 });
